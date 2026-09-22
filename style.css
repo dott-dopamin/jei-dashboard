@@ -203,3 +203,14 @@
   .todo-item>span{-webkit-line-clamp:3}
   .todo-item button{font-size:11px;padding:3px}
 }
+
+
+/* V20: TODO drag & drop */
+.todo-item{cursor:grab;touch-action:pan-y}
+.todo-item:active{cursor:grabbing}
+.todo-item.dragging{opacity:.42;transform:scale(.985);box-shadow:0 7px 18px rgba(20,24,30,.10)}
+.todo-col.drag-over{background:#eef1f5;outline:2px dashed #c7ccd3;outline-offset:-2px}
+.todo-list{min-height:42px}
+.todo-item.touch-dragging{touch-action:none}
+.todo-actions button{cursor:pointer}
+@media(max-width:560px){.todo-item{touch-action:pan-y}.todo-col.drag-over{display:block}}
