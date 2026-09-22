@@ -279,3 +279,13 @@
  #eventModal .range-event-form{grid-template-columns:1fr 1fr!important}
  #eventModal .event-title-field,#eventModal .event-submit{grid-column:1/-1!important}
 }
+
+/* V26: weekend date colors + holiday schedule color */
+.week b:first-child{color:#d94b4b!important}
+.week b:last-child{color:#3f6fd8!important}
+.day.sunday strong{color:#d94b4b!important}
+.day.saturday strong{color:#3f6fd8!important}
+.day.today strong{color:#fff!important}
+#eventModal .holiday-check{grid-column:1/-1;display:flex;align-items:center;gap:7px;font-size:12px;color:#656b74;cursor:pointer;margin-top:-1px}
+#eventModal .holiday-check input{width:15px;height:15px;margin:0;accent-color:#d96b6b}
+#eventModal .holiday-check span{font-weight:700}
