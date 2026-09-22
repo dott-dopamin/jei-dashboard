@@ -214,3 +214,20 @@
 .todo-item.touch-dragging{touch-action:none}
 .todo-actions button{cursor:pointer}
 @media(max-width:560px){.todo-item{touch-action:pan-y}.todo-col.drag-over{display:block}}
+
+/* V21 — compact schedule modal */
+#eventModal .modal-box{width:min(620px,100%);padding:20px 22px}
+#eventModal .modal-head h2{margin:4px 0 14px}
+#eventModal .range-event-form{display:grid;grid-template-columns:minmax(0,2fr) minmax(125px,.8fr) minmax(125px,.8fr) 86px;gap:8px;align-items:end}
+#eventModal .range-event-form>#eventText{height:40px;padding:9px 12px;font-size:13px}
+#eventModal .range-event-form>label{gap:4px}
+#eventModal .range-event-form>label span{font-size:10px}
+#eventModal .range-event-form>label input{height:40px;padding:8px 8px;font-size:12px}
+#eventModal .range-event-form>button{height:40px;padding:0 10px;font-size:12px;white-space:nowrap}
+#eventModal .event-list{margin-top:8px}
+@media(max-width:700px){
+ #eventModal .modal-box{padding:18px;width:min(94vw,480px)}
+ #eventModal .range-event-form{grid-template-columns:1fr 1fr;gap:7px}
+ #eventModal .range-event-form>#eventText{grid-column:1/-1}
+ #eventModal .range-event-form>button{grid-column:2;justify-self:end;width:86px}
+}
