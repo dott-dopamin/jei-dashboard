@@ -232,18 +232,50 @@
  #eventModal .range-event-form>button{grid-column:2;justify-self:end;width:86px}
 }
 
-/* V23 — clean compact schedule form */
-#eventModal .modal-box{width:min(690px,96vw);padding:20px 22px}
+/* V24 — clean compact schedule editor (single row, no duplicate date UI) */
+#eventModal .modal-box{width:min(700px,calc(100vw - 36px));padding:20px 22px}
 #eventModal .modal-head h2{margin:4px 0 14px}
-#eventModal .range-event-form{display:grid;grid-template-columns:minmax(250px,1fr) 145px 145px 86px;gap:8px;align-items:end}
-#eventModal .range-event-form>label{display:flex;flex-direction:column;gap:4px;min-width:0}
-#eventModal .range-event-form>label>span{font-size:10px;color:#8e949d;font-weight:700}
-#eventModal .range-event-form input{width:100%;height:40px;border:1px solid #dfe2e6;border-radius:9px;background:#fff;padding:8px 10px;font:12px inherit;outline:none}
-#eventModal .event-name-field input{font-size:13px}
-#eventModal .event-submit{height:40px;padding:0 10px;font-size:12px;white-space:nowrap}
+#eventModal .range-event-form{display:grid;grid-template-columns:minmax(220px,1.9fr) minmax(118px,.75fr) minmax(118px,.75fr) 84px;gap:8px;align-items:end}
+#eventModal .event-field{display:flex;flex-direction:column;gap:4px;min-width:0}
+#eventModal .event-field>span{font-size:10px;color:#8e949d;font-weight:700}
+#eventModal .event-title-field>input{width:100%;height:40px;border:1px solid #dfe2e6;border-radius:9px;padding:8px 11px;font:13px inherit;outline:none}
+#eventModal .date-field{position:relative}
+#eventModal .date-display{height:40px;border:1px solid #dfe2e6;border-radius:9px;background:#fff;display:flex;align-items:center;cursor:pointer;overflow:hidden}
+#eventModal .date-display input{border:0!important;background:transparent!important;outline:0!important;width:100%;height:100%;padding:0 8px!important;font:12px/1 inherit!important;cursor:pointer;color:#17191c}
+#eventModal .date-display b{font-size:11px;margin-right:8px;color:#17191c;font-weight:700}
+#eventModal .native-date{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;left:50%;bottom:0;padding:0!important;border:0!important}
+#eventModal .event-submit{height:40px;padding:0 10px;font-size:12px;white-space:nowrap;border:0;border-radius:9px;background:#17191c;color:#fff;font-weight:700;cursor:pointer}
+#eventModal .event-list{margin-top:8px}
 @media(max-width:700px){
- #eventModal .modal-box{width:min(94vw,520px);padding:18px}
- #eventModal .range-event-form{grid-template-columns:1fr 1fr;gap:7px}
- #eventModal .event-name-field{grid-column:1/-1}
- #eventModal .event-submit{grid-column:2;justify-self:end;width:86px}
+ #eventModal .modal-box{width:min(96vw,620px);padding:18px}
+ #eventModal .range-event-form{grid-template-columns:minmax(0,1.5fr) minmax(102px,.8fr) minmax(102px,.8fr);gap:7px}
+ #eventModal .event-submit{grid-column:3;justify-self:end;width:84px}
+}
+@media(max-width:500px){
+ #eventModal .range-event-form{grid-template-columns:1fr 1fr}
+ #eventModal .event-title-field{grid-column:1/-1}
+ #eventModal .event-submit{grid-column:2;justify-self:end}
+}
+
+/* V25 — truly compact portrait schedule modal */
+#eventModal .modal-box{width:min(390px,calc(100vw - 28px))!important;padding:20px!important;border-radius:18px!important}
+#eventModal .modal-head{align-items:flex-start}
+#eventModal .modal-head h2{font-size:24px!important;margin:5px 0 18px!important}
+#eventModal .range-event-form{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px 12px!important;align-items:end!important}
+#eventModal .event-title-field{grid-column:1/-1!important}
+#eventModal .event-field{display:flex!important;flex-direction:column!important;gap:5px!important;min-width:0!important}
+#eventModal .event-field>span{font-size:11px!important;color:#858b94!important;font-weight:700!important}
+#eventModal .event-title-field>input{height:42px!important;width:100%!important;padding:9px 12px!important;font-size:13px!important}
+#eventModal .date-display{height:42px!important}
+#eventModal .date-display input{font-size:13px!important;padding:0 10px!important}
+#eventModal .date-display b{margin-right:10px!important}
+#eventModal .event-submit{grid-column:1/-1!important;width:100%!important;height:42px!important;font-size:13px!important;margin-top:1px!important}
+#eventModal .event-list{margin-top:12px!important}
+#eventModal .event-row{padding:11px 4px!important;font-size:13px!important}
+#eventModal .event-row i{width:11px!important;height:11px!important}
+#eventModal .event-range-label{display:block;font-size:9px;color:#999;margin-top:2px}
+@media(max-width:500px){
+ #eventModal .modal-box{width:min(360px,calc(100vw - 24px))!important;padding:18px!important}
+ #eventModal .range-event-form{grid-template-columns:1fr 1fr!important}
+ #eventModal .event-title-field,#eventModal .event-submit{grid-column:1/-1!important}
 }
