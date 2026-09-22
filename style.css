@@ -232,16 +232,18 @@
  #eventModal .range-event-form>button{grid-column:2;justify-self:end;width:86px}
 }
 
-/* V22 compact schedule modal */
-#eventModal .modal-box{width:min(720px,96vw);padding:20px 22px}
+/* V23 — clean compact schedule form */
+#eventModal .modal-box{width:min(690px,96vw);padding:20px 22px}
 #eventModal .modal-head h2{margin:4px 0 14px}
-#eventModal .range-event-form{display:grid;grid-template-columns:minmax(260px,1fr) 145px 145px 86px;gap:8px;align-items:end}
-#eventModal .range-event-form label{display:flex;flex-direction:column;gap:4px;min-width:0}
-#eventModal .range-event-form label>span{font-size:10px;color:#8e949d;font-weight:700}
-#eventModal .event-name-field input,#eventModal .date-display{height:40px;border:1px solid #dfe2e6;border-radius:9px;background:#fff;padding:8px 11px;font:13px inherit;outline:none;width:100%}
-#eventModal .date-display-wrap{position:relative}
-#eventModal .date-display{padding-right:34px;cursor:pointer}
-#eventModal .calendar-pick{position:absolute;right:5px;top:5px;width:30px;height:30px;border:0;background:transparent;color:#17191c;font-size:12px;cursor:pointer}
-#eventModal .native-date{position:absolute;width:1px!important;height:1px!important;opacity:0;pointer-events:none;padding:0!important;border:0!important}
+#eventModal .range-event-form{display:grid;grid-template-columns:minmax(250px,1fr) 145px 145px 86px;gap:8px;align-items:end}
+#eventModal .range-event-form>label{display:flex;flex-direction:column;gap:4px;min-width:0}
+#eventModal .range-event-form>label>span{font-size:10px;color:#8e949d;font-weight:700}
+#eventModal .range-event-form input{width:100%;height:40px;border:1px solid #dfe2e6;border-radius:9px;background:#fff;padding:8px 10px;font:12px inherit;outline:none}
+#eventModal .event-name-field input{font-size:13px}
 #eventModal .event-submit{height:40px;padding:0 10px;font-size:12px;white-space:nowrap}
-@media(max-width:700px){#eventModal .modal-box{width:min(94vw,520px);padding:18px}#eventModal .range-event-form{grid-template-columns:1fr 1fr;gap:7px}#eventModal .event-name-field{grid-column:1/-1}#eventModal .event-submit{grid-column:2;justify-self:end;width:86px}}
+@media(max-width:700px){
+ #eventModal .modal-box{width:min(94vw,520px);padding:18px}
+ #eventModal .range-event-form{grid-template-columns:1fr 1fr;gap:7px}
+ #eventModal .event-name-field{grid-column:1/-1}
+ #eventModal .event-submit{grid-column:2;justify-self:end;width:86px}
+}
