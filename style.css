@@ -1,0 +1,138 @@
+*{box-sizing:border-box}body{margin:0;background:#f5f6f8;color:#17191c;font-family:Arial,'Noto Sans KR',sans-serif}.wrap{max-width:1560px;margin:auto;padding:46px 26px 70px}header{display:flex;justify-content:space-between;align-items:end;border-bottom:1px solid #dde1e6;padding-bottom:22px;margin-bottom:16px}.eyebrow,small{font-size:10px;letter-spacing:.14em;color:#7b818b;font-weight:800}h1{font-size:48px;letter-spacing:-.055em;margin:7px 0 2px}header p{margin:0;color:#737983;font-size:14px}.date{font-size:13px;color:#666}.quick{margin-bottom:14px}.quick a{display:flex;justify-content:space-between;gap:20px;background:#17191c;color:#fff;text-decoration:none;padding:16px 19px;border-radius:14px;font-weight:700;font-size:14px}.quick span{font-weight:400;color:#bfc3c9}.dashboard{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(520px,1.3fr);gap:18px}.panel{background:#fff;border:1px solid #e1e4e8;border-radius:18px;padding:28px;min-width:0}.calendar-panel{grid-row:span 2}.memo-panel textarea{width:100%;height:220px;border:1px solid #e0e3e7;border-radius:12px;padding:15px;font:14px/1.65 inherit;resize:vertical;outline:none}.memo-panel textarea:focus,.add-row input:focus,.event-form input:focus,.rule-add input:focus{border-color:#999}.section-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:17px}.section-head h2{margin:5px 0 0;font-size:26px;letter-spacing:-.04em}.section-head>span,.count{font-size:11px;color:#9499a1}.month-nav{display:flex;align-items:center;gap:8px}.month-nav button{border:0;background:#f1f2f4;border-radius:8px;width:30px;height:30px;font-size:20px;cursor:pointer}.month-nav b{font-size:17px;min-width:72px;text-align:center}.week,.calendar{display:grid;grid-template-columns:repeat(7,1fr)}.week b{text-align:center;font-size:12px;color:#969ba3;padding:7px}.day{appearance:none;text-align:left;background:#fff;border:0;border-top:1px solid #eceef1;border-right:1px solid #eceef1;min-height:126px;padding:10px;cursor:pointer;overflow:hidden}.day:nth-child(7n){border-right:0}.day strong{display:inline-grid;place-items:center;font-size:13px;width:27px;height:27px}.day.today strong{background:#17191c;color:#fff;border-radius:50%}.day.blank{cursor:default}.event-chip{display:block;margin-top:4px;padding:4px 5px;border-radius:5px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#3f4349}.more{display:block;margin-top:3px;letter-spacing:0}.cal-help,.sub{font-size:11px;color:#989da5;margin:12px 0 0}.add-row{display:grid;grid-template-columns:1fr 110px 72px;gap:7px;margin-bottom:15px}.add-row input,.add-row select,.rule-add input,.event-form input{min-width:0;border:1px solid #dfe2e6;border-radius:9px;background:#fff;padding:13px 14px;font:15px inherit;outline:none}.add-row select{font-size:14px}.add-row button,.rule-add button,.event-form button{border:0;border-radius:9px;background:#17191c;color:#fff;font-weight:700;cursor:pointer}.todo-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.todo-col{background:#f7f8fa;border-radius:13px;padding:14px;min-width:0}.todo-col h3{font-size:14px;margin:1px 2px 9px;display:flex;align-items:center;gap:5px}.todo-col h3 em{font-style:normal;color:#a1a5ac;margin-left:auto}.dot{width:7px;height:7px;border-radius:50%;display:inline-block}.dot.before{background:#aeb4bc}.dot.doing{background:#e1ae54}.dot.done{background:#72aa8b}.todo-item{background:#fff;border:1px solid #e5e7ea;border-radius:8px;padding:13px;margin-top:8px;display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.6;min-height:54px}.todo-item span{flex:1;overflow-wrap:anywhere}.todo-item.is-done span{text-decoration:line-through;color:#a2a6ad}.todo-item button,.event-row button,.rule button{border:0;background:transparent;color:#a3a7ae;cursor:pointer;padding:0 3px}.empty{font-size:10px;color:#b0b4ba;text-align:center;margin:14px 0}.rules-panel .sub{margin-top:-8px;margin-bottom:13px}.rule-add{display:grid;grid-template-columns:1fr 48px 55px;gap:7px}.rule-add input[type=color]{padding:3px;height:39px}.rules{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.rule{display:flex;align-items:center;gap:6px;border:1px solid #e3e5e8;border-radius:20px;padding:6px 8px;font-size:11px}.rule i{width:14px;height:14px;border-radius:50%}.modal{position:fixed;inset:0;background:#0005;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}.modal.show{display:flex}.modal-box{background:#fff;border-radius:18px;padding:22px;width:min(480px,100%);max-height:80vh;overflow:auto}.modal-head{display:flex;justify-content:space-between}.modal-head h2{margin:4px 0 18px}.x{border:0;background:#f1f2f4;width:32px;height:32px;border-radius:50%;font-size:20px;cursor:pointer}.event-form{display:grid;grid-template-columns:1fr 80px;gap:7px}.event-row{display:flex;align-items:center;gap:9px;padding:11px 2px;border-bottom:1px solid #eee;font-size:13px}.event-row i{width:10px;height:10px;border-radius:3px}.event-row span{flex:1}
+@media(max-width:1050px){.dashboard{grid-template-columns:1fr}.calendar-panel{grid-row:auto}.todo-columns{grid-template-columns:1fr}.todo-col{padding:12px}.day{min-height:80px}.event-chip{font-size:8px}}
+@media(max-width:560px){.wrap{padding:28px 14px 50px}header{align-items:flex-start}h1{font-size:39px}.date{font-size:10px}.panel{padding:16px;border-radius:15px}.day{min-height:62px;padding:4px}.day strong{font-size:10px}.event-chip{padding:3px;font-size:0;height:7px}.event-chip:after{content:''}.add-row{grid-template-columns:1fr 82px}.add-row button{grid-column:1/-1;height:38px}.calendar-panel{padding-left:8px;padding-right:8px}.section-head{padding:0 4px}.quick a{padding:14px}.memo-panel textarea{height:180px}}
+
+.calendar-rules{margin:4px 0 18px;padding:14px 16px;background:#f7f8fa;border-radius:12px}.calendar-rules-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}.calendar-rules-head b{font-size:13px}.calendar-rules-head span{font-size:11px;color:#9298a1}.calendar-rules .rule-add{grid-template-columns:minmax(160px,280px) 48px 64px;max-width:430px}.calendar-rules .rules{margin-top:10px}
+
+/* V4 readability + layout */
+.dashboard{grid-template-columns:minmax(0,1.6fr) minmax(560px,1.4fr);align-items:start}.dashboard>section:nth-child(2){min-height:560px}.memo-panel{padding-top:20px;padding-bottom:20px}.memo-panel .section-head{margin-bottom:10px}.memo-panel textarea{height:105px;min-height:90px}.event-chip{font-size:13px;font-weight:650;color:#202329;padding:5px 7px}.day strong{font-size:14px}.day{min-height:132px}
+@media(max-width:1050px){.dashboard{grid-template-columns:1fr}.dashboard>section:nth-child(2){min-height:0}.memo-panel textarea{height:120px}.event-chip{font-size:10px}}
+@media(max-width:560px){.event-chip{font-size:0}.day strong{font-size:11px}}
+
+/* V5: align right column with calendar and use the empty space for TODO */
+.dashboard{align-items:stretch}
+.calendar-panel{grid-row:1 / span 2}
+.dashboard>section:nth-child(2){grid-column:2;grid-row:1;min-height:0;align-self:stretch}
+.memo-panel{grid-column:2;grid-row:2;align-self:end}
+/* Calendar date number: always top-left of each day cell */
+.day{display:block;position:relative;vertical-align:top;text-align:left}
+.day strong{display:grid;margin:0 0 4px 0;position:relative;top:0;left:0}
+.day>div{display:block;width:100%}
+@media(min-width:1051px){
+  .dashboard{grid-template-rows:minmax(620px,1fr) auto}
+  .dashboard>section:nth-child(2){height:100%}
+  .todo-columns{min-height:480px;align-items:stretch}
+  .todo-col{height:100%}
+  .memo-panel{margin-top:0}
+}
+@media(max-width:1050px){
+  .calendar-panel,.dashboard>section:nth-child(2),.memo-panel{grid-column:auto;grid-row:auto}
+  .todo-columns{min-height:0}
+}
+
+/* V7: force calendar dates to the true top-left + reclaim right-column gap for memo */
+.day{
+  display:flex !important;
+  flex-direction:column;
+  justify-content:flex-start !important;
+  align-items:stretch !important;
+  text-align:left !important;
+}
+.day strong{
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+  align-self:flex-start !important;
+  flex:0 0 27px;
+  margin:0 0 4px 0 !important;
+  position:static !important;
+}
+.day>div{flex:0 0 auto;width:100%}
+
+@media(min-width:1051px){
+  .dashboard{
+    grid-template-rows:auto minmax(250px,1fr) !important;
+  }
+  .calendar-panel{grid-row:1 / span 2}
+  .dashboard>section:nth-child(2){
+    grid-column:2;
+    grid-row:1;
+    height:auto !important;
+    min-height:0 !important;
+  }
+  .todo-columns{min-height:0 !important;height:auto !important}
+  .todo-col{height:auto !important;min-height:300px}
+  .memo-panel{
+    grid-column:2;
+    grid-row:2;
+    align-self:stretch !important;
+    display:flex;
+    flex-direction:column;
+    min-height:250px;
+  }
+  .memo-panel textarea{
+    flex:1;
+    height:auto !important;
+    min-height:170px;
+  }
+}
+
+/* V8: balanced memo height + discontinued-product popup */
+.todo-head-actions{display:flex;align-items:center;gap:10px}
+.discontinue-open{border:1px solid #dfe2e6;background:#f7f8fa;color:#34383e;border-radius:9px;padding:8px 11px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.discontinue-open:hover{background:#eef0f3}
+.discontinue-form{display:grid;grid-template-columns:1fr 70px;gap:8px;margin-bottom:16px}
+.discontinue-form input{border:1px solid #dfe2e6;border-radius:9px;padding:13px 14px;font:14px inherit;outline:none}
+.discontinue-form button{border:0;border-radius:9px;background:#17191c;color:#fff;font-weight:700;cursor:pointer}
+.discontinue-item{display:flex;align-items:flex-start;gap:12px;padding:13px 2px;border-bottom:1px solid #eceef1;font-size:14px;line-height:1.55}
+.discontinue-item span{flex:1;overflow-wrap:anywhere}
+.discontinue-item button{border:1px solid #dfe2e6;background:#fff;border-radius:8px;padding:6px 9px;font-size:11px;cursor:pointer;white-space:nowrap}
+.discontinue-empty{font-size:12px;padding:24px 0}
+@media(min-width:1051px){
+ .dashboard{grid-template-rows:auto 190px !important}
+ .memo-panel{min-height:190px !important;max-height:190px}
+ .memo-panel textarea{min-height:105px !important;height:105px !important;flex:none !important}
+}
+@media(max-width:560px){.todo-head-actions{gap:6px}.discontinue-open{font-size:10px;padding:7px 8px}.discontinue-form{grid-template-columns:1fr}.discontinue-form button{height:38px}}
+
+/* V9: keep memo textarea fully inside the memo card */
+@media(min-width:1051px){
+  .memo-panel{height:190px !important;min-height:190px !important;max-height:190px !important;overflow:hidden}
+  .memo-panel textarea{height:82px !important;min-height:82px !important;max-height:82px !important;flex:none !important;resize:none}
+}
+
+/* V10: wider discontinued popup + separate product/memo fields */
+.discontinue-box{width:min(760px,calc(100vw - 32px));max-width:760px}
+.discontinue-form{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr) 70px}
+.discontinue-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.discontinue-copy strong{font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.discontinue-copy span{font-size:12px;color:#747b84;line-height:1.5;overflow-wrap:anywhere}
+@media(max-width:700px){.discontinue-form{grid-template-columns:1fr}.discontinue-form button{height:40px}}
+
+/* V11: memo middle-ground height — taller than V10 without wasting the right column */
+@media(min-width:1051px){
+  .dashboard{grid-template-rows:auto 250px !important}
+  .memo-panel{height:250px !important;min-height:250px !important;max-height:250px !important;overflow:hidden}
+  .memo-panel textarea{height:142px !important;min-height:142px !important;max-height:142px !important;flex:none !important;resize:none}
+}
+
+/* V12: memo height requested 350px */
+@media(min-width:1051px){
+  .memo-panel{height:350px !important;min-height:350px !important;max-height:350px !important;overflow:hidden}
+  .memo-panel textarea{height:242px !important;min-height:242px !important;max-height:242px !important;flex:none !important;resize:none}
+}
+
+/* V13: right column must exactly share the calendar height: TODO fills the remaining space above a 350px memo */
+@media(min-width:1051px){
+  .dashboard{align-items:stretch !important;grid-template-rows:minmax(0,1fr) 350px !important}
+  .calendar-panel{grid-column:1;grid-row:1 / 3;height:100% !important}
+  .dashboard>section:nth-child(2){grid-column:2;grid-row:1;height:100% !important;min-height:0 !important;overflow:auto}
+  .memo-panel{grid-column:2;grid-row:2;height:350px !important;min-height:350px !important;max-height:350px !important;align-self:stretch !important;margin:0 !important;overflow:hidden}
+  .memo-panel textarea{height:242px !important;min-height:242px !important;max-height:242px !important;resize:none}
+}
+
+/* V14: private dashboard lock */
+.lock-screen{position:fixed;inset:0;z-index:9999;background:#f4f5f7;display:flex;align-items:center;justify-content:center;padding:24px}
+.lock-screen.hidden{display:none}
+.lock-box{width:min(390px,100%);background:#fff;border:1px solid #dde1e6;border-radius:22px;padding:34px;box-shadow:0 18px 55px rgba(20,24,30,.08);text-align:center}
+.lock-box small{font-size:11px;font-weight:800;letter-spacing:.16em;color:#8a919b}.lock-box h2{font-size:28px;margin:9px 0 8px}.lock-box p{font-size:13px;color:#8a919b;margin:0 0 22px}.lock-form{display:flex;gap:8px}.lock-form input{min-width:0;flex:1;border:1px solid #dfe2e6;border-radius:10px;padding:13px 14px;font:16px inherit;outline:none}.lock-form input:focus{border-color:#777d85}.lock-form button{border:0;border-radius:10px;background:#17191c;color:#fff;padding:0 18px;font-weight:800;cursor:pointer}.lock-error{height:18px;margin-top:10px!important;color:#d34b4b!important;font-size:12px!important}
