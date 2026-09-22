@@ -12,5 +12,58 @@
 <div class="modal" id="discontinueModal"><div class="modal-box discontinue-box"><div class="modal-head"><div><small>PRODUCT WATCH</small><h2>단종 예정리스트</h2></div><button type="button" class="x" id="discontinueClose">×</button></div><form id="discontinueForm" class="discontinue-form"><input id="discontinueProduct" placeholder="상품명을 입력하세요" autocomplete="off"><input id="discontinueMemo" placeholder="메모를 입력하세요 (선택)" autocomplete="off"><button>추가</button></form><div id="discontinueList" class="discontinue-list"></div></div></div>
 <div class="modal" id="eventModal"><div class="modal-box"><div class="modal-head"><div><small>SCHEDULE</small><h2 id="modalDate"></h2></div><button type="button" class="x" id="closeModal">×</button></div><form id="eventForm" class="event-form"><input id="eventText" placeholder="일정 내용을 입력하세요" autocomplete="off"><button>일정 추가</button></form><div id="eventList" class="event-list"></div></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
-<script src="app.js"></script></body></html>
+<script>
+const SUPABASE_URL='https://yqvjgalmjrydfygtozgo.supabase.co';
+const SUPABASE_KEY='sb_publishable_8K_sITH95Nkikw8-tdyDwQ_-JFzo94Z';
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=s=>document.querySelector(s); const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LOCK_PASSWORD='0514';
+let todos=[],discontinued=[],events={},rules=[],selected='',view=new Date();view.setDate(1),noteId=null;
+const statusToDb={before:'시작전',doing:'진행중',done:'완료'}, statusFromDb={'시작전':'before','진행중':'doing','완료':'done'};
+
+// First gate: 0514. Then authenticate with Supabase before loading private data.
+const lockScreen=$('#lockScreen'), lockForm=$('#lockForm'), lockPassword=$('#lockPassword'), lockError=$('#lockError');
+lockForm.addEventListener('submit',async e=>{e.preventDefault(); if(lockPassword.value!==LOCK_PASSWORD){lockError.textContent='비밀번호가 맞지 않아요.';lockPassword.value='';return} lockError.textContent=''; await ensureLogin();});
+async function ensureLogin(){
+  const {data:{session}}=await db.auth.getSession();
+  if(session){lockScreen.classList.add('hidden');await loadAll();return}
+  const email=prompt('관리자 이메일을 입력하세요.'); if(!email)return;
+  const password=prompt('Supabase 관리자 비밀번호를 입력하세요.'); if(!password)return;
+  const {error}=await db.auth.signInWithPassword({email,password});
+  if(error){alert('관리자 로그인 실패: '+error.message);return}
+  lockScreen.classList.add('hidden'); await loadAll();
+}
+(async()=>{const {data:{session}}=await db.auth.getSession(); if(session){lockScreen.classList.add('hidden');await loadAll()} else setTimeout(()=>lockPassword.focus(),50)})();
+$('#today').textContent=new Intl.DateTimeFormat('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'short'}).format(new Date());
+
+async function loadAll(){
+ const [t,n,c,k,d]=await Promise.all([db.from('todos').select('*').order('created_at',{ascending:false}),db.from('notes').select('*').limit(1),db.from('calendar_events').select('*'),db.from('calendar_keywords').select('*').order('created_at'),db.from('discontinued_items').select('*').order('created_at',{ascending:false})]);
+ const err=[t,n,c,k,d].find(x=>x.error)?.error;if(err){alert(err.message);return}
+ todos=t.data.map(x=>({id:x.id,text:x.content,status:statusFromDb[x.status]||'before'}));
+ if(n.data[0]){noteId=n.data[0].id;$('#memo').value=n.data[0].content||''}
+ events={};c.data.forEach(x=>(events[x.event_date]??=[]).push({id:x.id,text:x.title}));
+ rules=k.data.map(x=>({id:x.id,keyword:x.keyword,color:x.color}));
+ discontinued=d.data.map(x=>({id:x.id,product:x.product_name,memo:x.memo||''}));
+ drawTodos();drawDiscontinued();drawRules();drawCalendar();
+}
+function drawTodos(){['before','doing','done'].forEach(st=>{const arr=todos.filter(x=>x.status===st);$('#'+st+'N').textContent=arr.length;$('#'+st+'List').innerHTML=arr.length?arr.map(x=>`<div class="todo-item ${st==='done'?'is-done':''}"><span>${esc(x.text)}</span><div><button onclick="moveTodo('${x.id}')">→</button><button onclick="delTodo('${x.id}')">×</button></div></div>`).join(''):'<p class="empty">비어 있음</p>'});$('#todoCount').textContent=todos.length+'개'}
+$('#todoForm').addEventListener('submit',async e=>{e.preventDefault();const v=$('#todoInput').value.trim();if(!v)return;const st=$('#todoStatus').value;const {data,error}=await db.from('todos').insert({content:v,status:statusToDb[st]}).select().single();if(error)return alert(error.message);todos.unshift({id:data.id,text:v,status:st});$('#todoInput').value='';drawTodos()});
+window.moveTodo=async id=>{const x=todos.find(t=>t.id===id);if(!x)return;const ns=x.status==='before'?'doing':x.status==='doing'?'done':'before';const {error}=await db.from('todos').update({status:statusToDb[ns],updated_at:new Date().toISOString()}).eq('id',id);if(error)return alert(error.message);x.status=ns;drawTodos()};
+window.delTodo=async id=>{const {error}=await db.from('todos').delete().eq('id',id);if(error)return alert(error.message);todos=todos.filter(x=>x.id!==id);drawTodos()};
+
+function drawDiscontinued(){$('#discontinueList').innerHTML=discontinued.length?discontinued.map(x=>`<div class="discontinue-item"><div><b>${esc(x.product)}</b>${x.memo?`<p>${esc(x.memo)}</p>`:''}</div><button onclick="doneDiscontinued('${x.id}')">처리완료</button></div>`).join(''):'<p class="empty">등록된 상품이 없어요.</p>'}
+$('#discontinueOpen').onclick=()=>{$('#discontinueModal').classList.add('show');drawDiscontinued()};$('#discontinueClose').onclick=()=>$('#discontinueModal').classList.remove('show');$('#discontinueModal').onclick=e=>{if(e.target===$('#discontinueModal'))$('#discontinueModal').classList.remove('show')};
+$('#discontinueForm').addEventListener('submit',async e=>{e.preventDefault();const product=$('#discontinueProduct').value.trim(),memo=$('#discontinueMemo').value.trim();if(!product)return;const {data,error}=await db.from('discontinued_items').insert({product_name:product,memo}).select().single();if(error)return alert(error.message);discontinued.unshift({id:data.id,product,memo});e.target.reset();drawDiscontinued()});
+window.doneDiscontinued=async id=>{const {error}=await db.from('discontinued_items').delete().eq('id',id);if(error)return alert(error.message);discontinued=discontinued.filter(x=>x.id!==id);drawDiscontinued()};
+
+let memoTimer;$('#memo').addEventListener('input',()=>{clearTimeout(memoTimer);$('#memoSaved').textContent='저장 중…';memoTimer=setTimeout(async()=>{let r;if(noteId)r=await db.from('notes').update({content:$('#memo').value,updated_at:new Date().toISOString()}).eq('id',noteId);else{r=await db.from('notes').insert({content:$('#memo').value}).select().single();if(r.data)noteId=r.data.id}$('#memoSaved').textContent=r.error?'저장 실패':'저장됨'},500)});
+
+function dateKey(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`}function colorFor(text){const r=rules.find(r=>text.includes(r.keyword));return r?r.color:'#eef0f3'}
+function drawCalendar(){const y=view.getFullYear(),m=view.getMonth();$('#monthTitle').textContent=`${y}. ${String(m+1).padStart(2,'0')}`;const first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate();let html='';for(let i=0;i<first;i++)html+='<div class="day blank"></div>';for(let d=1;d<=last;d++){const k=dateKey(y,m,d),es=events[k]||[],today=k===dateKey(new Date().getFullYear(),new Date().getMonth(),new Date().getDate());html+=`<button class="day ${today?'today':''}" onclick="openDay('${k}')"><strong>${d}</strong><div>${es.slice(0,3).map(e=>`<span class="event-chip" style="background:${colorFor(e.text)}">${esc(e.text)}</span>`).join('')}${es.length>3?`<small class="more">+${es.length-3}</small>`:''}</div></button>`}$('#calendar').innerHTML=html}
+$('#prev').onclick=()=>{view.setMonth(view.getMonth()-1);drawCalendar()};$('#next').onclick=()=>{view.setMonth(view.getMonth()+1);drawCalendar()};
+window.openDay=k=>{selected=k;const [y,m,d]=k.split('-');$('#modalDate').textContent=`${Number(m)}월 ${Number(d)}일`;$('#eventModal').classList.add('show');drawEventList();setTimeout(()=>$('#eventText').focus(),50)};$('#closeModal').onclick=()=>$('#eventModal').classList.remove('show');$('#eventModal').onclick=e=>{if(e.target===$('#eventModal'))$('#eventModal').classList.remove('show')};
+$('#eventForm').addEventListener('submit',async e=>{e.preventDefault();const v=$('#eventText').value.trim();if(!v)return;const {data,error}=await db.from('calendar_events').insert({event_date:selected,title:v}).select().single();if(error)return alert(error.message);(events[selected]??=[]).push({id:data.id,text:v});$('#eventText').value='';drawCalendar();drawEventList()});
+function drawEventList(){if(!selected)return;const es=events[selected]||[];$('#eventList').innerHTML=es.length?es.map(e=>`<div class="event-row"><i style="background:${colorFor(e.text)}"></i><span>${esc(e.text)}</span><button onclick="delEvent('${e.id}')">×</button></div>`).join(''):'<p class="empty">등록된 일정이 없어요.</p>'}window.delEvent=async id=>{const {error}=await db.from('calendar_events').delete().eq('id',id);if(error)return alert(error.message);events[selected]=(events[selected]||[]).filter(e=>e.id!==id);drawCalendar();drawEventList()};
+function drawRules(){$('#ruleList').innerHTML=rules.map(r=>`<div class="rule"><i style="background:${r.color}"></i><b>${esc(r.keyword)}</b><button onclick="delRule('${r.id}')">×</button></div>`).join('')||'<p class="empty">등록된 키워드가 없어요.</p>'}
+$('#ruleForm').addEventListener('submit',async e=>{e.preventDefault();const keyword=$('#ruleKeyword').value.trim(),color=$('#ruleColor').value;if(!keyword)return;const {data,error}=await db.from('calendar_keywords').insert({keyword,color}).select().single();if(error)return alert(error.message);rules.push(data);$('#ruleKeyword').value='';drawRules();drawCalendar()});window.delRule=async id=>{const {error}=await db.from('calendar_keywords').delete().eq('id',id);if(error)return alert(error.message);rules=rules.filter(r=>r.id!==id);drawRules();drawCalendar()};
+</script></body></html>
