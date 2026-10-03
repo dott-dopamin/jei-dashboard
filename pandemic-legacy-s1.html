@@ -144,8 +144,8 @@ const $=s=>document.querySelector(s);
 const months=Array.from({length:12},(_,i)=>`${i+1}월`);
 let state=null,isAdmin=false,canEdit=false,accessCode='',saveTimer=null;
 
-function defaultState(){return {meta:{current_month:'1월',attempt:1,funding:'',last_result:'',next_note:''},players:[{name:'제이',character:'',role:''},{name:'승연',character:'',role:''},{name:'우리',character:'',role:''},{name:'종우',character:'',role:''}],sessions:[]};}
-function mergeState(s){const d=defaultState();return {meta:{...d.meta,...(s?.meta||{})},players:d.players.map((p,i)=>({...p,...(s?.players?.[i]||{})})),sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
+function defaultState(){return {meta:{current_month:'1월',attempt:1,funding:'',last_result:'',next_note:''},players:[{name:'제이',character:'',role:''},{name:'우리',character:'',role:''},{name:'승연',character:'',role:''},{name:'종우',character:'',role:''}],sessions:[]};}
+function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s.players:[];return {meta:{...d.meta,...(s?.meta||{})},players:d.players.map((p,i)=>{const saved=stored.find(x=>x?.name===p.name)||stored[i]||{};return {...p,...saved,name:p.name};}),sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
 async function boot(){const {data:{session}}=await db.auth.getSession();isAdmin=!!session;if(isAdmin){const {data,error}=await db.from('pandemic_legacy_s1_state').select('data').eq('id',1).single();if(!error&&data){state=mergeState(data.data);canEdit=true;openApp();return;}}}
 async function unlock(){const code=$('#codeInput').value.trim();if(!code)return;$('#gateError').textContent='';const {data,error}=await db.rpc('get_pandemic_legacy_s1',{p_code:code});if(error){console.error(error);$('#gateError').textContent=error.code==='P0001'?'비밀번호가 맞지 않아요.':'연결 설정을 확인해주세요.';return;}accessCode=code;state=mergeState(data);canEdit=true;sessionStorage.setItem('pandemicLegacyS1Code',code);openApp();}
 function openApp(){$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');$('#sessionToolbar').classList.toggle('hidden',!canEdit);render();}
