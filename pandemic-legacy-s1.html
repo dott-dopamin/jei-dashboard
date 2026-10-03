@@ -100,6 +100,103 @@ body{min-width:0;}
   .session-list{grid-template-columns:1fr!important}
 }
 </style>
+
+<style>
+/* V52: one exact header geometry across GAME ARCHIVE pages */
+html{overflow-y:scroll;scrollbar-gutter:stable;}
+.archive-header{
+  width:100%!important;
+  height:66px!important;
+  min-height:66px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  margin:0 0 20px!important;
+  padding:0 0 20px!important;
+  box-sizing:border-box!important;
+  border-bottom:1px solid #dde1e6!important;
+}
+.archive-header .archive-head,
+.archive-header .archive-brand{display:block!important;margin:0!important;padding:0!important;min-width:0!important;}
+.archive-header .archive-nav{
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:nowrap!important;
+  white-space:nowrap!important;
+  gap:6px!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+  height:36px!important;
+}
+.archive-header .archive-kicker{
+  font-size:11px!important;
+  line-height:1!important;
+  letter-spacing:.18em!important;
+  font-weight:700!important;
+  margin:0 4px 0 0!important;
+  padding:0!important;
+  white-space:nowrap!important;
+  color:#77808a!important;
+}
+.archive-header .archive-link{
+  height:36px!important;
+  min-height:36px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  padding:0 14px!important;
+  margin:0!important;
+  border:1px solid transparent!important;
+  border-radius:11px!important;
+  box-sizing:border-box!important;
+  text-decoration:none!important;
+  font-size:14px!important;
+  line-height:1!important;
+  font-weight:800!important;
+  color:#69727c!important;
+}
+.archive-header .archive-link.active{
+  background:#f7f8fa!important;
+  color:#17191c!important;
+  border-color:#d7dde3!important;
+  box-shadow:0 1px 2px rgba(18,24,30,.04)!important;
+}
+.archive-header .archive-divider{
+  width:8px!important;
+  flex:0 0 8px!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:center!important;
+  font-size:13px!important;
+  line-height:1!important;
+  color:#c7cdd3!important;
+}
+.archive-header .back{
+  margin:0!important;
+  padding:0!important;
+  font-size:13px!important;
+  line-height:1!important;
+  font-weight:700!important;
+  color:#747c86!important;
+  text-decoration:none!important;
+}
+.archive-header-dark{border-bottom-color:#3b484f!important;}
+.archive-header-dark .archive-kicker{color:#91a1a7!important;}
+.archive-header-dark .archive-link{color:#b3bec2!important;}
+.archive-header-dark .archive-link.active{background:#2a363d!important;color:#fff!important;border-color:#46555d!important;box-shadow:0 1px 2px rgba(7,12,15,.15)!important;}
+.archive-header-dark .archive-divider{color:#59676d!important;}
+.archive-header-dark .back{color:#aab6bb!important;}
+@media(max-width:600px){
+  .archive-header{height:auto!important;min-height:64px!important;align-items:flex-start!important;padding-bottom:18px!important;margin-bottom:18px!important;}
+  .archive-header .archive-nav{height:auto!important;flex-wrap:wrap!important;gap:4px!important;}
+  .archive-header .archive-kicker{width:100%!important;margin:0 0 3px!important;font-size:10px!important;}
+  .archive-header .archive-link{height:32px!important;min-height:32px!important;font-size:12px!important;padding:0 10px!important;}
+  .archive-header .archive-divider{font-size:12px!important;}
+}
+</style>
+
 </head>
 <body>
 <div id="gate" class="gate">
@@ -113,7 +210,7 @@ body{min-width:0;}
 </div>
 
 <main id="app" class="page hidden">
-  <div class="topbar"><div class="archive-brand"><nav class="archive-nav" aria-label="게임 아카이브"><span class="archive-kicker">GAME ARCHIVE</span><a class="archive-link" href="games.html">보드게임 책장 <span>📚</span></a><span class="archive-divider">|</span><a class="archive-link" href="rules-notes.html">잔룰 노트 <span>📝</span></a><span class="archive-divider">|</span><a class="archive-link active" href="pandemic-legacy-s1.html">팬데믹 S1 로그 <span>🔒</span></a></nav></div><a class="back" href="index.html">← HOME</a></div>
+  <div class="topbar archive-header archive-header-dark"><div class="archive-brand"><nav class="archive-nav" aria-label="게임 아카이브"><span class="archive-kicker">GAME ARCHIVE</span><a class="archive-link" href="games.html">보드게임 책장 <span>📚</span></a><span class="archive-divider">|</span><a class="archive-link" href="rules-notes.html">잔룰 노트 <span>📝</span></a><span class="archive-divider">|</span><a class="archive-link active" href="pandemic-legacy-s1.html">팬데믹 S1 로그 <span>🔒</span></a></nav></div><a class="back" href="index.html">← HOME</a></div>
   <section class="hero">
     <div class="hero-grid">
       <div class="hero-title">
