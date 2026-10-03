@@ -77,6 +77,8 @@ body{
 @media(max-width:1100px){.players-section .grid4{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:820px){.players-section .grid4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+
+.photo-lightbox{position:fixed;inset:0;z-index:120;background:rgba(4,9,12,.88);display:flex;align-items:center;justify-content:center;padding:24px}.photo-lightbox.hidden{display:none!important}.photo-lightbox-panel{position:relative;max-width:min(1100px,94vw);max-height:92vh;display:flex;align-items:center;justify-content:center}.photo-lightbox img{display:block;max-width:94vw;max-height:88vh;width:auto;height:auto;object-fit:contain;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.45);background:#0e171c}.photo-lightbox-close{position:absolute;right:-14px;top:-14px;width:38px;height:38px;border:1px solid rgba(255,255,255,.22);border-radius:50%;background:rgba(12,20,25,.92);color:#fff;font-size:24px;line-height:36px;cursor:pointer;z-index:3}.photo-lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:54px;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:rgba(12,20,25,.78);color:#fff;font-size:24px;cursor:pointer;display:grid;place-items:center}.photo-lightbox-prev{left:-56px}.photo-lightbox-next{right:-56px}.photo-lightbox-count{position:absolute;left:50%;bottom:-31px;transform:translateX(-50%);color:#d9e4e8;font-size:11px;font-weight:800;letter-spacing:.08em}.photo-lightbox.single .photo-lightbox-nav,.photo-lightbox.single .photo-lightbox-count{display:none}@media(max-width:700px){.photo-lightbox{padding:16px}.photo-lightbox-panel{max-width:96vw}.photo-lightbox img{max-width:96vw;max-height:82vh;border-radius:9px}.photo-lightbox-close{right:2px;top:-48px}.photo-lightbox-prev{left:8px}.photo-lightbox-next{right:8px}.photo-lightbox-nav{top:auto;bottom:-56px;transform:none}.photo-lightbox-count{bottom:-43px}}
 </style>
 
 <style>
@@ -195,6 +197,17 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
   .archive-header .archive-link{height:32px!important;min-height:32px!important;font-size:12px!important;padding:0 10px!important;}
   .archive-header .archive-divider{font-size:12px!important;}
 }
+
+
+/* V59 campaign schedules */
+.hero-grid{grid-template-columns:minmax(0,1.2fr) minmax(280px,.72fr) minmax(360px,.7fr);gap:16px}
+.hero-schedule-panel{position:relative;border:1px solid rgba(190,214,221,.26);border-radius:14px;padding:14px;background:rgba(29,42,48,.72);backdrop-filter:blur(4px);min-width:0}
+.hero-schedule-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.hero-schedule-head b{font-size:12px;letter-spacing:.08em}.hero-schedule-head span{font-size:9px;color:#9eb0b6;letter-spacing:.08em}
+.hero-schedule-list{display:grid;gap:6px}.hero-schedule-item{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;min-height:31px;border:1px solid #526269;border-radius:7px;background:#2a373d;padding:6px 8px;min-width:0}.hero-schedule-round{font-size:9px;font-weight:900;color:#f1b0b0;white-space:nowrap}.hero-schedule-date{font-size:10px;font-weight:800;color:#d8e1e4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hero-schedule-empty{font-size:10px;color:#8fa1a8;padding:7px 1px}.schedule-section{margin-top:14px}.schedule-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.schedule-card{position:relative;background:#26343a;border:1px solid #405058;border-radius:11px;padding:12px 42px 12px 13px;min-height:76px}.schedule-card-title{font-size:12px;font-weight:900;color:#eef4f6;margin-bottom:5px}.schedule-card-date{font-size:13px;font-weight:800;color:#c8d6da}.schedule-card-note{font-size:11px;color:#9fb0b6;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.schedule-card-actions{position:absolute;right:8px;top:8px;display:flex;gap:4px;flex-direction:column}.schedule-mini-btn{width:26px;height:26px;border:1px solid #43575f;border-radius:7px;background:#1c282d;color:#bac8cd;cursor:pointer;padding:0;font-size:12px}.schedule-mini-btn:hover{background:#2c3d44;color:#fff}.schedule-empty{grid-column:1/-1;text-align:center;color:#8fa1a8;padding:22px 0;font-size:12px}.schedule-toolbar{display:flex;justify-content:flex-end}.schedule-modal .modal{width:min(520px,100%)}.schedule-modal .form-grid{grid-template-columns:1fr 1fr}.schedule-modal .field.wide{grid-column:1/-1}
+@media(max-width:1250px){.hero-grid{grid-template-columns:minmax(0,1fr) minmax(260px,.7fr);}.hero-title{grid-column:1/-1}.hero-schedule-panel,.hero-month-panel{min-height:100%}}
+@media(max-width:900px){.schedule-list{grid-template-columns:1fr 1fr}}
+@media(max-width:820px){.hero-grid{grid-template-columns:1fr}.hero-title{grid-column:auto}.hero-schedule-panel,.hero-month-panel{width:100%}.schedule-list{grid-template-columns:1fr}}
+@media(max-width:600px){.hero-schedule-panel{padding:11px}.hero-schedule-item{grid-template-columns:54px 1fr}.schedule-modal .form-grid{grid-template-columns:1fr}.schedule-modal .field.wide{grid-column:auto}}
 </style>
 
 <link rel="stylesheet" href="archive-header.css">
@@ -218,6 +231,10 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
         <h1>PANDEMIC LEGACY : SEASON 1</h1>
         <div class="spoiler">⚠ 이 페이지에는 캠페인 스포일러가 포함됩니다.</div>
       </div>
+      <aside class="hero-schedule-panel">
+        <div class="hero-schedule-head"><b>다음 레거시 일정</b><span>NEXT 3</span></div>
+        <div id="heroScheduleList" class="hero-schedule-list"></div>
+      </aside>
       <aside class="hero-month-panel">
         <div class="hero-month-head"><b>월별 진행</b><span>CAMPAIGN TIMELINE</span></div>
         <div id="monthStrip" class="months"></div>
@@ -237,11 +254,28 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
     </section>
   </div>
 
+  <section class="section schedule-section">
+    <div class="section-head"><div><h2>레거시 일정</h2><div class="section-desc">월 1회 모임 일정 관리 · 상단에는 가까운 일정 3개만 표시</div></div><div class="schedule-toolbar"><button id="addScheduleBtn" class="primary" type="button">+ 일정 추가</button></div></div>
+    <div id="scheduleList" class="schedule-list"></div>
+  </section>
+
   <section class="section sessions-section">
     <div class="section-head"><div><h2>회차 기록</h2><div class="section-desc">게임이 끝날 때마다 한 장씩 남겨두기</div></div><div id="sessionToolbar" class="session-toolbar hidden"><button id="addSessionBtn" class="primary">+ 회차 기록</button></div></div>
     <div id="sessionList" class="session-list"></div>
   </section>
 </main>
+
+<div id="scheduleModal" class="modal-bg schedule-modal hidden"><div class="modal">
+  <h3 id="scheduleModalTitle">레거시 일정 추가</h3>
+  <form id="scheduleForm" class="form-grid">
+    <input type="hidden" id="scheduleId">
+    <div class="field"><label>회차</label><input id="scheduleRound" placeholder="예: 1회차"></div>
+    <div class="field"><label>날짜</label><input id="scheduleDate" type="date"></div>
+    <div class="field"><label>시간</label><input id="scheduleTime" type="time"></div>
+    <div class="field wide"><label>메모</label><input id="scheduleNote" placeholder="예: 도트 / 1시부터"></div>
+  </form>
+  <div class="modal-actions"><button id="cancelSchedule" class="ghost" type="button">취소</button><button id="saveSchedule" class="primary" type="button">저장</button></div>
+</div></div>
 
 <div id="sessionModal" class="modal-bg hidden"><div class="modal">
   <h3 id="modalTitle">회차 기록 추가</h3>
@@ -263,6 +297,15 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
   <div class="modal-actions"><button id="cancelSession" class="ghost" type="button">취소</button><button id="saveSession" class="primary" type="button">저장</button></div>
 </div></div>
 
+<div id="photoLightbox" class="photo-lightbox hidden" aria-hidden="true">
+  <div class="photo-lightbox-panel" role="dialog" aria-modal="true" aria-label="회차 사진 크게 보기">
+    <button id="photoLightboxClose" class="photo-lightbox-close" type="button" aria-label="닫기">×</button>
+    <button id="photoLightboxPrev" class="photo-lightbox-nav photo-lightbox-prev" type="button" aria-label="이전 사진">‹</button>
+    <img id="photoLightboxImage" alt="회차 사진 크게 보기">
+    <button id="photoLightboxNext" class="photo-lightbox-nav photo-lightbox-next" type="button" aria-label="다음 사진">›</button>
+    <div id="photoLightboxCount" class="photo-lightbox-count"></div>
+  </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const db=supabase.createClient('https://yqvjgalmjrydfygtozgo.supabase.co','sb_publishable_8K_sITH95Nkikw8-tdyDwQ_-JFzo94Z');
@@ -271,15 +314,33 @@ const months=Array.from({length:12},(_,i)=>`${i+1}월`);
 let state=null,isAdmin=false,canEdit=false,accessCode='',saveTimer=null;
 let sessionPhotoCache=new Map(),modalExistingPhotos=[],modalPendingPhotos=[],modalDeletedPhotoIds=[];
 
-function defaultState(){return {meta:{current_month:'1월',attempt:1,funding:'',last_result:'',next_note:'',current_objectives:'',current_rules:'',permanent_summary:''},players:[{name:'제이',character:'',role:'',detail:''},{name:'우리',character:'',role:'',detail:''},{name:'승연',character:'',role:'',detail:''},{name:'종우',character:'',role:'',detail:''}],sessions:[]};}
-function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s.players:[];return {meta:{...d.meta,...(s?.meta||{})},players:d.players.map((p,i)=>{const saved=stored.find(x=>x?.name===p.name)||stored[i]||{};return {...p,...saved,name:p.name};}),sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
+function defaultState(){return {meta:{current_month:'1월',attempt:1,funding:'',last_result:'',next_note:'',current_objectives:'',current_rules:'',permanent_summary:''},players:[{name:'제이',character:'',role:'',detail:''},{name:'우리',character:'',role:'',detail:''},{name:'승연',character:'',role:'',detail:''},{name:'종우',character:'',role:'',detail:''}],schedules:[{id:'legacy-1',round:'1회차',date:'2026-10-17',time:'13:00',note:''}],sessions:[]};}
+function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s.players:[];return {meta:{...d.meta,...(s?.meta||{})},players:d.players.map((p,i)=>{const saved=stored.find(x=>x?.name===p.name)||stored[i]||{};return {...p,...saved,name:p.name};}),schedules:Array.isArray(s?.schedules)?s.schedules:d.schedules,sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
 async function boot(){const {data:{session}}=await db.auth.getSession();isAdmin=!!session;if(isAdmin){const {data,error}=await db.from('pandemic_legacy_s1_state').select('data').eq('id',1).single();if(!error&&data){state=mergeState(data.data);canEdit=true;openApp();return;}}}
 async function unlock(){const code=$('#codeInput').value.trim();if(!code)return;$('#gateError').textContent='';const {data,error}=await db.rpc('get_pandemic_legacy_s1',{p_code:code});if(error){console.error(error);$('#gateError').textContent=error.code==='P0001'?'비밀번호가 맞지 않아요.':'연결 설정을 확인해주세요.';return;}accessCode=code;state=mergeState(data);canEdit=true;sessionStorage.setItem('pandemicLegacyS1Code',code);openApp();}
-function openApp(){$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');$('#sessionToolbar').classList.toggle('hidden',!canEdit);render();}
-function render(){renderPlayers();renderStatus();renderMonths();renderSessions();}
+function openApp(){$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');$('#sessionToolbar').classList.toggle('hidden',!canEdit);$('#addScheduleBtn').classList.toggle('hidden',!canEdit);render();}
+function render(){renderPlayers();renderStatus();renderMonths();renderSchedules();renderSessions();}
 function renderPlayers(){const wrap=$('#players');wrap.innerHTML=state.players.map((p,i)=>`<div class="player-card"><div class="player-name">${p.name}</div>${canEdit?`<input data-player="${i}" data-key="character" value="${escapeAttr(p.character)}" placeholder="캐릭터명"><input class="role-input" data-player="${i}" data-key="role" value="${escapeAttr(p.role)}" placeholder="역할 / 직업"><textarea class="detail-input" data-player="${i}" data-key="detail" placeholder="상처 · 관계 · 업그레이드 메모">${esc(p.detail||'')}</textarea>`:`<div class="player-character">${esc(p.character||'캐릭터 미정')}</div><div class="player-role">${esc(p.role||'')}</div><div class="player-detail-read">${esc(p.detail||'상태 메모 없음')}</div>`}</div>`).join('');if(canEdit){wrap.querySelectorAll('input,textarea').forEach(el=>el.oninput=()=>{state.players[+el.dataset.player][el.dataset.key]=el.value;queueSave();});}}
 function renderStatus(){const m=state.meta;$('#statusArea').innerHTML=canEdit?`<div class="status-grid"><div class="stat"><label>현재 월</label><select id="metaMonth">${months.map(x=>`<option ${x===m.current_month?'selected':''}>${x}</option>`).join('')}</select></div><div class="stat"><label>현재 도전</label><input id="metaAttempt" type="number" min="1" value="${m.attempt||1}"></div><div class="stat"><label>자금 지원</label><input id="metaFunding" type="number" min="0" max="10" value="${escapeAttr(m.funding??'')}"></div><div class="stat"><label>직전 결과</label><select id="metaResult"><option value="">-</option><option value="WIN" ${m.last_result==='WIN'?'selected':''}>WIN</option><option value="LOSE" ${m.last_result==='LOSE'?'selected':''}>LOSE</option></select></div></div><div class="campaign-brief-grid"><div class="brief-card"><label>현재 활성 목표</label><textarea id="metaObjectives" placeholder="이번 달/이번 회차에서 현재 적용 중인 목표">${esc(m.current_objectives||'')}</textarea></div><div class="brief-card"><label>이번 달 추가 규칙 · 예외</label><textarea id="metaRules" placeholder="새로 열린 규칙, setup 때 잊기 쉬운 변화">${esc(m.current_rules||'')}</textarea></div><div class="brief-card"><label>영구 상태 요약</label><textarea id="metaPermanent" placeholder="도시 상태 · 연구소 · 질병 변화 등 꼭 기억할 것">${esc(m.permanent_summary||'')}</textarea></div></div><div class="next-note"><div class="note-title">📌 다음 게임 시작 전에 읽기</div><textarea id="metaNext" placeholder="다음 판 시작 전에 꼭 기억할 것">${esc(m.next_note||'')}</textarea></div>`:`<div class="status-grid"><div class="stat"><label>현재 월</label><strong>${esc(m.current_month||'-')}</strong></div><div class="stat"><label>현재 도전</label><strong>${esc(m.attempt||'-')}</strong></div><div class="stat"><label>자금 지원</label><strong>${esc(m.funding||'-')}</strong></div><div class="stat"><label>직전 결과</label><strong class="${m.last_result==='WIN'?'result-win':m.last_result==='LOSE'?'result-lose':''}">${esc(m.last_result||'-')}</strong></div></div><div class="campaign-brief-grid"><div class="brief-card"><label>현재 활성 목표</label><div class="brief-read">${esc(m.current_objectives||'-')}</div></div><div class="brief-card"><label>이번 달 추가 규칙 · 예외</label><div class="brief-read">${esc(m.current_rules||'-')}</div></div><div class="brief-card"><label>영구 상태 요약</label><div class="brief-read">${esc(m.permanent_summary||'-')}</div></div></div><div class="next-note"><div class="note-title">📌 다음 게임 시작 전에 읽기</div><div class="readonly">${esc(m.next_note||'아직 메모가 없어요.')}</div></div>`;if(canEdit){const saveMeta=()=>{state.meta.current_month=$('#metaMonth').value;state.meta.attempt=+$('#metaAttempt').value||1;state.meta.funding=$('#metaFunding').value;state.meta.last_result=$('#metaResult').value;state.meta.current_objectives=$('#metaObjectives').value;state.meta.current_rules=$('#metaRules').value;state.meta.permanent_summary=$('#metaPermanent').value;state.meta.next_note=$('#metaNext').value;queueSave();renderMonths();};['metaMonth','metaAttempt','metaFunding','metaResult'].forEach(id=>$('#'+id).onchange=saveMeta);['metaObjectives','metaRules','metaPermanent','metaNext'].forEach(id=>$('#'+id).oninput=saveMeta);}}
 function renderMonths(){$('#monthStrip').innerHTML=months.map(x=>`<div class="month-chip ${x===state.meta.current_month?'active':''}">${x}</div>`).join('');}
+
+function sortedSchedules(){return [...(state.schedules||[])].sort((a,b)=>(a.date||'9999-99-99').localeCompare(b.date||'9999-99-99')||(a.time||'99:99').localeCompare(b.time||'99:99'));}
+function weekdayKo(dateStr){if(!dateStr)return '';const d=new Date(dateStr+'T00:00:00');return ['일','월','화','수','목','금','토'][d.getDay()]||'';}
+function dateShort(dateStr){if(!dateStr)return '날짜 미정';const [y,m,d]=dateStr.split('-');return `${y.slice(2)}/${m}/${d}`;}
+function timeKo(timeStr){if(!timeStr)return '';const [h,m]=timeStr.split(':').map(Number);if(Number.isNaN(h))return '';let hh=h%12||12;return `${hh}시${m?` ${m}분`:''}~`;}
+function scheduleLine(s){const wd=weekdayKo(s.date);return `${dateShort(s.date)} ${wd?wd+'요일':''}${s.time?` · ${timeKo(s.time)}`:''}`;}
+function renderSchedules(){
+  const all=sortedSchedules();
+  const hero=$('#heroScheduleList');
+  const next3=all.slice(0,3);while(next3.length<3)next3.push(null);hero.innerHTML=next3.map((s,i)=>s?`<div class="hero-schedule-item"><span class="hero-schedule-round">${esc(s.round||`${i+1}회차`)}</span><span class="hero-schedule-date">${esc(scheduleLine(s))}</span></div>`:`<div class="hero-schedule-item"><span class="hero-schedule-round">${i+1}회차</span><span class="hero-schedule-date" style="color:#7f929a">일정 미정</span></div>`).join('');
+  const list=$('#scheduleList');
+  if(!list)return;
+  list.innerHTML=all.length?all.map(s=>`<article class="schedule-card"><div class="schedule-card-title">${esc(s.round||'레거시 일정')}</div><div class="schedule-card-date">${esc(scheduleLine(s))}</div>${s.note?`<div class="schedule-card-note">${esc(s.note)}</div>`:''}${canEdit?`<div class="schedule-card-actions"><button class="schedule-mini-btn" type="button" onclick="editSchedule('${s.id}')" title="수정">✎</button><button class="schedule-mini-btn" type="button" onclick="deleteSchedule('${s.id}')" title="삭제">×</button></div>`:''}</article>`).join(''):'<div class="schedule-empty">아직 등록된 레거시 일정이 없어요.</div>';
+}
+function openSchedule(data={}){$('#scheduleId').value=data.id||'';$('#scheduleRound').value=data.round||`${(state.schedules?.length||0)+1}회차`;$('#scheduleDate').value=data.date||'';$('#scheduleTime').value=data.time||'';$('#scheduleNote').value=data.note||'';$('#scheduleModalTitle').textContent=data.id?'레거시 일정 수정':'레거시 일정 추가';$('#scheduleModal').classList.remove('hidden');setTimeout(()=>$('#scheduleRound').focus(),50);}
+window.editSchedule=id=>{const s=(state.schedules||[]).find(x=>x.id===id);if(s)openSchedule(s);};
+window.deleteSchedule=async id=>{if(!canEdit||!confirm('이 레거시 일정을 삭제할까요?'))return;state.schedules=(state.schedules||[]).filter(x=>x.id!==id);await saveState();renderSchedules();};
+async function saveSchedule(){if(!canEdit)return;const id=$('#scheduleId').value||crypto.randomUUID();const row={id,round:$('#scheduleRound').value.trim()||'일정',date:$('#scheduleDate').value,time:$('#scheduleTime').value,note:$('#scheduleNote').value.trim()};const arr=state.schedules||(state.schedules=[]);const idx=arr.findIndex(x=>x.id===id);if(idx>=0)arr[idx]=row;else arr.push(row);await saveState();$('#scheduleModal').classList.add('hidden');renderSchedules();}
 function renderSessions(){const list=$('#sessionList');const sessions=[...state.sessions].sort((a,b)=>(b.date||'').localeCompare(a.date||'')||String(b.created_at||'').localeCompare(String(a.created_at||'')));if(!sessions.length){list.innerHTML='<div class="empty">아직 기록된 회차가 없어요.</div>';return;}list.innerHTML=sessions.map((s,i)=>`<article class="session-card"><div class="session-summary" onclick="toggleSession('${s.id}',this)"><div class="session-index">${esc(s.month||'?')}</div><div><div class="session-title">${esc(s.month||'')} · ${esc(s.attempt||1)}차 ${s.result?`<span class="${s.result==='WIN'?'result-win':'result-lose'}">${esc(s.result)}</span>`:''}</div><div class="session-sub">${esc(s.date||'날짜 미정')}${s.funding!==''&&s.funding!=null?` · 자금 지원 ${esc(s.funding)}`:''}</div></div><div class="session-open">⌄</div></div><div class="session-body hidden"><div class="record-grid">${record('참여 캐릭터',s.characters)}${record('이번 회차 목표',s.objectives)}${record('주요 내용',s.highlights,true)}${record('영구 변경사항',s.permanent,true)}${record('게임 종료 업그레이드',s.upgrades,true)}${record('다음 게임에서 기억할 것',s.next,true)}<div class="session-photo-block"><b>회차 사진</b><div id="sessionPhotos-${s.id}" class="session-photo-grid"><div class="photo-loading">펼치면 사진을 불러옵니다.</div></div></div></div>${canEdit?`<div class="session-actions"><button class="ghost" onclick="event.stopPropagation();editSession('${s.id}')">수정</button><button class="ghost danger" onclick="event.stopPropagation();deleteSession('${s.id}')">삭제</button></div>`:''}</div></article>`).join('');}
 window.toggleSession=async(id,summary)=>{const body=summary.nextElementSibling;const opening=body.classList.contains('hidden');body.classList.toggle('hidden');if(opening)await renderSessionPhotos(id);};
 function record(label,value,wide=false){return `<div class="record ${wide?'wide':''}"><b>${label}</b><div>${esc(value||'-')}</div></div>`;}
@@ -296,7 +357,33 @@ async function renderSessionPhotos(sessionId){
   const photos=await getSessionPhotos(sessionId);
   el.innerHTML=photos.length?photos.map(p=>`<div class="session-photo" onclick="openSessionPhoto('${sessionId}','${p.id}')"><img src="${p.data_url}" alt="회차 사진" loading="lazy"></div>`).join(''):'<div class="photo-empty">첨부된 사진이 없어요.</div>';
 }
-window.openSessionPhoto=(sessionId,photoId)=>{const p=(sessionPhotoCache.get(sessionId)||[]).find(x=>x.id===photoId);if(p)window.open(p.data_url,'_blank','noopener');};
+let lightboxPhotos=[],lightboxIndex=0;
+function renderPhotoLightbox(){
+  const box=$('#photoLightbox');
+  if(!lightboxPhotos.length){box.classList.add('hidden');return;}
+  lightboxIndex=(lightboxIndex+lightboxPhotos.length)%lightboxPhotos.length;
+  $('#photoLightboxImage').src=lightboxPhotos[lightboxIndex].data_url;
+  $('#photoLightboxCount').textContent=`${lightboxIndex+1} / ${lightboxPhotos.length}`;
+  box.classList.toggle('single',lightboxPhotos.length<=1);
+}
+function closePhotoLightbox(){
+  $('#photoLightbox').classList.add('hidden');
+  $('#photoLightbox').setAttribute('aria-hidden','true');
+  $('#photoLightboxImage').removeAttribute('src');
+}
+window.openSessionPhoto=(sessionId,photoId)=>{
+  const photos=sessionPhotoCache.get(sessionId)||[];
+  const idx=photos.findIndex(x=>x.id===photoId);
+  if(idx<0)return;
+  lightboxPhotos=photos;lightboxIndex=idx;
+  $('#photoLightbox').classList.remove('hidden');
+  $('#photoLightbox').setAttribute('aria-hidden','false');
+  renderPhotoLightbox();
+};
+$('#photoLightboxClose').onclick=closePhotoLightbox;
+$('#photoLightboxPrev').onclick=e=>{e.stopPropagation();lightboxIndex--;renderPhotoLightbox();};
+$('#photoLightboxNext').onclick=e=>{e.stopPropagation();lightboxIndex++;renderPhotoLightbox();};
+$('#photoLightbox').onclick=e=>{if(e.target===$('#photoLightbox'))closePhotoLightbox();};
 function renderModalPhotos(){
   const wrap=$('#sessionPhotoPreview');if(!wrap)return;
   const existing=modalExistingPhotos.filter(p=>!modalDeletedPhotoIds.includes(p.id));
@@ -339,7 +426,7 @@ async function saveSession(){const id=$('#sessionId').value||crypto.randomUUID()
 function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}function escapeAttr(v){return esc(v).replace(/`/g,'&#96;');}
 const rememberedCode=sessionStorage.getItem('pandemicLegacyS1Code');if(rememberedCode&&!isAdmin){$('#codeInput').value=rememberedCode;setTimeout(unlock,0);}
 $('#sPhotos').onchange=e=>handlePhotoFiles(e.target.files);
-$('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#addSessionBtn').onclick=()=>openSession();$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sessionModal').classList.contains('hidden'))$('#sessionModal').classList.add('hidden')});
+$('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#addScheduleBtn').onclick=()=>openSchedule();$('#cancelSchedule').onclick=()=>$('#scheduleModal').classList.add('hidden');$('#saveSchedule').onclick=saveSchedule;$('#addSessionBtn').onclick=()=>openSession();$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#photoLightbox').classList.contains('hidden')){closePhotoLightbox();return;}if(!$('#photoLightbox').classList.contains('hidden')){if(e.key==='ArrowLeft'){lightboxIndex--;renderPhotoLightbox();}else if(e.key==='ArrowRight'){lightboxIndex++;renderPhotoLightbox();}return;}if(e.key==='Escape'&&!$('#scheduleModal').classList.contains('hidden')){$('#scheduleModal').classList.add('hidden');return;}if(e.key==='Escape'&&!$('#sessionModal').classList.contains('hidden'))$('#sessionModal').classList.add('hidden')});
 boot();
 </script>
 </body></html>
