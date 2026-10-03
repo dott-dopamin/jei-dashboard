@@ -1,16 +1,37 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JEI Dashboard</title><link rel="stylesheet" href="style.css"><style>
-/* V48: archive-style compact dashboard header */
-html,body{background:#f7f8f9!important}
-.wrap{background:#f7f8f9!important;padding-top:42px!important}
-.index-hero{width:100%;display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 20px!important;padding:0 0 20px!important;border-bottom:1px solid #dde1e6;background:transparent!important}
-.index-nav{display:flex;align-items:center;gap:8px;min-width:0;white-space:nowrap}
-.index-title{margin:0!important;font-size:16px!important;font-weight:800!important;letter-spacing:-.025em!important;line-height:1;color:#17191c}
-.index-divider{color:#c7cdd3;font-size:13px;flex:0 0 auto}
-.index-date{color:#77808a;font-size:12px;font-weight:650;letter-spacing:.01em;line-height:1;white-space:nowrap}
-.archive-shortcut{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:0 0 auto;text-decoration:none;color:#54616b;background:#fff;border:1px solid #d7dde3;border-radius:11px;padding:9px 14px;font-size:12px;font-weight:800;line-height:1;box-shadow:0 1px 2px rgba(18,24,30,.04);transition:.15s ease;white-space:nowrap}
-.archive-shortcut:hover{background:#f0f3f5;color:#27343c;border-color:#cbd3da}
-@media(max-width:600px){.wrap{padding-top:28px!important}.index-hero{align-items:flex-start;gap:10px;padding:0 0 16px!important;margin-bottom:16px!important}.index-nav{gap:6px;flex-wrap:wrap}.index-title{font-size:14px!important}.index-date{font-size:10px}.index-divider{font-size:11px}.archive-shortcut{padding:8px 10px;font-size:10px;border-radius:9px}}
+/* V53: exact shared header geometry with GAME ARCHIVE pages */
+html{overflow-y:scroll;scrollbar-gutter:stable;background:#f7f8f9!important}
+body{background:#f7f8f9!important;min-width:0}
+.wrap{width:100%!important;max-width:1560px!important;margin:0 auto!important;padding:42px 26px 70px!important;background:#f7f8f9!important}
+.index-hero{
+  width:100%!important;
+  height:66px!important;
+  min-height:66px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  margin:0 0 20px!important;
+  padding:0 0 20px!important;
+  box-sizing:border-box!important;
+  border-bottom:1px solid #dde1e6!important;
+  background:transparent!important;
+}
+.index-nav{display:flex!important;align-items:center!important;flex-wrap:nowrap!important;white-space:nowrap!important;gap:6px!important;margin:0!important;padding:0!important;height:36px!important;min-width:0}
+.index-title{margin:0!important;font-size:14px!important;font-weight:800!important;letter-spacing:-.02em!important;line-height:1!important;color:#17191c!important;height:36px!important;display:inline-flex!important;align-items:center!important}
+.index-divider{color:#c7cdd3!important;font-size:13px!important;flex:0 0 auto!important;line-height:1!important}
+.index-date{color:#69727c!important;font-size:12px!important;font-weight:700!important;letter-spacing:.01em!important;line-height:1!important;white-space:nowrap!important;height:36px!important;display:inline-flex!important;align-items:center!important}
+.archive-shortcut{height:36px!important;min-height:36px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;flex:0 0 auto!important;text-decoration:none!important;color:#17191c!important;background:#f7f8fa!important;border:1px solid #d7dde3!important;border-radius:11px!important;padding:0 14px!important;font-size:12px!important;font-weight:800!important;line-height:1!important;box-sizing:border-box!important;box-shadow:0 1px 2px rgba(18,24,30,.04)!important;transition:.15s ease!important;white-space:nowrap!important}
+.archive-shortcut:hover{background:#eef1f3!important;color:#17191c!important;border-color:#ccd3d9!important}
+@media(max-width:600px){
+  .wrap{padding:28px 10px 50px!important}
+  .index-hero{height:auto!important;min-height:64px!important;align-items:flex-start!important;padding-bottom:18px!important;margin-bottom:18px!important}
+  .index-nav{height:auto!important;flex-wrap:wrap!important;gap:4px!important}
+  .index-title{height:32px!important;font-size:12px!important}
+  .index-date{height:32px!important;font-size:10px!important}
+  .index-divider{font-size:12px!important}
+  .archive-shortcut{height:32px!important;min-height:32px!important;font-size:10px!important;padding:0 10px!important}
+}
 </style></head>
 <body><div class="lock-screen" id="lockScreen"><div class="lock-box"><small>PRIVATE DASHBOARD</small><h2>일해라 절해라</h2><p>개인 대시보드입니다. 비밀번호를 입력하세요.</p><form class="lock-form" id="lockForm"><input id="lockPassword" type="password" inputmode="numeric" autocomplete="current-password" placeholder="비밀번호" maxlength="20"><button type="submit">열기</button></form><p class="lock-error" id="lockError"></p></div></div><div class="wrap"><header class="index-hero"><div class="index-nav"><h1 class="index-title">일해라 절해라</h1><span class="index-divider">|</span><div class="index-date" id="today"></div><span class="index-divider">|</span><a class="archive-shortcut" href="games.html">🎲 GAME ARCHIVE</a></div></header>
 <main class="dashboard">
