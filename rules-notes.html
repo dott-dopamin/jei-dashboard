@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="archive-header.css">
 <style>
+/* 잔룰 팝업 클래스는 공용 style.css의 .modal과 충돌하지 않도록 rule-dialog로 분리 */
 html,body{background:#f7f8f9!important}
 html{overflow-y:scroll;scrollbar-gutter:stable}
 *{box-sizing:border-box}
@@ -36,16 +37,16 @@ button,input,textarea{font:inherit}
 .rule-edit:hover,.rule-delete:hover{background:#f2f4f6;color:#20252a}
 .empty{grid-column:1/-1;text-align:center;color:#9aa0a8;padding:80px 0;font-size:13px}
 .modal-bg{position:fixed;inset:0;z-index:80;background:rgba(24,30,35,.46);display:grid;place-items:center;padding:18px}
-.modal{width:min(560px,100%);max-height:88vh;overflow:auto;background:#fff;border:1px solid #dfe4e8;border-radius:18px;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.22)}
-.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}
+.rule-dialog{display:block;width:min(560px,100%);max-height:88vh;overflow:auto;background:#fff;border:1px solid #dfe4e8;border-radius:18px;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.22)}
+.rule-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}
 .modal-kicker{font-size:10px;letter-spacing:.14em;font-weight:900;color:#9198a0;margin-bottom:5px}
-.modal h2{font-size:22px;margin:0;letter-spacing:-.03em}
+.rule-dialog h2{font-size:22px;margin:0;letter-spacing:-.03em}
 .close-modal{border:0;width:34px;height:34px;border-radius:50%;background:#f0f2f4;color:#23282d;font-size:20px;cursor:pointer;flex:0 0 auto}
 .field{display:flex;flex-direction:column;gap:6px;margin-top:12px}.field label{font-size:11px;font-weight:800;color:#737c85}.field input,.field textarea{border:1px solid #dfe4e8;border-radius:10px;padding:11px 12px;background:#fff;outline:none;color:#20262b}.field input:focus,.field textarea:focus{border-color:#b8c0c8;box-shadow:0 0 0 3px rgba(77,92,107,.07)}.field textarea{min-height:220px;resize:vertical;line-height:1.65}
 .note-view{white-space:pre-wrap;line-height:1.7;font-size:14px;color:#343b42;background:#f7f8f9;border:1px solid #e7eaed;border-radius:11px;padding:14px;min-height:150px}
-.modal-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;margin-top:15px}.primary{border:0;border-radius:9px;background:#28343e;color:#fff;font-weight:800;padding:10px 15px;cursor:pointer}.ghost{border:1px solid #dce1e5;border-radius:9px;background:#fff;color:#626a73;font-weight:800;padding:9px 13px;cursor:pointer}.save-state{font-size:11px;color:#8b9299;margin-right:auto}.hidden{display:none!important}
+.rule-dialog-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;margin-top:15px}.primary{border:0;border-radius:9px;background:#28343e;color:#fff;font-weight:800;padding:10px 15px;cursor:pointer}.ghost{border:1px solid #dce1e5;border-radius:9px;background:#fff;color:#626a73;font-weight:800;padding:9px 13px;cursor:pointer}.save-state{font-size:11px;color:#8b9299;margin-right:auto}.hidden{display:none!important}
 @media(max-width:1000px){.rules-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){.rules-wrap{padding:28px 10px 50px}.rules-toolbar{grid-template-columns:1fr auto}.add-rule{padding:0 13px}.rules-list{grid-template-columns:1fr}.modal{padding:16px;border-radius:15px}.field textarea{min-height:180px}}
+@media(max-width:600px){.rules-wrap{padding:28px 10px 50px}.rules-toolbar{grid-template-columns:1fr auto}.add-rule{padding:0 13px}.rules-list{grid-template-columns:1fr}.rule-dialog{padding:16px;border-radius:15px}.field textarea{min-height:180px}}
 </style>
 </head>
 <body>
@@ -71,8 +72,8 @@ button,input,textarea{font:inherit}
 </div>
 
 <div id="ruleModal" class="modal-bg hidden">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-head">
+  <div class="rule-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="rule-dialog-head">
       <div><div class="modal-kicker">RULE NOTE</div><h2 id="modalTitle">잔룰 노트</h2></div>
       <button id="closeModal" class="close-modal" type="button" aria-label="닫기">×</button>
     </div>
@@ -83,7 +84,7 @@ button,input,textarea{font:inherit}
       <input id="noteId" type="hidden">
       <div class="field"><label>게임명</label><input id="gameName" required placeholder="게임명"></div>
       <div class="field"><label>잔룰 메모</label><textarea id="gameNote" placeholder="헷갈리는 잔룰, 예외, 점수 계산, 턴 순서 등을 적어두세요."></textarea></div>
-      <div class="modal-actions"><span id="saveState" class="save-state"></span><button id="cancelEdit" class="ghost" type="button">취소</button><button id="saveNew" class="primary" type="submit">저장</button></div>
+      <div class="rule-dialog-actions"><span id="saveState" class="save-state"></span><button id="cancelEdit" class="ghost" type="button">취소</button><button id="saveNew" class="primary" type="submit">저장</button></div>
     </form>
   </div>
 </div>
