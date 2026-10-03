@@ -7,7 +7,7 @@
 
 ## 실제 GitHub Pages에 필요한 파일
 
-루트에는 아래 4개만 있으면 됩니다.
+루트에는 아래 5개와 공용 스타일 파일이 있으면 됩니다.
 
 - `index.html` — 개인 대시보드
   - 업무 캘린더 / TODO / 메모 / 단종 예정
@@ -20,6 +20,10 @@
   - 관리자 로그인 시 게임 추가·수정·삭제
   - 확장 / 펀딩 배지
   - 팬데믹 S1 로그 링크
+- `rules-notes.html` — 보드게임 잔룰 노트
+  - 게임별 잔룰/예외/점수 계산 메모
+  - 관리자 로그인 시 자동 저장
+  - `games.html`에서 게임명 클릭 시 같은 내용을 팝업으로 즉시 확인
 - `pandemic-legacy-s1.html` — 팬데믹 레거시 시즌 1 공동 기록
   - 공유 비밀번호 통과 시 공동 편집
   - 플레이어 / 캠페인 상태 / 메모 자동 저장
@@ -33,6 +37,7 @@
 
 - 개인 대시보드: `/jei-dashboard/`
 - GAME ARCHIVE: `/jei-dashboard/games.html`
+- 잔룰 노트: `/jei-dashboard/rules-notes.html`
 - 팬데믹 S1 로그: `/jei-dashboard/pandemic-legacy-s1.html`
 
 ## 유지보수 원칙
@@ -64,6 +69,7 @@ where id = 1;
 - `calendar_keywords`
 - `discontinued_items`
 - `board_games`
+- `board_game_rule_notes`
 - `pandemic_legacy_s1_state`
 - `pandemic_legacy_s1_settings`
 - Storage bucket: `board-game-images`
@@ -82,3 +88,13 @@ where id = 1;
 - 과거 버전 ZIP 및 개별 migration SQL
 
 기존 Supabase 데이터는 이 파일 정리와 무관하며 삭제되지 않습니다.
+
+## V51 팬데믹 기록 보강
+
+커뮤니티 기록 습관을 반영해 현재 활성 목표, 이번 달 추가 규칙/예외, 영구 상태 요약, 캐릭터별 상처·관계·업그레이드 메모를 추가했습니다. 기존 JSON 상태에 필드가 추가되는 방식이라 별도 팬데믹 DB 마이그레이션은 필요하지 않습니다.
+
+
+## V51 추가 기능
+- 보드게임 책장 카드 제목 클릭 잔룰 팝업은 제거했습니다. 잔룰은 `rules-notes.html`에서만 관리합니다.
+- 팬데믹 S1 회차 기록마다 사진 1~3장을 첨부할 수 있습니다. 사진은 브라우저에서 자동 축소 후 별도 DB 테이블에 저장합니다.
+- 최초 적용 시 `database/v51-required.sql`을 Supabase SQL Editor에서 한 번 실행하세요.

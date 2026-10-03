@@ -78,6 +78,12 @@ on conflict (id) do update set public = true;
 -- -------------------------
 -- Pandemic Legacy S1
 -- -------------------------
+create table if not exists public.board_game_rule_notes (
+  game_id uuid primary key references public.board_games(id) on delete cascade,
+  note text not null default '',
+  updated_at timestamptz not null default now()
+);
+
 create table if not exists public.pandemic_legacy_s1_state (
   id integer primary key,
   data jsonb not null default '{}'::jsonb,
@@ -90,6 +96,15 @@ create table if not exists public.pandemic_legacy_s1_settings (
   access_code text not null,
   constraint pandemic_legacy_s1_settings_singleton check (id = 1)
 );
+
+create table if not exists public.pandemic_legacy_s1_photos (
+  id uuid primary key default gen_random_uuid(),
+  session_id text not null,
+  data_url text not null,
+  created_at timestamptz not null default now()
+);
+create index if not exists idx_pandemic_legacy_s1_photos_session
+on public.pandemic_legacy_s1_photos(session_id,created_at);
 
 -- 팬데믹 공유 비밀번호의 실제 값은 이 참고 파일에 적지 않습니다.
 -- 변경 시:
@@ -158,8 +173,10 @@ alter table public.calendar_events enable row level security;
 alter table public.calendar_keywords enable row level security;
 alter table public.discontinued_items enable row level security;
 alter table public.board_games enable row level security;
+alter table public.board_game_rule_notes enable row level security;
 alter table public.pandemic_legacy_s1_state enable row level security;
 alter table public.pandemic_legacy_s1_settings enable row level security;
+alter table public.pandemic_legacy_s1_photos enable row level security;
 
 grant select,insert,update,delete on public.todos to authenticated;
 grant select,insert,update,delete on public.notes to authenticated;
@@ -168,13 +185,17 @@ grant select,insert,update,delete on public.calendar_keywords to authenticated;
 grant select,insert,update,delete on public.discontinued_items to authenticated;
 grant select on public.board_games to anon;
 grant select,insert,update,delete on public.board_games to authenticated;
+grant select on public.board_game_rule_notes to anon;
+grant select,insert,update,delete on public.board_game_rule_notes to authenticated;
 grant select,insert,update,delete on public.pandemic_legacy_s1_state to authenticated;
 grant select,insert,update,delete on public.pandemic_legacy_s1_settings to authenticated;
+grant select,insert,delete on public.pandemic_legacy_s1_photos to authenticated;
 
 -- 실제 라이브 DB의 RLS policy는 Supabase Dashboard에서도 함께 확인하세요.
 -- board_games: anon SELECT, authenticated ALL
 -- 개인 대시보드 테이블: authenticated ALL
 -- pandemic tables: authenticated ALL, 공유 비밀번호 사용자는 SECURITY DEFINER RPC로 접근
+-- pandemic photos: 별도 테이블 + 비밀번호 검증 RPC로 회차별 최대 3장
 -- storage.objects / board-game-images: public SELECT, authenticated INSERT/UPDATE/DELETE
 
 revoke all on function public.get_pandemic_legacy_s1(text) from public;

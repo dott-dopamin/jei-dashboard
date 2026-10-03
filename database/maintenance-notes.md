@@ -29,3 +29,16 @@
 ## 주의
 
 Publishable key는 프론트엔드에 노출될 수 있지만 `service_role` 또는 Secret key는 절대 공개 저장소에 넣으면 안 됩니다.
+
+
+## V50 잔룰 노트
+- `board_game_rule_notes.game_id`는 `board_games.id`와 1:1 연결
+- 외부 사용자는 SELECT만 가능
+- 관리자 로그인 사용자는 자동 저장 편집 가능
+- `games.html` 게임명 클릭 팝업과 `rules-notes.html`이 같은 데이터를 사용
+
+
+## V51 팬데믹 회차 사진
+- `pandemic_legacy_s1_photos`: 회차별 최대 3장. 클라이언트에서 1280px 이내 JPEG로 축소.
+- 공유 비밀번호 사용자는 사진 테이블에 직접 접근하지 않고 `get/save/delete_pandemic_legacy_s1_*photo*` RPC로 접근합니다.
+- 잔룰 노트는 보드게임 책장과 UI상 분리되어 `rules-notes.html`에서만 확인/편집합니다.
