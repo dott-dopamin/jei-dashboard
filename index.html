@@ -2,7 +2,7 @@
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JEI Dashboard</title><link rel="stylesheet" href="style.css"><style>
 /* V48: archive-style compact dashboard header */
 html,body{background:#f7f8f9!important}
-.wrap{background:#f7f8f9!important}
+.wrap{background:#f7f8f9!important;padding-top:42px!important}
 .index-hero{width:100%;display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 20px!important;padding:0 0 20px!important;border-bottom:1px solid #dde1e6;background:transparent!important}
 .index-nav{display:flex;align-items:center;gap:8px;min-width:0;white-space:nowrap}
 .index-title{margin:0!important;font-size:16px!important;font-weight:800!important;letter-spacing:-.025em!important;line-height:1;color:#17191c}
@@ -10,7 +10,7 @@ html,body{background:#f7f8f9!important}
 .index-date{color:#77808a;font-size:12px;font-weight:650;letter-spacing:.01em;line-height:1;white-space:nowrap}
 .archive-shortcut{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:0 0 auto;text-decoration:none;color:#54616b;background:#fff;border:1px solid #d7dde3;border-radius:11px;padding:9px 14px;font-size:12px;font-weight:800;line-height:1;box-shadow:0 1px 2px rgba(18,24,30,.04);transition:.15s ease;white-space:nowrap}
 .archive-shortcut:hover{background:#f0f3f5;color:#27343c;border-color:#cbd3da}
-@media(max-width:600px){.index-hero{align-items:flex-start;gap:10px;padding:0 0 16px!important;margin-bottom:16px!important}.index-nav{gap:6px;flex-wrap:wrap}.index-title{font-size:14px!important}.index-date{font-size:10px}.index-divider{font-size:11px}.archive-shortcut{padding:8px 10px;font-size:10px;border-radius:9px}}
+@media(max-width:600px){.wrap{padding-top:28px!important}.index-hero{align-items:flex-start;gap:10px;padding:0 0 16px!important;margin-bottom:16px!important}.index-nav{gap:6px;flex-wrap:wrap}.index-title{font-size:14px!important}.index-date{font-size:10px}.index-divider{font-size:11px}.archive-shortcut{padding:8px 10px;font-size:10px;border-radius:9px}}
 </style></head>
 <body><div class="lock-screen" id="lockScreen"><div class="lock-box"><small>PRIVATE DASHBOARD</small><h2>일해라 절해라</h2><p>개인 대시보드입니다. 비밀번호를 입력하세요.</p><form class="lock-form" id="lockForm"><input id="lockPassword" type="password" inputmode="numeric" autocomplete="current-password" placeholder="비밀번호" maxlength="20"><button type="submit">열기</button></form><p class="lock-error" id="lockError"></p></div></div><div class="wrap"><header class="index-hero"><div class="index-nav"><h1 class="index-title">일해라 절해라</h1><span class="index-divider">|</span><div class="index-date" id="today"></div><span class="index-divider">|</span><a class="archive-shortcut" href="games.html">🎲 GAME ARCHIVE</a></div></header>
 <main class="dashboard">
