@@ -84,7 +84,7 @@ button,input,textarea{font:inherit}
       <input id="noteId" type="hidden">
       <div class="field"><label>게임명</label><input id="gameName" required placeholder="게임명"></div>
       <div class="field"><label>잔룰 메모</label><textarea id="gameNote" placeholder="헷갈리는 잔룰, 예외, 점수 계산, 턴 순서 등을 적어두세요."></textarea></div>
-      <div class="rule-dialog-actions"><span id="saveState" class="save-state"></span><button id="cancelEdit" class="ghost" type="button">취소</button><button id="saveNew" class="primary" type="submit">저장</button></div>
+      <div class="rule-dialog-actions"><span id="saveState" class="save-state"></span><button id="cancelEdit" class="ghost" type="button">닫기</button></div>
     </form>
   </div>
 </div>
@@ -139,8 +139,8 @@ window.openView=id=>{
 function openNew(){
   if(!isAdmin)return;
   editingId=null; $('#editMode').reset(); $('#noteId').value='';
-  $('#modalTitle').textContent='잔룰 추가'; $('#saveNew').textContent='등록';
-  $('#saveState').textContent='';
+  $('#modalTitle').textContent='잔룰 추가';
+  $('#saveState').textContent='게임명을 입력하면 자동 저장';
   $('#viewMode').classList.add('hidden'); $('#editMode').classList.remove('hidden');
   showModal(); setTimeout(()=>$('#gameName').focus(),50);
 }
@@ -149,33 +149,48 @@ window.openEdit=id=>{
   if(!isAdmin)return;
   const n=notes.find(x=>x.id===id); if(!n)return;
   editingId=id; $('#noteId').value=id; $('#gameName').value=n.game_name||''; $('#gameNote').value=n.note||'';
-  $('#modalTitle').textContent='잔룰 수정'; $('#saveNew').textContent='저장'; $('#saveState').textContent='입력하면 자동 저장';
+  $('#modalTitle').textContent='잔룰 수정'; $('#saveState').textContent='입력하면 자동 저장';
   $('#viewMode').classList.add('hidden'); $('#editMode').classList.remove('hidden');
   showModal();
 };
 
 async function createNote(){
   const game_name=$('#gameName').value.trim(), note=$('#gameNote').value;
-  if(!game_name)return;
+  if(!game_name){$('#saveState').textContent='게임명을 입력하면 자동 저장';return;}
+  $('#saveState').textContent='저장 중...';
   const {data,error}=await db.from('game_rule_notes').insert({game_name,note,updated_at:new Date().toISOString()}).select().single();
-  if(error)return alert(error.code==='23505'?'같은 게임명이 이미 등록되어 있어요.':error.message);
-  notes.push(data); closeModal(); draw();
+  if(error){
+    $('#saveState').textContent=error.code==='23505'?'같은 게임명이 이미 있어요.':'저장 실패';
+    return;
+  }
+  notes.push(data);
+  editingId=data.id;
+  $('#noteId').value=data.id;
+  $('#modalTitle').textContent='잔룰 수정';
+  $('#saveState').textContent='자동 저장됨';
+  draw();
+  setTimeout(()=>{if($('#saveState').textContent==='자동 저장됨')$('#saveState').textContent='입력하면 자동 저장';},1000);
 }
 
 function queueEditSave(){
-  if(!editingId||!isAdmin)return;
-  $('#saveState').textContent='입력 중...';
+  if(!isAdmin)return;
   clearTimeout(saveTimer);
-  saveTimer=setTimeout(saveEdit,650);
+  const game_name=$('#gameName').value.trim();
+  if(!editingId&&!game_name){$('#saveState').textContent='게임명을 입력하면 자동 저장';return;}
+  $('#saveState').textContent='입력 중...';
+  saveTimer=setTimeout(()=>editingId?saveEdit():createNote(),650);
 }
 
 async function saveEdit(){
   if(!editingId||!isAdmin)return;
   const game_name=$('#gameName').value.trim(), note=$('#gameNote').value;
-  if(!game_name)return;
+  if(!game_name){$('#saveState').textContent='게임명은 비워둘 수 없어요.';return;}
   $('#saveState').textContent='저장 중...';
   const {data,error}=await db.from('game_rule_notes').update({game_name,note,updated_at:new Date().toISOString()}).eq('id',editingId).select().single();
-  if(error){$('#saveState').textContent='저장 실패';return alert(error.code==='23505'?'같은 게임명이 이미 등록되어 있어요.':error.message);}
+  if(error){
+    $('#saveState').textContent=error.code==='23505'?'같은 게임명이 이미 있어요.':'저장 실패';
+    return;
+  }
   const i=notes.findIndex(x=>x.id===editingId); if(i>=0)notes[i]=data;
   $('#saveState').textContent='자동 저장됨'; draw();
   setTimeout(()=>{if($('#saveState').textContent==='자동 저장됨')$('#saveState').textContent='입력하면 자동 저장';},1000);
@@ -192,7 +207,7 @@ $('#q').oninput=draw;
 $('#addRule').onclick=openNew;
 $('#closeModal').onclick=closeModal;
 $('#cancelEdit').onclick=closeModal;
-$('#editMode').addEventListener('submit',async e=>{e.preventDefault(); if(editingId)await saveEdit(); else await createNote();});
+$('#editMode').addEventListener('submit',e=>e.preventDefault());
 $('#gameName').oninput=queueEditSave; $('#gameNote').oninput=queueEditSave;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#ruleModal').classList.contains('hidden'))closeModal();});
 init();
