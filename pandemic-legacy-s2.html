@@ -29,13 +29,104 @@ radial-gradient(circle at 15% -8%,rgba(69,128,151,.18),transparent 30%),linear-g
 .photo-grid,.session-photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.photo-item,.session-photo{position:relative;aspect-ratio:4/3;border:1px solid #2d4149;border-radius:8px;overflow:hidden;background:#10191e}.photo-item img,.session-photo img{width:100%;height:100%;object-fit:cover}.session-photo{cursor:zoom-in}.photo-remove{position:absolute;right:5px;top:5px;width:24px;height:24px;border:0;border-radius:50%;background:rgba(0,0,0,.75);color:white;cursor:pointer}.session-photo-block{grid-column:1/-1;background:#10191e;border:1px solid #263940;border-radius:8px;padding:10px}.session-photo-block>b{display:block;font-size:9px;color:#82959d;margin-bottom:7px}.photo-help,.photo-status{font-size:10px;color:#83969e;line-height:1.5}.lightbox{position:fixed;inset:0;z-index:120;background:rgba(4,9,12,.9);display:flex;align-items:center;justify-content:center;padding:20px}.lightbox img{max-width:94vw;max-height:88vh;border-radius:10px}.lightbox button{position:absolute;border:1px solid rgba(255,255,255,.22);background:rgba(10,18,22,.84);color:#fff;cursor:pointer}.lightbox-close{right:18px;top:18px;width:38px;height:38px;border-radius:50%;font-size:22px}.lightbox-prev,.lightbox-next{top:50%;transform:translateY(-50%);width:42px;height:54px;border-radius:10px;font-size:24px}.lightbox-prev{left:18px}.lightbox-next{right:18px}
 @media(max-width:1100px){.hero-grid,.dashboard-grid{grid-template-columns:1fr}.session-list{grid-template-columns:1fr}.city-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:600px){.page{padding:28px 10px 50px}.hero{padding:16px;border-radius:14px}.hero-title{min-height:105px}.hero h1{font-size:28px}.grid4{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.player-card{padding:10px}.player-card input,.player-card textarea{padding:8px}.player-card textarea{min-height:54px}.status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.campaign-brief-grid{grid-template-columns:1fr}.tracker-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.player-deck-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.city-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bottom-city-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.manage-row{grid-template-columns:1fr 72px auto}.manage-row .manage-extra{grid-column:1/-1}.form-grid{grid-template-columns:1fr}.field.wide{grid-column:auto}.record-grid{grid-template-columns:1fr}.record.wide{grid-column:auto}.photo-grid,.session-photo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ===== SEASON 2 / SUPPLY ROUTE THEME ===== */
+.season2-theme{
+  --s2-paper:#eef1ea;--s2-card:#f8f7f1;--s2-ink:#20343a;--s2-muted:#718388;
+  --s2-line:#bcc9c6;--s2-sea:#2d6670;--s2-deep:#244b54;--s2-rust:#c26d46;
+  --s2-sand:#d8c69f;--s2-green:#668f7d;
+  color:var(--s2-ink)!important;
+  background:
+    linear-gradient(rgba(45,102,112,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(45,102,112,.035) 1px,transparent 1px),
+    radial-gradient(circle at 8% 0%,rgba(78,132,137,.16),transparent 30%),
+    #e7ece8!important;
+  background-size:28px 28px,28px 28px,auto!important;
+}
+html{background:#e7ece8!important}
+.season2-theme .archive-header-s2 .archive-kicker{color:#67797e!important}
+.season2-theme .archive-header-s2 .archive-link{color:#53666b!important}
+.season2-theme .archive-header-s2 .archive-link:hover{color:#17383f!important}
+.season2-theme .archive-header-s2 .archive-link.active{background:#d9e5e2!important;color:#17383f!important;border-color:#a9bfba!important;box-shadow:none!important}
+.season2-theme .archive-header-s2 .archive-divider{color:#9fb0ad!important}
+.season2-theme .back{color:#66787d!important}
+.season2-theme .hero{
+  position:relative;overflow:hidden;border:1px solid #8aa8a5;border-radius:18px;
+  background:linear-gradient(120deg,#315f68 0%,#244952 58%,#18383f 100%)!important;
+  box-shadow:0 14px 34px rgba(35,73,79,.16)!important;color:#f8fbf9!important;
+}
+.season2-theme .hero:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(118deg,transparent 0 24px,rgba(255,255,255,.025) 24px 25px)}
+.season2-theme .hero:after{content:"SUPPLY ROUTE / ATLANTIC GRID";position:absolute;left:22px;bottom:12px;font-size:8px;letter-spacing:.24em;color:rgba(229,239,235,.44);font-weight:800}
+.season2-theme .hero h1:before{content:"FIELD LOG / SEASON 2";color:#bcd2cf!important}
+.season2-theme .spoiler{border-color:rgba(244,186,133,.46)!important;background:rgba(116,56,32,.34)!important;color:#ffe5d4!important}
+.season2-theme .password-change-btn{border-color:#71939a!important;background:rgba(14,46,53,.48)!important;color:#e5efed!important}
+.season2-theme .password-change-btn:hover{background:#37656e!important}
+.season2-theme .hero-month-panel{background:rgba(238,244,240,.1)!important;border-color:rgba(220,236,231,.24)!important;backdrop-filter:blur(2px)}
+.season2-theme .hero-month-head span{color:#aac2c1!important}
+.season2-theme .month-chip{background:rgba(11,42,48,.35)!important;border-color:#52757c!important;color:#c1d2d0!important}
+.season2-theme .month-chip.active{background:var(--s2-rust)!important;border-color:var(--s2-rust)!important;color:white!important}
+.season2-theme .section{
+  background:var(--s2-card)!important;border:1px solid var(--s2-line)!important;color:var(--s2-ink)!important;
+  box-shadow:0 7px 20px rgba(42,72,73,.07)!important;
+}
+.season2-theme .section h2:before{background:var(--s2-rust)!important}
+.season2-theme .section-desc,.season2-theme .save-state{color:var(--s2-muted)!important}
+.season2-theme .player-card{background:#f3f4ee!important;border-color:#c5cfcb!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.45)}
+.season2-theme .player-card:before{height:5px}
+.season2-theme .player-name{color:#334b51!important}
+.season2-theme .player-card input,.season2-theme .player-card textarea,
+.season2-theme .stat input,.season2-theme .stat select,.season2-theme .field input,.season2-theme .field select,.season2-theme .field textarea,
+.season2-theme .deck-stat input,.season2-theme .tracker-config input,.season2-theme .manage-row input,.season2-theme .manage-row select{
+  background:#fff!important;color:#24383e!important;border-color:#bdc9c6!important;
+}
+.season2-theme .stat,.season2-theme .brief-card,.season2-theme .tracker-stat,.season2-theme .player-deck-panel,.season2-theme .deck-stat,
+.season2-theme .session-card,.season2-theme .record,.season2-theme .session-photo-block{
+  background:#f0f2ec!important;border-color:#c3ceca!important;color:#263a40!important;
+}
+.season2-theme .stat label,.season2-theme .brief-card label,.season2-theme .tracker-stat span,.season2-theme .deck-stat label,.season2-theme .record b,.season2-theme .session-photo-block>b{color:#74868a!important}
+.season2-theme .brief-card textarea,.season2-theme .next-note textarea{color:#263a40!important}
+.season2-theme .next-note{background:#f6ead6!important;border-color:#dfc394!important}
+.season2-theme .next-note b{color:#91642e!important}
+.season2-theme .primary{background:var(--s2-rust)!important;border-color:#a95333!important;color:#fff!important}
+.season2-theme .primary:hover{background:#ad5d3c!important}
+.season2-theme .ghost,.season2-theme .mini,.season2-theme .deck-mini{background:#eef1ec!important;border-color:#bac6c3!important;color:#41585e!important}
+.season2-theme .danger{color:#a84d3d!important}
+.season2-theme .session-summary{background:#e6ece7!important}
+.season2-theme .session-index{background:#d6e6e2!important;border-color:#9bbab5!important;color:#28545d!important}
+.season2-theme .session-sub,.season2-theme .tracker-help,.season2-theme .deck-note,.season2-theme .infection-topbar p,.season2-theme .photo-help,.season2-theme .photo-status{color:#73868a!important}
+.season2-theme .tracker-config{background:#e9eee9!important;border-color:#c0ccc8!important}
+.season2-theme .tracker-config label{color:#60777c!important}
+.season2-theme .tracker-config small{color:#75878b!important}
+.season2-theme .tracker-config .match{color:#4d806a!important}.season2-theme .tracker-config .mismatch{color:#a77736!important}
+.season2-theme .group-chip{background:#e6ece7!important;border-color:#bdc9c5!important;color:#4b6267!important}
+.season2-theme .group-chip.top{background:#f0dfd5!important;border-color:#d69a7c!important;color:#814c36!important}
+.season2-theme .modal-bg{background:rgba(20,43,47,.66)!important}
+.season2-theme .modal{background:#f4f4ed!important;border-color:#afbfbb!important;color:#23383e!important;box-shadow:0 24px 70px rgba(25,51,55,.28)!important}
+.season2-theme .field label,.season2-theme .password-help{color:#6f8185!important}
+.season2-theme .password-error{color:#a74b3e!important}
+.season2-theme .city-btn,.season2-theme .bottom-city{background:#e7ece7!important;border-color:#bdc9c5!important;color:#263a40!important}
+.season2-theme .city-btn:hover{border-color:#789a96!important;background:#dfe8e4!important}
+.season2-theme .city-btn.invalid{opacity:.42}
+.season2-theme .city-counts,.season2-theme .bottom-city small{color:#718489!important}
+.season2-theme .manage-row{background:#e9ede8!important;border-color:#c1ccc8!important}
+.season2-theme .manage-row button{background:#f5f5ef!important;color:#425a60!important;border-color:#bcc8c4!important}
+.season2-theme .photo-item,.season2-theme .session-photo{background:#dfe6e1!important;border-color:#b8c6c2!important}
+.season2-theme .gate{background:linear-gradient(135deg,#244952,#dce6e2)!important}
+.season2-theme .gate-card{background:#f4f4ed!important;border-color:#b1c2be!important;color:#23383e!important;box-shadow:0 22px 60px rgba(24,55,59,.24)!important}
+.season2-theme .gate-lock{background:#315f68!important;color:#fff!important}
+.season2-theme .gate-card p{color:#708286!important}
+.season2-theme .gate-row input{background:#fff!important;color:#23383e!important;border-color:#bdc9c6!important}
+.season2-theme .gate-row button{background:var(--s2-rust)!important}
+.season2-theme .lightbox{background:rgba(19,37,40,.92)!important}
+@media(max-width:600px){.season2-theme .hero:after{display:none}.season2-theme .section{box-shadow:none!important}}
+
 </style>
 </head>
-<body>
+<body class="season2-theme">
 <div id="gate" class="gate"><div class="gate-card"><div class="gate-lock">🔒</div><h2>팬데믹 S2 로그</h2><p>캠페인 스포일러가 포함되어 있어요. 공유받은 비밀번호로 들어오면 기록을 함께 수정할 수 있습니다.</p><div class="gate-row"><input id="codeInput" type="password" inputmode="numeric" placeholder="비밀번호"><button id="unlockBtn">열기</button></div><div id="gateError" class="gate-error"></div></div></div>
 
 <main id="app" class="page hidden">
-  <div class="topbar archive-header archive-header-dark"><div class="archive-brand"><nav class="archive-nav" aria-label="게임 아카이브"><span class="archive-kicker">GAME ARCHIVE</span><a class="archive-link" href="games.html">보드게임 책장 <span>📚</span></a><span class="archive-divider">|</span><a class="archive-link" href="play-log.html">플레이 로그 <span>📅</span></a><span class="archive-divider">|</span><a class="archive-link" href="rules-notes.html">잔룰 노트 <span>📝</span></a><span class="archive-divider">|</span><a class="archive-link" href="pandemic-legacy-s1.html">팬데믹 S1 로그 <span>🔒</span></a><span class="archive-divider">|</span><a class="archive-link active" href="pandemic-legacy-s2.html">팬데믹 S2 로그 <span>🔒</span></a></nav></div><a class="back" href="index.html">← HOME</a></div>
+  <div class="topbar archive-header archive-header-s2"><div class="archive-brand"><nav class="archive-nav" aria-label="게임 아카이브"><span class="archive-kicker">GAME ARCHIVE</span><a class="archive-link" href="games.html">보드게임 책장 <span>📚</span></a><span class="archive-divider">|</span><a class="archive-link" href="play-log.html">플레이 로그 <span>📅</span></a><span class="archive-divider">|</span><a class="archive-link" href="rules-notes.html">잔룰 노트 <span>📝</span></a><span class="archive-divider">|</span><a class="archive-link" href="pandemic-legacy-s1.html">팬데믹 S1 로그 <span>🔒</span></a><span class="archive-divider">|</span><a class="archive-link active" href="pandemic-legacy-s2.html">팬데믹 S2 로그 <span>🔒</span></a></nav></div><a class="back" href="index.html">← HOME</a></div>
 
   <section class="hero"><div class="hero-grid"><div class="hero-title"><h1>PANDEMIC LEGACY : SEASON 2</h1><div class="hero-actions"><div class="spoiler">⚠ 이 페이지에는 캠페인 스포일러가 포함됩니다.</div><button id="changePasswordBtn" class="password-change-btn" type="button">비밀번호 변경</button></div></div><aside class="hero-month-panel"><div class="hero-month-head"><b>월별 진행</b><span>JAN — DEC</span></div><div id="monthStrip" class="months"></div></aside></div></section>
 
