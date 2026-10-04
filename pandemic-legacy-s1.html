@@ -6,7 +6,7 @@
 <title>JEI | 팬데믹 레거시 시즌 1</title>
 <link rel="preconnect" href="https://yqvjgalmjrydfygtozgo.supabase.co">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="prefetch" href="games.html"><link rel="prefetch" href="rules-notes.html">
+<link rel="prefetch" href="games.html"><link rel="prefetch" href="play-log.html"><link rel="prefetch" href="rules-notes.html">
 <style>
 :root{
   --bg:#0d1418;--card:#121b20;--card-2:#172329;--line:#2a3940;--text:#edf3f5;--muted:#93a1a8;
@@ -212,6 +212,42 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
 </style>
 
 <link rel="stylesheet" href="archive-header.css">
+
+<style>
+/* V65 mobile campaign status layout */
+@media(max-width:600px){
+  .status-section .status-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+  .status-section .stat{
+    min-width:0!important;
+    padding:10px!important;
+  }
+  .status-section .stat input,
+  .status-section .stat select{
+    min-width:0!important;
+    padding:9px!important;
+  }
+  .status-section .campaign-brief-grid{
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+    margin-top:8px!important;
+  }
+  .status-section .brief-card{
+    width:100%!important;
+    min-width:0!important;
+    padding:11px 12px!important;
+  }
+  .status-section .brief-card textarea{
+    min-height:76px!important;
+    width:100%!important;
+  }
+  .status-section .brief-read{
+    min-height:0!important;
+  }
+}
+</style>
 </head>
 <body>
 <div id="gate" class="gate">
@@ -225,7 +261,7 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
 </div>
 
 <main id="app" class="page hidden">
-  <div class="topbar archive-header archive-header-dark"><div class="archive-brand"><nav class="archive-nav" aria-label="게임 아카이브"><span class="archive-kicker">GAME ARCHIVE</span><a class="archive-link" href="games.html">보드게임 책장 <span>📚</span></a><span class="archive-divider">|</span><a class="archive-link" href="rules-notes.html">잔룰 노트 <span>📝</span></a><span class="archive-divider">|</span><a class="archive-link active" href="pandemic-legacy-s1.html">팬데믹 S1 로그 <span>🔒</span></a></nav></div><a class="back" href="index.html">← HOME</a></div>
+  <div class="topbar archive-header archive-header-dark"><div class="archive-brand"><nav class="archive-nav" aria-label="게임 아카이브"><span class="archive-kicker">GAME ARCHIVE</span><a class="archive-link " href="games.html">보드게임 책장 <span>📚</span></a><span class="archive-divider">|</span><a class="archive-link " href="play-log.html">플레이 로그 <span>📅</span></a><span class="archive-divider">|</span><a class="archive-link " href="rules-notes.html">잔룰 노트 <span>📝</span></a><span class="archive-divider">|</span><a class="archive-link active" href="pandemic-legacy-s1.html">팬데믹 S1 로그 <span>🔒</span></a></nav></div><a class="back" href="index.html">← HOME</a></div>
   <section class="hero">
     <div class="hero-grid">
       <div class="hero-title">

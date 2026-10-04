@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://yqvjgalmjrydfygtozgo.supabase.co">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="prefetch" href="games.html">
+<link rel="prefetch" href="play-log.html">
 <link rel="prefetch" href="pandemic-legacy-s1.html">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="archive-header.css">
@@ -36,30 +37,26 @@ button,input,textarea{font:inherit}
 .rule-edit{padding:0 9px}.rule-delete{width:28px;padding:0;font-size:14px}
 .rule-edit:hover,.rule-delete:hover{background:#f2f4f6;color:#20252a}
 .empty{grid-column:1/-1;text-align:center;color:#9aa0a8;padding:80px 0;font-size:13px}
-.modal-bg{position:fixed;inset:0;z-index:80;background:rgba(24,30,35,.46);display:grid;place-items:center;padding:18px}
-.rule-dialog{display:block;width:min(560px,100%);max-height:88vh;overflow:auto;background:#fff;border:1px solid #dfe4e8;border-radius:18px;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.22)}
-.rule-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}
+.modal-bg{position:fixed;inset:0;z-index:80;background:rgba(24,30,35,.46);display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.rule-dialog{display:flex;flex-direction:column;width:min(560px,100%);max-height:calc(100dvh - 36px);overflow:hidden;background:#fff;border:1px solid #dfe4e8;border-radius:18px;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.22)}
+.rule-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px;flex:0 0 auto}
+.rule-dialog-body{flex:1 1 auto;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-right:2px}
 .modal-kicker{font-size:10px;letter-spacing:.14em;font-weight:900;color:#9198a0;margin-bottom:5px}
 .rule-dialog h2{font-size:22px;margin:0;letter-spacing:-.03em}
 .close-modal{border:0;width:34px;height:34px;border-radius:50%;background:#f0f2f4;color:#23282d;font-size:20px;cursor:pointer;flex:0 0 auto}
 .field{display:flex;flex-direction:column;gap:6px;margin-top:12px}.field label{font-size:11px;font-weight:800;color:#737c85}.field input,.field textarea{border:1px solid #dfe4e8;border-radius:10px;padding:11px 12px;background:#fff;outline:none;color:#20262b}.field input:focus,.field textarea:focus{border-color:#b8c0c8;box-shadow:0 0 0 3px rgba(77,92,107,.07)}.field textarea{min-height:220px;resize:vertical;line-height:1.65}
 .note-view{white-space:pre-wrap;line-height:1.7;font-size:14px;color:#343b42;background:#f7f8f9;border:1px solid #e7eaed;border-radius:11px;padding:14px;min-height:150px}
 .rule-dialog-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;margin-top:15px}.primary{border:0;border-radius:9px;background:#28343e;color:#fff;font-weight:800;padding:10px 15px;cursor:pointer}.ghost{border:1px solid #dce1e5;border-radius:9px;background:#fff;color:#626a73;font-weight:800;padding:9px 13px;cursor:pointer}.save-state{font-size:11px;color:#8b9299;margin-right:auto}.hidden{display:none!important}
+body.rule-modal-open{overflow:hidden}
 @media(max-width:1000px){.rules-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){.rules-wrap{padding:28px 10px 50px}.rules-toolbar{grid-template-columns:1fr auto}.add-rule{padding:0 13px}.rules-list{grid-template-columns:1fr}.rule-dialog{padding:16px;border-radius:15px}.field textarea{min-height:180px}}
+@media(max-width:600px){.rules-wrap{padding:28px 10px 50px}.rules-toolbar{grid-template-columns:1fr auto}.add-rule{padding:0 13px}.rules-list{grid-template-columns:1fr}.modal-bg{align-items:flex-start;padding:10px}.rule-dialog{padding:16px 14px;border-radius:15px;max-height:calc(100dvh - 20px)}.rule-dialog-head{margin-bottom:12px}.rule-dialog h2{font-size:20px}.field textarea{min-height:180px}.note-view{font-size:15px;line-height:1.75}}
 </style>
 </head>
 <body>
 <div class="rules-wrap">
   <div class="rules-top archive-header">
     <nav class="archive-nav" aria-label="게임 아카이브">
-      <span class="archive-kicker">GAME ARCHIVE</span>
-      <a class="archive-link" href="games.html">보드게임 책장 <span>📚</span></a>
-      <span class="archive-divider">|</span>
-      <a class="archive-link active" href="rules-notes.html">잔룰 노트 <span>📝</span></a>
-      <span class="archive-divider">|</span>
-      <a class="archive-link" href="pandemic-legacy-s1.html">팬데믹 S1 로그 <span>🔒</span></a>
-    </nav>
+      <span class="archive-kicker">GAME ARCHIVE</span><a class="archive-link " href="games.html">보드게임 책장 <span>📚</span></a><span class="archive-divider">|</span><a class="archive-link " href="play-log.html">플레이 로그 <span>📅</span></a><span class="archive-divider">|</span><a class="archive-link active" href="rules-notes.html">잔룰 노트 <span>📝</span></a><span class="archive-divider">|</span><a class="archive-link " href="pandemic-legacy-s1.html">팬데믹 S1 로그 <span>🔒</span></a></nav>
     <a class="back" href="index.html">← HOME</a>
   </div>
 
@@ -77,15 +74,17 @@ button,input,textarea{font:inherit}
       <div><div class="modal-kicker">RULE NOTE</div><h2 id="modalTitle">잔룰 노트</h2></div>
       <button id="closeModal" class="close-modal" type="button" aria-label="닫기">×</button>
     </div>
-    <div id="viewMode" class="hidden">
-      <div id="viewNote" class="note-view"></div>
+    <div class="rule-dialog-body">
+      <div id="viewMode" class="hidden">
+        <div id="viewNote" class="note-view"></div>
+      </div>
+      <form id="editMode" class="hidden">
+        <input id="noteId" type="hidden">
+        <div class="field"><label>게임명</label><input id="gameName" required placeholder="게임명"></div>
+        <div class="field"><label>잔룰 메모</label><textarea id="gameNote" placeholder="헷갈리는 잔룰, 예외, 점수 계산, 턴 순서 등을 적어두세요."></textarea></div>
+        <div class="rule-dialog-actions"><span id="saveState" class="save-state"></span><button id="cancelEdit" class="ghost" type="button">닫기</button></div>
+      </form>
     </div>
-    <form id="editMode" class="hidden">
-      <input id="noteId" type="hidden">
-      <div class="field"><label>게임명</label><input id="gameName" required placeholder="게임명"></div>
-      <div class="field"><label>잔룰 메모</label><textarea id="gameNote" placeholder="헷갈리는 잔룰, 예외, 점수 계산, 턴 순서 등을 적어두세요."></textarea></div>
-      <div class="rule-dialog-actions"><span id="saveState" class="save-state"></span><button id="cancelEdit" class="ghost" type="button">닫기</button></div>
-    </form>
   </div>
 </div>
 
@@ -120,12 +119,32 @@ function draw(){
   </article>`).join(''):'<div class="empty">등록된 잔룰이 없어요.</div>';
 }
 
-function showModal(){ $('#ruleModal').classList.remove('hidden'); }
+let modalScrollY=0;
+function lockBodyScroll(){
+  modalScrollY=window.scrollY||window.pageYOffset||0;
+  document.body.classList.add('rule-modal-open');
+  document.body.style.position='fixed';
+  document.body.style.top=`-${modalScrollY}px`;
+  document.body.style.left='0';
+  document.body.style.right='0';
+  document.body.style.width='100%';
+}
+function unlockBodyScroll(){
+  document.body.classList.remove('rule-modal-open');
+  document.body.style.position='';
+  document.body.style.top='';
+  document.body.style.left='';
+  document.body.style.right='';
+  document.body.style.width='';
+  window.scrollTo(0, modalScrollY);
+}
+function showModal(){ $('#ruleModal').classList.remove('hidden'); lockBodyScroll(); }
 function closeModal(){
   clearTimeout(saveTimer); editingId=null;
   $('#ruleModal').classList.add('hidden');
   $('#viewMode').classList.add('hidden'); $('#editMode').classList.add('hidden');
   $('#editMode').reset(); $('#noteId').value=''; $('#saveState').textContent='';
+  unlockBodyScroll();
 }
 
 window.openView=id=>{
