@@ -100,6 +100,16 @@ body{
 .macro-infection-dialog{width:min(1460px,100%)}
 .macro-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px;border-bottom:1px solid #3b4a51;background:#222e34;flex-wrap:wrap}
 .macro-round-control{display:flex;align-items:center;gap:9px}.macro-round-control span{font-size:11px;color:#aab9be;font-weight:850}.macro-round-control select{border:1px solid #52636b;border-radius:8px;background:#182328;color:#eef4f6;padding:8px 28px 8px 10px;font-weight:850;outline:none}.macro-actions{margin-left:auto}
+
+.macro-term-guide{margin:10px 0 12px;border:1px solid #41525a;border-radius:11px;background:#1b272c;padding:11px 13px;color:#b8c4c8}
+.macro-term-guide-title{font-size:11px;font-weight:900;color:#eef4f6;margin-bottom:8px}
+.macro-term-guide-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.macro-term-item{border:1px solid #34454c;border-radius:8px;background:#202e34;padding:8px 9px;line-height:1.45;font-size:9px}
+.macro-term-item b{display:block;color:#eef4f6;font-size:10px;margin-bottom:3px}
+.macro-term-item span{color:#9eacb1}
+@media(max-width:1050px){.macro-term-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.macro-term-guide-grid{grid-template-columns:1fr}.macro-term-item{font-size:10px}}
+
 .macro-dialog-scroll{padding:14px 16px 18px}.macro-tracker-layout{display:grid;grid-template-columns:minmax(760px,1fr) 270px;gap:12px;align-items:start}.macro-table-wrap{overflow:auto;border:1px solid #41525a;border-radius:11px;background:#1c272c;overscroll-behavior:auto;-webkit-overflow-scrolling:touch}.macro-infection-table{width:100%;min-width:900px;border-collapse:separate;border-spacing:0;font-size:11px;color:#dbe5e8}.macro-infection-table th{position:sticky;top:0;z-index:3;background:#254f78;color:#fff;padding:9px 7px;border-right:1px solid rgba(255,255,255,.16);border-bottom:1px solid #567086;text-align:center;font-weight:900;white-space:nowrap}.macro-infection-table th.active{background:#a43c3c}.macro-city-col{left:0;z-index:5!important;min-width:145px}.macro-status-col{min-width:128px}.macro-risk-remaining-col{min-width:82px}.macro-total-col{min-width:62px}.macro-infection-table td{height:34px;border-right:1px solid #39484f;border-bottom:1px solid #35444b;text-align:center;background:#243138}.macro-city{position:sticky;left:0;z-index:2;text-align:left!important;padding:0 10px!important;font-weight:850;color:#172126!important}.disease-blue-cell{background:#b9cee7!important}.disease-yellow-cell{background:#f3e0a4!important}.disease-black-cell{background:#c5c8ca!important}.disease-red-cell{background:#f2c5b2!important;color:#9e2929!important}.macro-round-cell{padding:3px!important}.macro-round-cell.active{background:#303f46!important;box-shadow:inset 0 0 0 1px rgba(222,105,105,.24)}.macro-count-btn{width:100%;height:27px;border:1px solid transparent;border-radius:6px;background:transparent;color:#f5f8f9;font-size:12px;font-weight:900;cursor:pointer}.macro-count-btn:hover{background:#33454c}.macro-count-btn.on{background:#4e8992;border-color:#6cb0b9;color:#fff}.macro-round-cell.active .macro-count-btn.on{background:#a94848;border-color:#da6868}.macro-status{font-size:10px;font-weight:850;padding:0 7px!important;white-space:nowrap}.macro-status.status-complete{color:#9bd29f}.macro-status.status-danger{color:#ff8989;background:#3d282a!important}.macro-status.status-unseen{color:#a6b1b5}.macro-total{font-weight:850;color:#e4edf0}.macro-card-count-col{min-width:74px}.macro-remaining-col{min-width:74px}.macro-city-count-input{width:54px;height:28px;border:1px solid #52636b;border-radius:6px;background:#182328;color:#eef4f6;text-align:center;font-size:11px;font-weight:850;outline:none}.macro-city-count-input:focus{border-color:#76a9b4;box-shadow:0 0 0 2px rgba(85,159,172,.14)}.macro-remaining{font-weight:900;color:#e8f3f5}.macro-remaining.low{color:#ffb6b6}.macro-remaining.zero{color:#ff6b6b}.macro-risk-remaining{font-weight:900;color:#8f9ba0}.macro-risk-remaining.hot{color:#ff7d7d;background:#3d282a!important}.macro-row.removed td:not(.macro-city){opacity:.48}.macro-row.removed .macro-city{filter:saturate(.25);opacity:.72}.macro-count-btn:disabled{opacity:.25;cursor:not-allowed}.macro-risk-panel{position:sticky;top:0;border:1px solid #5b3a3a;border-radius:11px;background:#1f282d;overflow:hidden}.macro-risk-title{background:#a00000;color:#fff;padding:10px 12px;font-size:12px;font-weight:900}.macro-risk-desc{padding:9px 11px;color:#9eaaae;font-size:9px;line-height:1.5;border-bottom:1px solid #38464d}.macro-risk-list{max-height:560px;overflow:auto;padding:7px}.macro-risk-item{display:grid;grid-template-columns:24px 1fr;align-items:center;gap:6px;padding:7px 8px;border-bottom:1px solid #344249;font-size:11px}.macro-risk-item span{width:22px;height:22px;display:grid;place-items:center;border-radius:6px;background:#733535;color:#fff;font-size:9px;font-weight:900}.macro-risk-item b{color:#eef3f5}.macro-risk-empty{padding:18px 10px;text-align:center;color:#7f9198;font-size:10px}.macro-help{margin-top:12px}.infection-action:disabled,.macro-count-btn:disabled{opacity:.42;cursor:not-allowed}
 @media(max-width:1050px){.infection-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.macro-tracker-layout{grid-template-columns:1fr}.macro-risk-panel{position:static}.macro-risk-list{max-height:190px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.macro-risk-item{border:1px solid #344249;border-radius:7px}}
 @media(max-width:620px){.infection-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.macro-toolbar{align-items:stretch;padding:9px 12px}.macro-round-control{width:100%;justify-content:space-between}.macro-round-control select{min-width:96px}.macro-actions{width:100%;display:grid;grid-template-columns:1fr 1fr;margin:0}.macro-actions .epidemic{grid-column:1/-1}.macro-dialog-scroll{padding:10px}.macro-infection-table{min-width:800px;font-size:10px}.macro-city-col{min-width:122px}.macro-infection-table td{height:32px}.macro-risk-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -355,6 +365,17 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
       <div class="infection-deck-config-wrap">
         <div id="infectionDeckConfig" class="infection-deck-config"></div>
       </div>
+
+      <div class="macro-term-guide">
+        <div class="macro-term-guide-title">용어 안내</div>
+        <div class="macro-term-guide-grid">
+          <div class="macro-term-item"><b>차수 상태</b><span>현재 차수를 기준으로 해당 도시가 등장했는지 보여줘요.</span></div>
+          <div class="macro-term-item"><b>✅ 이번 차수 등장</b><span>현재 차수에서 해당 도시 카드가 1장 이상 나온 상태예요.</span></div>
+          <div class="macro-term-item"><b>🚨 재등장 후보</b><span>직전 차수에 등장했고 현재 차수에는 아직 한 장도 나오지 않은 도시예요.</span></div>
+          <div class="macro-term-item"><b>재등장 후보 장수</b><span>직전 차수에서 돌아온 카드 중 현재 차수에 아직 나오지 않은 남은 장수예요.</span></div>
+        </div>
+      </div>
+
       <div class="macro-tracker-layout">
         <div class="macro-table-wrap">
           <table class="macro-infection-table">
@@ -363,12 +384,12 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
           </table>
         </div>
         <aside class="macro-risk-panel">
-          <div class="macro-risk-title">🚨 덱 상단 위험 카드</div>
-          <div class="macro-risk-desc">직전 차수 대비 현재 차수에 아직 다시 나오지 않은 카드 장수</div>
+          <div class="macro-risk-title">🚨 재등장 후보 도시</div>
+          <div class="macro-risk-desc">직전 차수에서 돌아온 카드 중 이번 차수에 아직 등장하지 않은 도시와 남은 장수</div>
           <div id="infectionRiskList" class="macro-risk-list"></div>
         </aside>
       </div>
-      <div class="infection-help macro-help">※ 각 도시의 <b>보유 장수</b>를 실제 덱 구성에 맞게 입력하세요. 차수 칸은 클릭할 때마다 0→1→2…→보유 장수→0으로 순환합니다. 현재 남음은 <b>보유 장수 − 현재 차수에서 나온 장수</b>로 계산합니다. 영구 제거된 도시는 보유 장수를 0으로 바꾸면 됩니다.</div>
+      <div class="infection-help macro-help">※ 각 도시의 <b>보유 장수</b>를 실제 덱 구성에 맞게 입력하세요. 차수 칸은 클릭할 때마다 0→1→2…→보유 장수→0으로 순환합니다. <b>현재 남음</b>은 보유 장수 − 현재 차수에서 나온 장수이며, <b>재등장 후보 장수</b>는 직전 차수 등장 장수 − 현재 차수 등장 장수(최소 0)로 계산합니다. 영구 제거된 도시는 보유 장수를 0으로 바꾸면 됩니다.</div>
     </div>
   </div>
 </div>
@@ -477,14 +498,14 @@ function infectionStatus(city){
   const t=infectionTracker(),r=t.current_round,total=infectionCityCardCount(city);
   if(total<=0)return 'removed';
   // 엑셀 원본 판정: 현재 차수에 1장이라도 나오면 '이번차수 완료',
-  // 현재 차수에는 없고 직전 차수에 있었다면 '덱 상단', 그 외는 '미등장'.
+  // 현재 차수에는 없고 직전 차수에 있었다면 '재등장 후보', 그 외는 '미등장'.
   if(infectionCount(city,r)>0)return 'complete';
   if(r>0&&infectionCount(city,r-1)>0)return 'danger';
   return 'unseen';
 }
-function infectionStatusLabel(city,st){if(st==='removed')return '⛔ 영구 제거';if(st==='danger')return '🚨 덱 상단';if(st==='complete')return '✅ 이번차수 완료';return '⚪ 미등장';}
-// 위험 잔여는 엑셀 상태와 별개로 카드 '장수' 차이를 계산한다.
-// 예: 직전 차수 3장 / 현재 차수 1장 => 엑셀 상태는 완료, 위험 잔여는 2장.
+function infectionStatusLabel(city,st){if(st==='removed')return '⛔ 영구 제거';if(st==='danger')return '🚨 재등장 후보';if(st==='complete')return '✅ 이번 차수 등장';return '⚪ 미등장';}
+// 재등장 후보 장수는 차수 상태와 별개로 카드 '장수' 차이를 계산한다.
+// 예: 직전 차수 3장 / 현재 차수 1장 => 차수 상태는 완료, 재등장 후보 장수는 2장.
 function infectionRiskCities(){return infectionCities.filter(c=>infectionCityCardCount(c)>0&&infectionRiskRemaining(c)>0);}
 function infectionCompletedCities(){return infectionCities.filter(c=>infectionStatus(c)==='complete');}
 function infectionUnseenCities(){return infectionCities.filter(c=>infectionStatus(c)==='unseen');}
@@ -499,9 +520,9 @@ function renderInfectionTracker(){
     const inp=$('#infectionDeckTotal');if(inp)inp.onchange=()=>{t.configured_total=Math.max(1,parseInt(inp.value,10)||48);renderInfectionTracker();queueSave();};
   }
   const sel=$('#infectionRoundSelect');if(sel){sel.innerHTML=Array.from({length:7},(_,i)=>`<option value="${i}" ${i===r?'selected':''}>${i}차</option>`).join('');sel.onchange=()=>setInfectionRound(+sel.value);}
-  const head=$('#infectionTableHead');if(head)head.innerHTML=`<tr><th class="macro-city-col">도시명</th><th class="macro-card-count-col">보유 장수</th>${Array.from({length:7},(_,i)=>`<th class="macro-round-head ${i===r?'active':''}">${i}차</th>`).join('')}<th class="macro-remaining-col">현재 남음</th><th class="macro-status-col">엑셀 상태</th><th class="macro-risk-remaining-col">위험 잔여</th></tr>`;
+  const head=$('#infectionTableHead');if(head)head.innerHTML=`<tr><th class="macro-city-col">도시명</th><th class="macro-card-count-col">보유 장수</th>${Array.from({length:7},(_,i)=>`<th class="macro-round-head ${i===r?'active':''}">${i}차</th>`).join('')}<th class="macro-remaining-col">현재 남음</th><th class="macro-status-col">차수 상태</th><th class="macro-risk-remaining-col">재등장 후보 장수</th></tr>`;
   const body=$('#infectionTableBody');if(body)body.innerHTML=infectionCities.map(city=>{const color=infectionColorByCity[city],st=infectionStatus(city),total=infectionCityCardCount(city),remaining=infectionCurrentRemaining(city),riskRemaining=infectionRiskRemaining(city);return `<tr class="macro-row status-${st} ${total===0?'removed':''}"><td class="macro-city disease-${color}-cell">${city}</td><td><input class="macro-city-count-input" type="number" min="0" value="${total}" onchange="setInfectionCityCardCount('${city}',this.value)" aria-label="${city} 보유 장수"></td>${Array.from({length:7},(_,i)=>{const count=infectionCount(city,i);return `<td class="macro-round-cell ${i===r?'active':''}"><button type="button" class="macro-count-btn ${count?'on':''}" ${total===0?'disabled':''} onclick="cycleInfectionRoundCell('${city}',${i})" oncontextmenu="event.preventDefault();decrementInfectionRoundCell('${city}',${i})" aria-label="${city} ${i}차 ${count}장">${count||''}</button></td>`}).join('')}<td class="macro-remaining ${remaining===0?'zero':remaining===1?'low':''}">${remaining}장</td><td class="macro-status status-${st}">${infectionStatusLabel(city,st)}</td><td class="macro-risk-remaining ${riskRemaining>0?'hot':''}">${riskRemaining>0?`🚨 ×${riskRemaining}`:'-'}</td></tr>`}).join('');
-  const riskList=$('#infectionRiskList');if(riskList)riskList.innerHTML=risk.length?risk.map(c=>`<div class="macro-risk-item"><span>${infectionRiskRemaining(c)}</span><b>${c}</b></div>`).join(''):'<div class="macro-risk-empty">현재 위험 잔여 카드가 없어요.</div>';
+  const riskList=$('#infectionRiskList');if(riskList)riskList.innerHTML=risk.length?risk.map(c=>`<div class="macro-risk-item"><span>${infectionRiskRemaining(c)}</span><b>${c}</b></div>`).join(''):'<div class="macro-risk-empty">현재 재등장 후보 카드가 없어요.</div>';
   const undo=$('#infectionUndo');if(undo)undo.disabled=!infectionUndoStack.length;
   const adv=$('#infectionEpidemic');if(adv){adv.disabled=!canEdit||r>=6;adv.textContent=r>=6?'6차까지 기록됨':'전염 발생 → 다음 차수';}
   const clear=$('#infectionClearRound');if(clear)clear.disabled=!canEdit;
