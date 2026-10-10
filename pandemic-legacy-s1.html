@@ -90,6 +90,16 @@ body{
 @media(max-width:430px){.infection-city-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.infection-actions{width:100%}.infection-action{flex:1}.infection-legend{gap:8px}.infection-dialog-title p{font-size:10px}}
 @media(max-width:430px){.player-deck-panel{padding:9px}.player-deck-grid{gap:5px}.player-deck-stat{padding:8px}.player-deck-stat strong{font-size:14px}.epidemic-piles{gap:3px}.epidemic-pile{padding:5px 2px}.deck-mini-btn{padding:7px 8px}}
 
+
+/* V75 · 엑셀 매크로 기반 감염 덱 트래커 */
+.infection-summary{grid-template-columns:repeat(5,minmax(0,1fr))}
+.macro-infection-dialog{width:min(1460px,100%)}
+.macro-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px;border-bottom:1px solid #3b4a51;background:#222e34;flex-wrap:wrap}
+.macro-round-control{display:flex;align-items:center;gap:9px}.macro-round-control span{font-size:11px;color:#aab9be;font-weight:850}.macro-round-control select{border:1px solid #52636b;border-radius:8px;background:#182328;color:#eef4f6;padding:8px 28px 8px 10px;font-weight:850;outline:none}.macro-actions{margin-left:auto}
+.macro-dialog-scroll{padding:14px 16px 18px}.macro-tracker-layout{display:grid;grid-template-columns:minmax(760px,1fr) 270px;gap:12px;align-items:start}.macro-table-wrap{overflow:auto;border:1px solid #41525a;border-radius:11px;background:#1c272c;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.macro-infection-table{width:100%;min-width:900px;border-collapse:separate;border-spacing:0;font-size:11px;color:#dbe5e8}.macro-infection-table th{position:sticky;top:0;z-index:3;background:#254f78;color:#fff;padding:9px 7px;border-right:1px solid rgba(255,255,255,.16);border-bottom:1px solid #567086;text-align:center;font-weight:900;white-space:nowrap}.macro-infection-table th.active{background:#a43c3c}.macro-city-col{left:0;z-index:5!important;min-width:145px}.macro-status-col{min-width:135px}.macro-total-col{min-width:62px}.macro-infection-table td{height:34px;border-right:1px solid #39484f;border-bottom:1px solid #35444b;text-align:center;background:#243138}.macro-city{position:sticky;left:0;z-index:2;text-align:left!important;padding:0 10px!important;font-weight:850;color:#172126!important}.disease-blue-cell{background:#b9cee7!important}.disease-yellow-cell{background:#f3e0a4!important}.disease-black-cell{background:#c5c8ca!important}.disease-red-cell{background:#f2c5b2!important;color:#9e2929!important}.macro-round-cell{padding:3px!important}.macro-round-cell.active{background:#303f46!important;box-shadow:inset 0 0 0 1px rgba(222,105,105,.24)}.macro-count-btn{width:100%;height:27px;border:1px solid transparent;border-radius:6px;background:transparent;color:#f5f8f9;font-size:12px;font-weight:900;cursor:pointer}.macro-count-btn:hover{background:#33454c}.macro-count-btn.on{background:#4e8992;border-color:#6cb0b9;color:#fff}.macro-round-cell.active .macro-count-btn.on{background:#a94848;border-color:#da6868}.macro-status{font-size:10px;font-weight:850;padding:0 7px!important;white-space:nowrap}.macro-status.status-complete{color:#9bd29f}.macro-status.status-danger{color:#ff8989;background:#3d282a!important}.macro-status.status-unseen{color:#a6b1b5}.macro-total{font-weight:850;color:#e4edf0}.macro-risk-panel{position:sticky;top:0;border:1px solid #5b3a3a;border-radius:11px;background:#1f282d;overflow:hidden}.macro-risk-title{background:#a00000;color:#fff;padding:10px 12px;font-size:12px;font-weight:900}.macro-risk-desc{padding:9px 11px;color:#9eaaae;font-size:9px;line-height:1.5;border-bottom:1px solid #38464d}.macro-risk-list{max-height:560px;overflow:auto;padding:7px}.macro-risk-item{display:grid;grid-template-columns:24px 1fr;align-items:center;gap:6px;padding:7px 8px;border-bottom:1px solid #344249;font-size:11px}.macro-risk-item span{width:22px;height:22px;display:grid;place-items:center;border-radius:6px;background:#733535;color:#fff;font-size:9px;font-weight:900}.macro-risk-item b{color:#eef3f5}.macro-risk-empty{padding:18px 10px;text-align:center;color:#7f9198;font-size:10px}.macro-help{margin-top:12px}.infection-action:disabled,.macro-count-btn:disabled{opacity:.42;cursor:not-allowed}
+@media(max-width:1050px){.infection-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.macro-tracker-layout{grid-template-columns:1fr}.macro-risk-panel{position:static}.macro-risk-list{max-height:190px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.macro-risk-item{border:1px solid #344249;border-radius:7px}}
+@media(max-width:620px){.infection-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.macro-toolbar{align-items:stretch;padding:9px 12px}.macro-round-control{width:100%;justify-content:space-between}.macro-round-control select{min-width:96px}.macro-actions{width:100%;display:grid;grid-template-columns:1fr 1fr;margin:0}.macro-actions .epidemic{grid-column:1/-1}.macro-dialog-scroll{padding:10px}.macro-infection-table{min-width:800px;font-size:10px}.macro-city-col{min-width:122px}.macro-infection-table td{height:32px}.macro-risk-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 </style>
 
 <style>
@@ -305,7 +315,7 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
   </div>
 
   <section class="section infection-section">
-    <div class="section-head"><div><h2>감염 도시 트래커</h2><div class="section-desc">감염 카드를 탭해서 위험 도시를 기억 · 전염 발생 시 위험군 자동 갱신</div></div><div class="infection-head-actions"><button id="openInfectionTracker" class="infection-open" type="button">트래커 열기</button></div></div>
+    <div class="section-head"><div><h2>감염 도시 트래커</h2><div class="section-desc">첨부 엑셀 매크로 방식 · 차수별 출현 기록으로 덱 상단 위험 도시 자동 계산</div></div><div class="infection-head-actions"><button id="openInfectionTracker" class="infection-open" type="button">트래커 열기</button></div></div>
     <div id="infectionSummary" class="infection-summary"></div><div id="infectionDeckConfig" class="infection-deck-config"></div>
     <div class="player-deck-panel">
       <div class="player-deck-head"><b>플레이어 덱 · 유행병 트래커</b><span>4인 기준 · 자금 지원 자동 반영</span></div>
@@ -319,7 +329,7 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
           <button id="playerUndo1" class="deck-mini-btn" type="button">−1</button>
           <button id="playerDeckReset" class="deck-mini-btn deck-reset" type="button">덱 카운터 초기화</button>
         </div>
-        <div class="player-deck-note">감염 덱은 게임 시작 시 초기 감염 9개 도시도 먼저 체크하면 39장으로 표시돼요.</div>
+        <div class="player-deck-note">초기 감염 9장도 0차 열에 먼저 체크한 뒤 시작하면 위험 도시 계산이 정확해져요.</div>
       </div>
     </div>
   </section>
@@ -337,26 +347,38 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
 
 
 <div id="infectionModal" class="infection-modal-bg hidden">
-  <div class="infection-dialog" role="dialog" aria-modal="true" aria-labelledby="infectionTitle">
+  <div class="infection-dialog macro-infection-dialog" role="dialog" aria-modal="true" aria-labelledby="infectionTitle">
     <div class="infection-dialog-head">
-      <div class="infection-dialog-title"><h3 id="infectionTitle">감염 도시 트래커</h3><p>감염 카드가 나오면 도시를 탭하세요. 전염이 나오면 최하단 도시까지 먼저 체크한 뒤 <b>전염 발생</b>을 누르면 됩니다.</p></div>
+      <div class="infection-dialog-title"><h3 id="infectionTitle">감염 덱 트래커</h3><p>엑셀 매크로와 같은 방식입니다. 각 차수에서 나온 도시의 셀을 탭하고, 전염이 발생하면 다음 차수로 넘기세요.</p></div>
       <button id="closeInfectionTracker" class="infection-close" type="button" aria-label="닫기">×</button>
     </div>
-    <div class="infection-dialog-toolbar">
-      <div class="infection-legend">
-        <span class="infection-legend-item"><i class="infection-dot current"></i>이번 사이클</span>
-        <span class="infection-legend-item"><i class="infection-dot hot"></i>최상단 위험</span>
-        <span class="infection-legend-item"><i class="infection-dot warm"></i>다음 위험</span>
+    <div class="macro-toolbar">
+      <div class="macro-round-control">
+        <span>현재 전염 차수</span>
+        <select id="infectionRoundSelect" aria-label="현재 전염 차수"></select>
       </div>
-      <div class="infection-actions">
+      <div class="infection-actions macro-actions">
         <button id="infectionUndo" class="infection-action" type="button">↶ 되돌리기</button>
-        <button id="infectionReset" class="infection-action" type="button">새 게임 초기화</button>
-        <button id="infectionEpidemic" class="infection-action epidemic" type="button">전염 발생</button>
+        <button id="infectionClearRound" class="infection-action" type="button">현재 차수 비우기</button>
+        <button id="infectionReset" class="infection-action" type="button">전체 초기화</button>
+        <button id="infectionEpidemic" class="infection-action epidemic" type="button">전염 발생 → 다음 차수</button>
       </div>
     </div>
-    <div class="infection-dialog-scroll">
-      <div id="infectionCityGroups" class="infection-groups"></div>
-      <div class="infection-help">※ 감염 카드가 나오면 해당 도시를 탭하세요. 전염이 나오면 최하단에서 뽑은 도시까지 체크한 뒤 <b>전염 발생</b>을 누르면 됩니다. 위험 표시는 최근 2단계까지만 유지해요.</div>
+    <div class="infection-dialog-scroll macro-dialog-scroll">
+      <div class="macro-tracker-layout">
+        <div class="macro-table-wrap">
+          <table class="macro-infection-table">
+            <thead id="infectionTableHead"></thead>
+            <tbody id="infectionTableBody"></tbody>
+          </table>
+        </div>
+        <aside class="macro-risk-panel">
+          <div class="macro-risk-title">🚨 덱 상단 위험 카드</div>
+          <div class="macro-risk-desc">직전 차수에는 나왔지만 현재 차수에서는 아직 나오지 않은 도시</div>
+          <div id="infectionRiskList" class="macro-risk-list"></div>
+        </aside>
+      </div>
+      <div class="infection-help macro-help">※ 0차에는 게임 시작 시 초기 감염으로 공개된 도시를 체크하세요. 전염이 발생할 때마다 <b>다음 차수</b>로 이동합니다. 현재 차수에서 체크된 도시는 <b>이번 차수 완료</b>, 직전 차수에 체크됐지만 아직 이번 차수에 나오지 않은 도시는 <b>덱 상단 위험</b>으로 자동 계산됩니다.</div>
     </div>
   </div>
 </div>
@@ -409,10 +431,27 @@ const months=Array.from({length:12},(_,i)=>`${i+1}월`);
 let state=null,isAdmin=false,canEdit=false,accessCode='',saveTimer=null;
 let sessionPhotoCache=new Map(),modalExistingPhotos=[],modalPendingPhotos=[],modalDeletedPhotoIds=[];
 
-function defaultInfectionTracker(){return {current:[],danger1:[],danger2:[],return_to:{},epidemics:0,configured_total:48};}
+function defaultInfectionTracker(){return {current_round:0,round_counts:{},epidemics:0,configured_total:48};}
 function defaultPlayerDeckTracker(){return {drawn:0};}
 function defaultState(){return {meta:{current_month:'1월',attempt:1,funding:'',last_result:'',next_note:'',current_objectives:'',current_rules:'',permanent_summary:''},players:[{name:'제이',character:'',role:'',detail:''},{name:'우리',character:'',role:'',detail:''},{name:'승연',character:'',role:'',detail:''},{name:'종우',character:'',role:'',detail:''}],infection_tracker:defaultInfectionTracker(),player_deck_tracker:defaultPlayerDeckTracker(),schedules:[{id:'legacy-1',round:'1회차',date:'2026-10-17',note:'1시~'}],sessions:[]};}
-function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s.players:[],it=s?.infection_tracker||{};return {meta:{...d.meta,...(s?.meta||{})},players:d.players.map((p,i)=>{const saved=stored.find(x=>x?.name===p.name)||stored[i]||{};return {...p,...saved,name:p.name};}),infection_tracker:{...defaultInfectionTracker(),...it,current:Array.isArray(it.current)?it.current:[],danger1:Array.isArray(it.danger1)?it.danger1:[],danger2:Array.isArray(it.danger2)?it.danger2:[],return_to:(it.return_to&&typeof it.return_to==='object')?it.return_to:{}},player_deck_tracker:{...defaultPlayerDeckTracker(),...(s?.player_deck_tracker||{})},schedules:Array.isArray(s?.schedules)?s.schedules:d.schedules,sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
+function normalizeInfectionCityName(name){return ({'하르툼':'카르툼','호치민시':'호치민'}[name]||name);}
+function normalizeRoundCounts(raw){
+  const out={};
+  infectionCities.forEach(city=>{const arr=Array.isArray(raw?.[city])?raw[city]:[];out[city]=Array.from({length:7},(_,i)=>Math.max(0,Math.min(1,parseInt(arr[i],10)||0)));});
+  return out;
+}
+function migrateInfectionTracker(raw){
+  const it=raw||{},base=defaultInfectionTracker();
+  if(it.round_counts&&typeof it.round_counts==='object'){
+    const currentRound=Math.max(0,Math.min(6,parseInt(it.current_round,10)||0));
+    return {...base,...it,current_round:currentRound,epidemics:currentRound,configured_total:Math.max(1,parseInt(it.configured_total,10)||48),round_counts:normalizeRoundCounts(it.round_counts)};
+  }
+  const round=Math.max(0,Math.min(6,parseInt(it.epidemics,10)||0)),counts=normalizeRoundCounts({});
+  const mark=(list,r)=>{if(r<0||r>6)return;(list||[]).forEach(c=>{c=normalizeInfectionCityName(c);if(counts[c])counts[c][r]=1;});};
+  mark(it.danger2,round-2);mark(it.danger1,round-1);mark(it.current,round);
+  return {...base,current_round:round,epidemics:round,configured_total:Math.max(1,parseInt(it.configured_total,10)||48),round_counts:counts};
+}
+function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s.players:[];return {meta:{...d.meta,...(s?.meta||{})},players:d.players.map((p,i)=>{const saved=stored.find(x=>x?.name===p.name)||stored[i]||{};return {...p,...saved,name:p.name};}),infection_tracker:migrateInfectionTracker(s?.infection_tracker),player_deck_tracker:{...defaultPlayerDeckTracker(),...(s?.player_deck_tracker||{})},schedules:Array.isArray(s?.schedules)?s.schedules:d.schedules,sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
 async function boot(){const {data:{session}}=await db.auth.getSession();isAdmin=!!session;if(isAdmin){const {data,error}=await db.from('pandemic_legacy_s1_state').select('data').eq('id',1).single();if(!error&&data){state=mergeState(data.data);canEdit=true;openApp();return;}}}
 async function unlock(){const code=$('#codeInput').value.trim();if(!code)return;$('#gateError').textContent='';const {data,error}=await db.rpc('get_pandemic_legacy_s1',{p_code:code});if(error){console.error(error);$('#gateError').textContent=error.code==='P0001'?'비밀번호가 맞지 않아요.':'연결 설정을 확인해주세요.';return;}accessCode=code;state=mergeState(data);canEdit=true;sessionStorage.setItem('pandemicLegacyS1Code',code);openApp();}
 function openApp(){$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');$('#sessionToolbar').classList.toggle('hidden',!canEdit);$('#addScheduleBtn').classList.toggle('hidden',!canEdit);render();}
@@ -423,47 +462,46 @@ function renderMonths(){$('#monthStrip').innerHTML=months.map(x=>`<div class="mo
 
 
 const infectionCityGroups=[
-  {key:'blue',label:'파란색 도시',cities:['샌프란시스코','시카고','몬트리올','뉴욕','워싱턴','애틀랜타','런던','마드리드','파리','에센','밀라노','상트페테르부르크']},
-  {key:'yellow',label:'노란색 도시',cities:['로스앤젤레스','멕시코시티','마이애미','보고타','리마','산티아고','부에노스아이레스','상파울루','라고스','킨샤사','요하네스버그','하르툼']},
+  {key:'blue',label:'파란색 도시',cities:['애틀랜타','시카고','뉴욕','워싱턴','런던','마드리드','파리','에센','밀라노','상트페테르부르크','몬트리올','샌프란시스코']},
+  {key:'yellow',label:'노란색 도시',cities:['로스앤젤레스','멕시코시티','마이애미','보고타','리마','산티아고','부에노스아이레스','상파울루','라고스','킨샤사','요하네스버그','카르툼']},
   {key:'black',label:'검은색 도시',cities:['알제','카이로','이스탄불','모스크바','바그다드','리야드','테헤란','카라치','뭄바이','델리','콜카타','첸나이']},
-  {key:'red',label:'빨간색 도시',cities:['베이징','서울','도쿄','상하이','홍콩','타이베이','오사카','방콕','호치민시','마닐라','자카르타','시드니']}
+  {key:'red',label:'빨간색 도시',cities:['베이징','상하이','서울','도쿄','오사카','타이베이','홍콩','방콕','호치민','마닐라','자카르타','시드니']}
 ];
+const infectionCities=infectionCityGroups.flatMap(g=>g.cities);
+const infectionColorByCity=Object.fromEntries(infectionCityGroups.flatMap(g=>g.cities.map(c=>[c,g.key])));
 let infectionUndoStack=[];let infectionModalScrollY=0;
-function infectionTracker(){if(!state.infection_tracker)state.infection_tracker=defaultInfectionTracker();return state.infection_tracker;}
-function uniqueCities(arr){return [...new Set((arr||[]).filter(Boolean))];}
+function infectionTracker(){if(!state.infection_tracker)state.infection_tracker=defaultInfectionTracker();const t=state.infection_tracker;if(!t.round_counts||typeof t.round_counts!=='object')t.round_counts=normalizeRoundCounts({});infectionCities.forEach(city=>{if(!Array.isArray(t.round_counts[city]))t.round_counts[city]=Array(7).fill(0);});t.current_round=Math.max(0,Math.min(6,parseInt(t.current_round,10)||0));t.epidemics=t.current_round;t.configured_total=Math.max(1,parseInt(t.configured_total,10)||48);return t;}
 function infectionSnapshot(){return JSON.parse(JSON.stringify(infectionTracker()));}
-function pushInfectionUndo(){infectionUndoStack.push(infectionSnapshot());if(infectionUndoStack.length>30)infectionUndoStack.shift();}
-function infectionStatus(city){const t=infectionTracker();if(t.current.includes(city))return 'current';if(t.danger1.includes(city))return 'hot';if(t.danger2.includes(city))return 'warm';return '';}
-function infectionStatusLabel(status){return status==='current'?'이번 사이클':status==='hot'?'최상단 위험':status==='warm'?'다음 위험':'';}
+function pushInfectionUndo(){infectionUndoStack.push(infectionSnapshot());if(infectionUndoStack.length>40)infectionUndoStack.shift();}
+function infectionCount(city,round){return Math.max(0,Math.min(1,parseInt(infectionTracker().round_counts?.[city]?.[round],10)||0));}
+function infectionTotalAppearances(city){return (infectionTracker().round_counts?.[city]||[]).reduce((a,b)=>a+(parseInt(b,10)||0),0);}
+function infectionStatus(city){const t=infectionTracker(),r=t.current_round;if(infectionCount(city,r)>0)return 'complete';if(r>0&&infectionCount(city,r-1)>0)return 'danger';return 'unseen';}
+function infectionStatusLabel(st){return st==='complete'?'✅ 이번차수 완료':st==='danger'?'🚨 덱 상단':'⚪ 미등장';}
+function infectionRiskCities(){return infectionCities.filter(c=>infectionStatus(c)==='danger');}
+function infectionCompletedCities(){return infectionCities.filter(c=>infectionStatus(c)==='complete');}
+function infectionUnseenCities(){return infectionCities.filter(c=>infectionStatus(c)==='unseen');}
 function renderInfectionTracker(){
-  const t=infectionTracker(),summary=$('#infectionSummary');
-  const total=Math.max(1,parseInt(t.configured_total,10)||48);
-  t.configured_total=total;
-  if(summary)summary.innerHTML=`<div class="infection-stat"><span>감염 덱 남음</span><strong>${Math.max(0,total-t.current.length)}장</strong></div><div class="infection-stat current"><span>이번 사이클</span><strong>${t.current.length}/${total}</strong></div><div class="infection-stat hot"><span>최상단 위험</span><strong>${t.danger1.length}도시</strong></div><div class="infection-stat"><span>전염 발생</span><strong>${t.epidemics||0}회</strong></div>`;
-  const cfg=$('#infectionDeckConfig');
-  if(cfg){cfg.innerHTML=`<label for="infectionDeckTotal">시작 감염덱 장수</label><input id="infectionDeckTotal" type="number" min="1" value="${total}"><small>실제 구성 확인 후 직접 수정 가능</small>`;const inp=$('#infectionDeckTotal');if(inp)inp.onchange=()=>{const n=Math.max(1,parseInt(inp.value,10)||48);t.configured_total=n;renderInfectionTracker();queueSave();};}
-  const groups=$('#infectionCityGroups');
-  if(groups)groups.innerHTML=infectionCityGroups.map(g=>`<section class="infection-group"><div class="infection-group-head"><i class="disease-swatch disease-${g.key}"></i>${g.label}</div><div class="infection-city-grid">${g.cities.map(city=>{const st=infectionStatus(city);return `<button type="button" class="infection-city ${st}" onclick="toggleInfectionCity('${city}')" title="${city}">${city}${st?`<span class="infection-city-status">${infectionStatusLabel(st)}</span>`:''}</button>`}).join('')}</div></section>`).join('');
+  const t=infectionTracker(),r=t.current_round,summary=$('#infectionSummary');
+  const risk=infectionRiskCities(),done=infectionCompletedCities(),unseen=infectionUnseenCities();
+  if(summary)summary.innerHTML=`<div class="infection-stat current"><span>현재 전염 차수</span><strong>${r}차</strong></div><div class="infection-stat hot"><span>덱 상단 남은 카드</span><strong>${risk.length}</strong></div><div class="infection-stat"><span>이번차수 완료</span><strong>${done.length}</strong></div><div class="infection-stat"><span>미등장 카드</span><strong>${unseen.length}</strong></div><div class="infection-stat"><span>총 도시 카드 수</span><strong>${infectionCities.length}</strong></div>`;
+  const cfg=$('#infectionDeckConfig');if(cfg){cfg.innerHTML=`<label for="infectionDeckTotal">시작 감염덱 장수</label><input id="infectionDeckTotal" type="number" min="1" value="${t.configured_total}"><small>참고용 · 실제 구성에 맞게 수정 가능</small>`;const inp=$('#infectionDeckTotal');if(inp)inp.onchange=()=>{t.configured_total=Math.max(1,parseInt(inp.value,10)||48);queueSave();};}
+  const sel=$('#infectionRoundSelect');if(sel){sel.innerHTML=Array.from({length:7},(_,i)=>`<option value="${i}" ${i===r?'selected':''}>${i}차</option>`).join('');sel.onchange=()=>setInfectionRound(+sel.value);}
+  const head=$('#infectionTableHead');if(head)head.innerHTML=`<tr><th class="macro-city-col">도시명</th>${Array.from({length:7},(_,i)=>`<th class="macro-round-head ${i===r?'active':''}">${i}차</th>`).join('')}<th class="macro-status-col">현재 덱 상태</th><th class="macro-total-col">총 출현</th></tr>`;
+  const body=$('#infectionTableBody');if(body)body.innerHTML=infectionCities.map(city=>{const color=infectionColorByCity[city],st=infectionStatus(city);return `<tr class="macro-row status-${st}"><td class="macro-city disease-${color}-cell">${city}</td>${Array.from({length:7},(_,i)=>`<td class="macro-round-cell ${i===r?'active':''}"><button type="button" class="macro-count-btn ${infectionCount(city,i)?'on':''}" onclick="toggleInfectionRoundCell('${city}',${i})" aria-label="${city} ${i}차">${infectionCount(city,i)?'1':''}</button></td>`).join('')}<td class="macro-status status-${st}">${infectionStatusLabel(st)}</td><td class="macro-total">${infectionTotalAppearances(city)}</td></tr>`}).join('');
+  const riskList=$('#infectionRiskList');if(riskList)riskList.innerHTML=risk.length?risk.map((c,i)=>`<div class="macro-risk-item"><span>${i+1}</span><b>${c}</b></div>`).join(''):'<div class="macro-risk-empty">현재 덱 상단 위험 카드가 없어요.</div>';
   const undo=$('#infectionUndo');if(undo)undo.disabled=!infectionUndoStack.length;
+  const adv=$('#infectionEpidemic');if(adv){adv.disabled=!canEdit||r>=6;adv.textContent=r>=6?'6차까지 기록됨':'전염 발생 → 다음 차수';}
+  const clear=$('#infectionClearRound');if(clear)clear.disabled=!canEdit;
+  if(sel)sel.disabled=!canEdit;
 }
-window.toggleInfectionCity=city=>{
-  if(!canEdit)return;pushInfectionUndo();const t=infectionTracker();
-  if(t.current.includes(city)){
-    t.current=t.current.filter(x=>x!==city);const prev=t.return_to?.[city];
-    if(prev==='danger1')t.danger1=uniqueCities([...t.danger1,city]);else if(prev==='danger2')t.danger2=uniqueCities([...t.danger2,city]);
-    if(t.return_to)delete t.return_to[city];
-  }else{
-    let prev='neutral';if(t.danger1.includes(city)){prev='danger1';t.danger1=t.danger1.filter(x=>x!==city);}else if(t.danger2.includes(city)){prev='danger2';t.danger2=t.danger2.filter(x=>x!==city);}
-    t.return_to=t.return_to||{};t.return_to[city]=prev;t.current=uniqueCities([...t.current,city]);
-  }
-  renderInfectionTracker();queueSave();
-};
-async function infectionEpidemic(){if(!canEdit)return;const t=infectionTracker();if(!t.current.length&&!confirm('이번 사이클에 체크된 도시가 없어요. 그래도 전염 발생 처리를 할까요?'))return;pushInfectionUndo();const newTop=uniqueCities(t.current),oldTopRemaining=uniqueCities(t.danger1.filter(c=>!newTop.includes(c)));t.danger2=oldTopRemaining;t.danger1=newTop;t.current=[];t.return_to={};t.epidemics=(+t.epidemics||0)+1;renderInfectionTracker();renderPlayerDeckTracker();await saveState();}
-async function resetInfectionTracker(){if(!canEdit||!confirm('새 게임 기준으로 감염 도시 트래커를 전부 초기화할까요?'))return;pushInfectionUndo();const total=infectionTracker().configured_total||48;state.infection_tracker={...defaultInfectionTracker(),configured_total:total};state.player_deck_tracker=defaultPlayerDeckTracker();renderInfectionTracker();renderPlayerDeckTracker();await saveState();}
+window.toggleInfectionRoundCell=(city,round)=>{if(!canEdit)return;const t=infectionTracker();if(!t.round_counts[city])return;pushInfectionUndo();t.round_counts[city][round]=infectionCount(city,round)?0:1;renderInfectionTracker();queueSave();};
+function setInfectionRound(round){if(!canEdit)return;const t=infectionTracker(),next=Math.max(0,Math.min(6,parseInt(round,10)||0));if(next===t.current_round)return;pushInfectionUndo();t.current_round=next;t.epidemics=next;renderInfectionTracker();renderPlayerDeckTracker();queueSave();}
+async function infectionEpidemic(){if(!canEdit)return;const t=infectionTracker();if(t.current_round>=6)return alert('엑셀 트래커와 동일하게 6차까지 기록할 수 있어요.');pushInfectionUndo();t.current_round+=1;t.epidemics=t.current_round;renderInfectionTracker();renderPlayerDeckTracker();await saveState();}
+async function clearCurrentInfectionRound(){if(!canEdit)return;const t=infectionTracker(),r=t.current_round;if(!confirm(`${r}차 기록을 전부 비울까요?`))return;pushInfectionUndo();infectionCities.forEach(city=>t.round_counts[city][r]=0);renderInfectionTracker();await saveState();}
+async function resetInfectionTracker(){if(!canEdit||!confirm('감염 덱 트래커의 0차~6차 기록을 전부 초기화할까요?'))return;pushInfectionUndo();const total=infectionTracker().configured_total||48;state.infection_tracker={...defaultInfectionTracker(),configured_total:total,round_counts:normalizeRoundCounts({})};state.player_deck_tracker=defaultPlayerDeckTracker();renderInfectionTracker();renderPlayerDeckTracker();await saveState();}
 function undoInfectionTracker(){if(!infectionUndoStack.length)return;state.infection_tracker=infectionUndoStack.pop();renderInfectionTracker();renderPlayerDeckTracker();queueSave();}
 function openInfectionTracker(){infectionModalScrollY=window.scrollY||window.pageYOffset||0;document.body.classList.add('infection-modal-open');document.body.style.position='fixed';document.body.style.top=`-${infectionModalScrollY}px`;document.body.style.left='0';document.body.style.right='0';document.body.style.width='100%';$('#infectionModal').classList.remove('hidden');renderInfectionTracker();}
 function closeInfectionTracker(){if($('#infectionModal').classList.contains('hidden'))return;$('#infectionModal').classList.add('hidden');document.body.classList.remove('infection-modal-open');document.body.style.position='';document.body.style.top='';document.body.style.left='';document.body.style.right='';document.body.style.width='';window.scrollTo(0,infectionModalScrollY);}
-
 
 function playerDeckTracker(){if(!state.player_deck_tracker)state.player_deck_tracker=defaultPlayerDeckTracker();return state.player_deck_tracker;}
 function playerDeckInfo(){
@@ -598,7 +636,7 @@ async function saveSession(){const id=$('#sessionId').value||crypto.randomUUID()
 function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}function escapeAttr(v){return esc(v).replace(/`/g,'&#96;');}
 const rememberedCode=sessionStorage.getItem('pandemicLegacyS1Code');if(rememberedCode&&!isAdmin){$('#codeInput').value=rememberedCode;setTimeout(unlock,0);}
 $('#sPhotos').onchange=e=>handlePhotoFiles(e.target.files);
-$('#openInfectionTracker').onclick=openInfectionTracker;$('#closeInfectionTracker').onclick=closeInfectionTracker;$('#infectionEpidemic').onclick=infectionEpidemic;$('#infectionReset').onclick=resetInfectionTracker;$('#infectionUndo').onclick=undoInfectionTracker;$('#playerDraw2').onclick=()=>adjustPlayerDeckDraw(2);$('#playerDraw1').onclick=()=>adjustPlayerDeckDraw(1);$('#playerUndo1').onclick=()=>adjustPlayerDeckDraw(-1);$('#playerDeckReset').onclick=resetPlayerDeckTracker;
+$('#openInfectionTracker').onclick=openInfectionTracker;$('#closeInfectionTracker').onclick=closeInfectionTracker;$('#infectionEpidemic').onclick=infectionEpidemic;$('#infectionReset').onclick=resetInfectionTracker;$('#infectionUndo').onclick=undoInfectionTracker;$('#infectionClearRound').onclick=clearCurrentInfectionRound;$('#playerDraw2').onclick=()=>adjustPlayerDeckDraw(2);$('#playerDraw1').onclick=()=>adjustPlayerDeckDraw(1);$('#playerUndo1').onclick=()=>adjustPlayerDeckDraw(-1);$('#playerDeckReset').onclick=resetPlayerDeckTracker;
 $('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#addScheduleBtn').onclick=()=>openSchedule();$('#cancelSchedule').onclick=()=>$('#scheduleModal').classList.add('hidden');$('#saveSchedule').onclick=saveSchedule;$('#addSessionBtn').onclick=()=>openSession();$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#infectionModal').classList.contains('hidden')){closeInfectionTracker();return;}if(e.key==='Escape'&&!$('#photoLightbox').classList.contains('hidden')){closePhotoLightbox();return;}if(!$('#photoLightbox').classList.contains('hidden')){if(e.key==='ArrowLeft'){lightboxIndex--;renderPhotoLightbox();}else if(e.key==='ArrowRight'){lightboxIndex++;renderPhotoLightbox();}return;}if(e.key==='Escape'&&!$('#scheduleModal').classList.contains('hidden')){$('#scheduleModal').classList.add('hidden');return;}if(e.key==='Escape'&&!$('#sessionModal').classList.contains('hidden'))$('#sessionModal').classList.add('hidden')});
 boot();
 </script>
