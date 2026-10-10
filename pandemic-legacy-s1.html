@@ -26,6 +26,7 @@ linear-gradient(135deg,rgba(19,61,70,.96),rgba(15,29,35,.98) 58%,rgba(25,31,34,.
 .hero:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(135deg,rgba(210,77,77,.10) 0 8px,transparent 8px 18px);opacity:.18;clip-path:polygon(72% 0,100% 0,100% 100%,92% 100%)}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(360px,.7fr);gap:20px;align-items:stretch;position:relative;z-index:1}
 .hero-title{display:flex;flex-direction:column;justify-content:center;min-height:150px;padding:6px}.hero h1{font-family:"Arial Narrow",Inter,system-ui,sans-serif;font-size:38px;line-height:.98;margin:0;letter-spacing:-.045em;font-weight:900;text-transform:uppercase;text-shadow:0 2px 18px rgba(0,0,0,.32)}
+.hero-title-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px}.hero-title-actions .spoiler{margin-top:0}.hero-tracker-btn{border:1px solid rgba(120,205,213,.42);border-radius:9px;background:rgba(29,74,81,.72);color:#e8fbfc;font-weight:900;padding:8px 12px;cursor:pointer;box-shadow:0 5px 18px rgba(0,0,0,.16);backdrop-filter:blur(3px)}.hero-tracker-btn:hover{background:rgba(37,92,100,.9);border-color:rgba(139,220,226,.62)}
 .hero h1:before{content:"CASE FILE / ";display:block;font-family:Inter,system-ui,sans-serif;font-size:10px;letter-spacing:.22em;color:#82a0a9;margin-bottom:11px;font-weight:900}
 .spoiler{display:inline-flex;width:max-content;max-width:100%;align-items:center;gap:7px;margin-top:18px;padding:8px 10px;border:1px solid rgba(210,77,77,.48);border-radius:7px;background:rgba(125,41,41,.28);font-size:11px;font-weight:800;color:#ffdede;letter-spacing:.01em}
 .hero-month-panel{position:relative;border:1px solid rgba(160,192,202,.18);border-radius:14px;padding:14px;background:rgba(6,15,18,.42);backdrop-filter:blur(4px)}.hero-month-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.hero-month-head b{font-size:12px;letter-spacing:.08em}.hero-month-head span{font-size:9px;color:#789098;letter-spacing:.08em}.months{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0}.month-chip{border:1px solid #31444c;border-radius:7px;background:#111c21;padding:8px 3px;text-align:center;font-size:10px;color:#8fa1a8;min-width:0}.month-chip.active{background:#d24d4d;color:#fff;border-color:#d24d4d;font-weight:900;box-shadow:0 0 0 1px rgba(255,255,255,.05),0 0 18px rgba(210,77,77,.20)}
@@ -88,6 +89,9 @@ body{
 @media(max-width:820px){.infection-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.infection-groups{grid-template-columns:1fr}.infection-dialog{max-height:calc(100dvh - 18px);border-radius:13px}.infection-modal-bg{align-items:flex-start;padding:9px}.infection-dialog-head{padding:13px 14px 10px}.infection-dialog-toolbar{padding:9px 14px}.infection-dialog-scroll{padding:12px 14px 16px}.infection-city-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.infection-city{font-size:10px;padding:8px 5px}}
 @media(max-width:820px){.player-deck-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.player-deck-actions{align-items:flex-start}.player-deck-note{width:100%}}
 @media(max-width:430px){.infection-city-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.infection-actions{width:100%}.infection-action{flex:1}.infection-legend{gap:8px}.infection-dialog-title p{font-size:10px}}
+.infection-dialog-overview{display:grid;gap:9px;margin-bottom:12px}.infection-dialog-overview .infection-summary{grid-template-columns:repeat(5,minmax(0,1fr))}.infection-dialog-overview .infection-deck-config{margin:0}.infection-dialog-overview .player-deck-panel{margin:0;background:#1f2b30}.infection-dialog-overview .player-deck-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:820px){.infection-dialog-overview .infection-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.infection-dialog-overview .player-deck-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-title-actions{gap:8px}.hero-tracker-btn{padding:8px 10px;font-size:11px}}
+
 @media(max-width:430px){.player-deck-panel{padding:9px}.player-deck-grid{gap:5px}.player-deck-stat{padding:8px}.player-deck-stat strong{font-size:14px}.epidemic-piles{gap:3px}.epidemic-pile{padding:5px 2px}.deck-mini-btn{padding:7px 8px}}
 
 
@@ -96,7 +100,7 @@ body{
 .macro-infection-dialog{width:min(1460px,100%)}
 .macro-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px;border-bottom:1px solid #3b4a51;background:#222e34;flex-wrap:wrap}
 .macro-round-control{display:flex;align-items:center;gap:9px}.macro-round-control span{font-size:11px;color:#aab9be;font-weight:850}.macro-round-control select{border:1px solid #52636b;border-radius:8px;background:#182328;color:#eef4f6;padding:8px 28px 8px 10px;font-weight:850;outline:none}.macro-actions{margin-left:auto}
-.macro-dialog-scroll{padding:14px 16px 18px}.macro-tracker-layout{display:grid;grid-template-columns:minmax(760px,1fr) 270px;gap:12px;align-items:start}.macro-table-wrap{overflow:auto;border:1px solid #41525a;border-radius:11px;background:#1c272c;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.macro-infection-table{width:100%;min-width:900px;border-collapse:separate;border-spacing:0;font-size:11px;color:#dbe5e8}.macro-infection-table th{position:sticky;top:0;z-index:3;background:#254f78;color:#fff;padding:9px 7px;border-right:1px solid rgba(255,255,255,.16);border-bottom:1px solid #567086;text-align:center;font-weight:900;white-space:nowrap}.macro-infection-table th.active{background:#a43c3c}.macro-city-col{left:0;z-index:5!important;min-width:145px}.macro-status-col{min-width:135px}.macro-total-col{min-width:62px}.macro-infection-table td{height:34px;border-right:1px solid #39484f;border-bottom:1px solid #35444b;text-align:center;background:#243138}.macro-city{position:sticky;left:0;z-index:2;text-align:left!important;padding:0 10px!important;font-weight:850;color:#172126!important}.disease-blue-cell{background:#b9cee7!important}.disease-yellow-cell{background:#f3e0a4!important}.disease-black-cell{background:#c5c8ca!important}.disease-red-cell{background:#f2c5b2!important;color:#9e2929!important}.macro-round-cell{padding:3px!important}.macro-round-cell.active{background:#303f46!important;box-shadow:inset 0 0 0 1px rgba(222,105,105,.24)}.macro-count-btn{width:100%;height:27px;border:1px solid transparent;border-radius:6px;background:transparent;color:#f5f8f9;font-size:12px;font-weight:900;cursor:pointer}.macro-count-btn:hover{background:#33454c}.macro-count-btn.on{background:#4e8992;border-color:#6cb0b9;color:#fff}.macro-round-cell.active .macro-count-btn.on{background:#a94848;border-color:#da6868}.macro-status{font-size:10px;font-weight:850;padding:0 7px!important;white-space:nowrap}.macro-status.status-complete{color:#9bd29f}.macro-status.status-danger{color:#ff8989;background:#3d282a!important}.macro-status.status-unseen{color:#a6b1b5}.macro-total{font-weight:850;color:#e4edf0}.macro-risk-panel{position:sticky;top:0;border:1px solid #5b3a3a;border-radius:11px;background:#1f282d;overflow:hidden}.macro-risk-title{background:#a00000;color:#fff;padding:10px 12px;font-size:12px;font-weight:900}.macro-risk-desc{padding:9px 11px;color:#9eaaae;font-size:9px;line-height:1.5;border-bottom:1px solid #38464d}.macro-risk-list{max-height:560px;overflow:auto;padding:7px}.macro-risk-item{display:grid;grid-template-columns:24px 1fr;align-items:center;gap:6px;padding:7px 8px;border-bottom:1px solid #344249;font-size:11px}.macro-risk-item span{width:22px;height:22px;display:grid;place-items:center;border-radius:6px;background:#733535;color:#fff;font-size:9px;font-weight:900}.macro-risk-item b{color:#eef3f5}.macro-risk-empty{padding:18px 10px;text-align:center;color:#7f9198;font-size:10px}.macro-help{margin-top:12px}.infection-action:disabled,.macro-count-btn:disabled{opacity:.42;cursor:not-allowed}
+.macro-dialog-scroll{padding:14px 16px 18px}.macro-tracker-layout{display:grid;grid-template-columns:minmax(760px,1fr) 270px;gap:12px;align-items:start}.macro-table-wrap{overflow:auto;border:1px solid #41525a;border-radius:11px;background:#1c272c;overscroll-behavior:auto;-webkit-overflow-scrolling:touch}.macro-infection-table{width:100%;min-width:900px;border-collapse:separate;border-spacing:0;font-size:11px;color:#dbe5e8}.macro-infection-table th{position:sticky;top:0;z-index:3;background:#254f78;color:#fff;padding:9px 7px;border-right:1px solid rgba(255,255,255,.16);border-bottom:1px solid #567086;text-align:center;font-weight:900;white-space:nowrap}.macro-infection-table th.active{background:#a43c3c}.macro-city-col{left:0;z-index:5!important;min-width:145px}.macro-status-col{min-width:135px}.macro-total-col{min-width:62px}.macro-infection-table td{height:34px;border-right:1px solid #39484f;border-bottom:1px solid #35444b;text-align:center;background:#243138}.macro-city{position:sticky;left:0;z-index:2;text-align:left!important;padding:0 10px!important;font-weight:850;color:#172126!important}.disease-blue-cell{background:#b9cee7!important}.disease-yellow-cell{background:#f3e0a4!important}.disease-black-cell{background:#c5c8ca!important}.disease-red-cell{background:#f2c5b2!important;color:#9e2929!important}.macro-round-cell{padding:3px!important}.macro-round-cell.active{background:#303f46!important;box-shadow:inset 0 0 0 1px rgba(222,105,105,.24)}.macro-count-btn{width:100%;height:27px;border:1px solid transparent;border-radius:6px;background:transparent;color:#f5f8f9;font-size:12px;font-weight:900;cursor:pointer}.macro-count-btn:hover{background:#33454c}.macro-count-btn.on{background:#4e8992;border-color:#6cb0b9;color:#fff}.macro-round-cell.active .macro-count-btn.on{background:#a94848;border-color:#da6868}.macro-status{font-size:10px;font-weight:850;padding:0 7px!important;white-space:nowrap}.macro-status.status-complete{color:#9bd29f}.macro-status.status-danger{color:#ff8989;background:#3d282a!important}.macro-status.status-unseen{color:#a6b1b5}.macro-total{font-weight:850;color:#e4edf0}.macro-risk-panel{position:sticky;top:0;border:1px solid #5b3a3a;border-radius:11px;background:#1f282d;overflow:hidden}.macro-risk-title{background:#a00000;color:#fff;padding:10px 12px;font-size:12px;font-weight:900}.macro-risk-desc{padding:9px 11px;color:#9eaaae;font-size:9px;line-height:1.5;border-bottom:1px solid #38464d}.macro-risk-list{max-height:560px;overflow:auto;padding:7px}.macro-risk-item{display:grid;grid-template-columns:24px 1fr;align-items:center;gap:6px;padding:7px 8px;border-bottom:1px solid #344249;font-size:11px}.macro-risk-item span{width:22px;height:22px;display:grid;place-items:center;border-radius:6px;background:#733535;color:#fff;font-size:9px;font-weight:900}.macro-risk-item b{color:#eef3f5}.macro-risk-empty{padding:18px 10px;text-align:center;color:#7f9198;font-size:10px}.macro-help{margin-top:12px}.infection-action:disabled,.macro-count-btn:disabled{opacity:.42;cursor:not-allowed}
 @media(max-width:1050px){.infection-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.macro-tracker-layout{grid-template-columns:1fr}.macro-risk-panel{position:static}.macro-risk-list{max-height:190px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.macro-risk-item{border:1px solid #344249;border-radius:7px}}
 @media(max-width:620px){.infection-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.macro-toolbar{align-items:stretch;padding:9px 12px}.macro-round-control{width:100%;justify-content:space-between}.macro-round-control select{min-width:96px}.macro-actions{width:100%;display:grid;grid-template-columns:1fr 1fr;margin:0}.macro-actions .epidemic{grid-column:1/-1}.macro-dialog-scroll{padding:10px}.macro-infection-table{min-width:800px;font-size:10px}.macro-city-col{min-width:122px}.macro-infection-table td{height:32px}.macro-risk-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
@@ -289,7 +293,10 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
     <div class="hero-grid">
       <div class="hero-title">
         <h1>PANDEMIC LEGACY : SEASON 1</h1>
-        <div class="spoiler">⚠ 이 페이지에는 캠페인 스포일러가 포함됩니다.</div>
+        <div class="hero-title-actions">
+          <div class="spoiler">⚠ 이 페이지에는 캠페인 스포일러가 포함됩니다.</div>
+          <button id="openInfectionTracker" class="hero-tracker-btn" type="button">감염 도시 트래커</button>
+        </div>
       </div>
       <aside class="hero-schedule-panel">
         <div class="hero-schedule-head"><b>다음 레거시 일정</b><span>NEXT 3</span></div>
@@ -313,26 +320,6 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
       <div id="statusArea"></div>
     </section>
   </div>
-
-  <section class="section infection-section">
-    <div class="section-head"><div><h2>감염 도시 트래커</h2><div class="section-desc">첨부 엑셀 매크로 방식 · 차수별 출현 기록으로 덱 상단 위험 도시 자동 계산</div></div><div class="infection-head-actions"><button id="openInfectionTracker" class="infection-open" type="button">트래커 열기</button></div></div>
-    <div id="infectionSummary" class="infection-summary"></div><div id="infectionDeckConfig" class="infection-deck-config"></div>
-    <div class="player-deck-panel">
-      <div class="player-deck-head"><b>플레이어 덱 · 유행병 트래커</b><span>4인 기준 · 자금 지원 자동 반영</span></div>
-      <div id="playerDeckSummary" class="player-deck-grid"></div>
-      <div id="epidemicPiles" class="epidemic-piles"></div>
-      <div id="epidemicWarning" class="epidemic-warning hidden"></div>
-      <div class="player-deck-actions">
-        <div class="player-deck-buttons">
-          <button id="playerDraw2" class="deck-mini-btn" type="button">+2 카드 뽑기</button>
-          <button id="playerDraw1" class="deck-mini-btn" type="button">+1</button>
-          <button id="playerUndo1" class="deck-mini-btn" type="button">−1</button>
-          <button id="playerDeckReset" class="deck-mini-btn deck-reset" type="button">덱 카운터 초기화</button>
-        </div>
-        <div class="player-deck-note">초기 감염 9장도 0차 열에 먼저 체크한 뒤 시작하면 위험 도시 계산이 정확해져요.</div>
-      </div>
-    </div>
-  </section>
 
   <section class="section schedule-section">
     <div class="section-head"><div><h2>레거시 일정</h2><div class="section-desc">월 1회 모임 일정 관리</div></div><div class="schedule-toolbar"><button id="addScheduleBtn" class="primary" type="button">+ 일정 추가</button></div></div>
@@ -365,6 +352,25 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
       </div>
     </div>
     <div class="infection-dialog-scroll macro-dialog-scroll">
+      <div class="infection-dialog-overview">
+        <div id="infectionSummary" class="infection-summary"></div>
+        <div id="infectionDeckConfig" class="infection-deck-config"></div>
+        <div class="player-deck-panel">
+          <div class="player-deck-head"><b>플레이어 덱 · 유행병 트래커</b><span>4인 기준 · 자금 지원 자동 반영</span></div>
+          <div id="playerDeckSummary" class="player-deck-grid"></div>
+          <div id="epidemicPiles" class="epidemic-piles"></div>
+          <div id="epidemicWarning" class="epidemic-warning hidden"></div>
+          <div class="player-deck-actions">
+            <div class="player-deck-buttons">
+              <button id="playerDraw2" class="deck-mini-btn" type="button">+2 카드 뽑기</button>
+              <button id="playerDraw1" class="deck-mini-btn" type="button">+1</button>
+              <button id="playerUndo1" class="deck-mini-btn" type="button">−1</button>
+              <button id="playerDeckReset" class="deck-mini-btn deck-reset" type="button">덱 카운터 초기화</button>
+            </div>
+            <div class="player-deck-note">초기 감염 9장도 0차 열에 먼저 체크한 뒤 시작하면 위험 도시 계산이 정확해져요.</div>
+          </div>
+        </div>
+      </div>
       <div class="macro-tracker-layout">
         <div class="macro-table-wrap">
           <table class="macro-infection-table">
@@ -500,7 +506,24 @@ async function infectionEpidemic(){if(!canEdit)return;const t=infectionTracker()
 async function clearCurrentInfectionRound(){if(!canEdit)return;const t=infectionTracker(),r=t.current_round;if(!confirm(`${r}차 기록을 전부 비울까요?`))return;pushInfectionUndo();infectionCities.forEach(city=>t.round_counts[city][r]=0);renderInfectionTracker();await saveState();}
 async function resetInfectionTracker(){if(!canEdit||!confirm('감염 덱 트래커의 0차~6차 기록을 전부 초기화할까요?'))return;pushInfectionUndo();const total=infectionTracker().configured_total||48;state.infection_tracker={...defaultInfectionTracker(),configured_total:total,round_counts:normalizeRoundCounts({})};state.player_deck_tracker=defaultPlayerDeckTracker();renderInfectionTracker();renderPlayerDeckTracker();await saveState();}
 function undoInfectionTracker(){if(!infectionUndoStack.length)return;state.infection_tracker=infectionUndoStack.pop();renderInfectionTracker();renderPlayerDeckTracker();queueSave();}
-function openInfectionTracker(){infectionModalScrollY=window.scrollY||window.pageYOffset||0;document.body.classList.add('infection-modal-open');document.body.style.position='fixed';document.body.style.top=`-${infectionModalScrollY}px`;document.body.style.left='0';document.body.style.right='0';document.body.style.width='100%';$('#infectionModal').classList.remove('hidden');renderInfectionTracker();}
+
+function enableMacroTableWheelBridge(){
+  const tableWrap=document.querySelector('.macro-table-wrap');
+  const dialogScroll=document.querySelector('#infectionModal .infection-dialog-scroll');
+  if(!tableWrap||!dialogScroll||tableWrap.dataset.wheelBridge==='1')return;
+  tableWrap.dataset.wheelBridge='1';
+  tableWrap.addEventListener('wheel',e=>{
+    // Shift+wheel and primarily-horizontal trackpad gestures keep controlling the table itself.
+    if(e.shiftKey || Math.abs(e.deltaX)>Math.abs(e.deltaY))return;
+    // Normal mouse wheel should move the whole tracker popup vertically.
+    if(e.deltaY){
+      e.preventDefault();
+      dialogScroll.scrollTop += e.deltaY;
+    }
+  },{passive:false});
+}
+
+function openInfectionTracker(){infectionModalScrollY=window.scrollY||window.pageYOffset||0;document.body.classList.add('infection-modal-open');document.body.style.position='fixed';document.body.style.top=`-${infectionModalScrollY}px`;document.body.style.left='0';document.body.style.right='0';document.body.style.width='100%';$('#infectionModal').classList.remove('hidden');renderInfectionTracker();renderPlayerDeckTracker();requestAnimationFrame(enableMacroTableWheelBridge);}
 function closeInfectionTracker(){if($('#infectionModal').classList.contains('hidden'))return;$('#infectionModal').classList.add('hidden');document.body.classList.remove('infection-modal-open');document.body.style.position='';document.body.style.top='';document.body.style.left='';document.body.style.right='';document.body.style.width='';window.scrollTo(0,infectionModalScrollY);}
 
 function playerDeckTracker(){if(!state.player_deck_tracker)state.player_deck_tracker=defaultPlayerDeckTracker();return state.player_deck_tracker;}
