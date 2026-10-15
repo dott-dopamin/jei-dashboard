@@ -113,6 +113,71 @@ body{
 @media(max-width:1050px){.infection-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.macro-tracker-layout{grid-template-columns:1fr}.macro-risk-panel{position:static}.macro-risk-list{max-height:190px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.macro-risk-item{border:1px solid #344249;border-radius:7px}}
 @media(max-width:620px){.infection-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.macro-toolbar{align-items:stretch;padding:9px 12px}.macro-round-control{width:100%;justify-content:space-between}.macro-round-control select{min-width:96px}.macro-actions{width:100%;display:grid;grid-template-columns:1fr 1fr;margin:0}.macro-actions .epidemic{grid-column:1/-1}.macro-dialog-scroll{padding:10px}.macro-infection-table{min-width:800px;font-size:10px}.macro-city-col{min-width:122px}.macro-infection-table td{height:32px}.macro-risk-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
+
+/* ===== V97: S1 current-play workflow ===== */
+.current-brief{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px;align-items:start;margin-bottom:10px;border:1px solid #6c623b;border-radius:10px;background:#302f24;padding:10px 12px;color:#d9d1a8}
+.current-brief b{font-size:11px;color:#f0cf6a;white-space:nowrap}.current-brief .brief-copy{font-size:10px;line-height:1.55}.current-brief .brief-meta{display:block;margin-top:4px;font-size:9px;color:#a99f78;font-weight:800}
+.current-play-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.current-play-stat{border:1px solid #405058;border-radius:9px;background:#1e2a2f;padding:9px}
+.current-play-stat label{display:block;font-size:9px;font-weight:900;color:#9eb0b7;margin-bottom:6px}
+.current-play-stat input,.current-play-stat select{width:100%;border:1px solid #4a5d65;border-radius:7px;background:#172126;color:#eef4f5;padding:9px;outline:none;font-weight:850}
+.current-play-stat small{display:block;margin-top:5px;color:#7f9299;font-size:8px;line-height:1.35}
+.current-objective{margin-top:9px;border:1px solid #405058;border-radius:10px;background:#1d292e;padding:10px}
+.current-objective label,.play-log-panel label{display:block;font-size:11px;font-weight:900;color:#d9e2e5;margin-bottom:6px}
+.current-objective textarea,.play-log-panel textarea{width:100%;resize:vertical;border:1px solid #455961;border-radius:8px;background:#172126;color:#f1f5f6;padding:10px 11px;line-height:1.65;outline:none}
+.current-objective textarea{min-height:90px}.play-log-panel{margin-top:9px;border:1px solid #405058;border-radius:10px;background:#1d292e;padding:10px}.play-log-panel textarea{min-height:155px}
+.end-wrap{margin-top:10px;border-top:1px solid #3b4b52;padding-top:10px}
+.end-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.end-head b{font-size:12px;color:#dce6e9}.end-head span{font-size:9px;color:#81949b}
+.end-grid{display:grid;grid-template-columns:170px 1fr 1fr;gap:8px}.end-card{border:1px solid #405058;border-radius:9px;background:#1e2a2f;padding:9px}
+.end-card label{display:block;font-size:9px;font-weight:900;color:#9eb0b7;margin-bottom:6px}.end-card select,.end-card textarea{width:100%;border:1px solid #4a5d65;border-radius:7px;background:#172126;color:#eef4f5;padding:9px;outline:none}.end-card textarea{min-height:100px;resize:vertical;line-height:1.55}
+.end-card.wide{grid-column:1/-1}.next-draft{border-color:#655d37;background:#2d2b21}.next-draft label{color:#f0cf6a}
+.current-photo-panel{margin-top:8px;border:1px solid #405058;border-radius:9px;background:#1e2a2f;padding:9px}.current-photo-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}.current-photo-head b{font-size:10px;color:#c7d3d7}.current-photo-panel input{font-size:10px;color:#b8c7cc}
+.current-preview{margin-top:7px;display:grid;grid-template-columns:repeat(3,minmax(0,110px));gap:7px}.current-preview .photo-item{position:relative}.current-preview img{width:100%;aspect-ratio:1.25/1;object-fit:cover;border-radius:8px;border:1px solid #43555c}.current-preview .photo-remove{position:absolute;right:4px;top:4px;width:22px;height:22px;border:0;border-radius:50%;background:rgba(5,10,12,.8);color:#fff;cursor:pointer}
+.current-save-row{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-top:10px}.current-save-note{font-size:9px;color:#7f9299}.current-save-btn{border:0;border-radius:9px;background:#c85f5f;color:#fff;padding:11px 16px;font-size:11px;font-weight:950;cursor:pointer}.current-save-btn:hover{background:#b34f4f}
+@media(max-width:900px){.current-play-grid{grid-template-columns:1fr 1fr}.end-grid{grid-template-columns:1fr 1fr}.end-card:first-child{grid-column:1/-1}}
+@media(max-width:600px){.current-brief{grid-template-columns:1fr}.current-play-grid{grid-template-columns:1fr 1fr}.end-grid{grid-template-columns:1fr}.end-card:first-child{grid-column:auto}.play-log-panel textarea{min-height:180px}.current-save-row{align-items:stretch;flex-direction:column}.current-save-btn{width:100%}.current-preview{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+
+/* V98 · S1 city panic tracker, separate from infection deck tracking */
+.hero-panic-btn{background:rgba(106,61,52,.66);border-color:rgba(235,164,124,.50);color:#ffe8d9}
+.hero-panic-btn:hover{background:rgba(132,74,58,.85);border-color:rgba(255,196,159,.72)}
+.panic-overlay{position:fixed;inset:0;z-index:145;background:rgba(5,11,14,.84);display:flex;align-items:center;justify-content:center;padding:16px}
+.panic-dialog{width:min(1180px,100%);height:min(880px,calc(100dvh - 32px));display:flex;flex-direction:column;min-height:0;background:#27343b;border:1px solid #596971;border-radius:16px;box-shadow:0 25px 90px rgba(0,0,0,.55);overflow:hidden}
+.panic-head{flex:0 0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:17px 20px 14px;border-bottom:1px solid #41525a;background:#283840}
+.panic-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:#a6bac3;margin-bottom:4px}
+.panic-head h3{margin:0;color:#f2f6f6;font-size:21px}.panic-head p{font-size:11px;color:#adbec5;margin:5px 0 0;line-height:1.45}
+.panic-close{flex:0 0 auto;border:1px solid #556971;border-radius:50%;background:#203038;color:#fff;width:36px;height:36px;font-size:23px;cursor:pointer}
+.panic-scroll{min-height:0;flex:1 1 auto;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:16px 19px 20px}
+.panic-overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.panic-metric{border:1px solid #455861;background:#1e2b31;border-radius:9px;padding:11px 12px}
+.panic-metric label{display:block;color:#adbcc1;font-size:10px;font-weight:800}.panic-metric strong{display:block;color:#f0f5f6;font-size:22px;margin-top:3px}
+.panic-controls{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin:12px 0}
+.panic-controls input[type=search]{width:min(300px,100%);border:1px solid #52656d;border-radius:9px;background:#19272d;color:#fff;padding:11px 12px;font-size:13px;outline:none}
+.panic-controls input[type=search]:focus{border-color:#8cb4bd}
+.panic-filter{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:850;color:#d5e0e4;cursor:pointer}
+.panic-filter input{accent-color:#dc7770;width:16px;height:16px}
+.panic-level-guide{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-bottom:13px}
+.panic-level-guide>div{border:1px solid #45565e;border-radius:9px;background:#1f2d33;padding:9px 10px;min-width:0}
+.panic-level-guide b{font-size:11px;color:#f1d3af;display:block}.panic-level-guide span{font-size:10px;color:#abbabf;display:block;line-height:1.5;margin-top:4px}
+.panic-city-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.panic-city{min-width:0;border:1px solid #485b64;border-radius:10px;background:#202e35;overflow:hidden}
+.panic-city.level-2,.panic-city.level-3{border-color:#9d7954}.panic-city.level-4{border-color:#bd644e}.panic-city.level-5{border-color:#d44f50}
+.panic-city-top{display:flex;align-items:center;justify-content:space-between;gap:5px;padding:9px 10px;border-bottom:1px solid #3c4d55}
+.panic-city-name{font-size:13px;font-weight:900;line-height:1.3;color:#f0f5f5;overflow-wrap:anywhere}
+.panic-city-color{display:inline-block;width:7px;height:14px;border-radius:2px;margin-right:6px;vertical-align:-2px}
+.panic-city-color.blue{background:#6faee3}.panic-city-color.yellow{background:#ebc253}.panic-city-color.black{background:#a2acb0}.panic-city-color.red{background:#df7373}
+.panic-level-chip{border-radius:999px;background:#33434c;color:#bac9ce;padding:4px 7px;font-size:10px;font-weight:900;white-space:nowrap}
+.panic-level-chip.alert-1{background:#3d4a39;color:#c7db93}.panic-level-chip.alert-2{background:#5a4c32;color:#f3d29d}.panic-level-chip.alert-4{background:#6a3b30;color:#ffbca8}.panic-level-chip.alert-5{background:#753438;color:#ffd0d0}
+.panic-city-action{display:flex;align-items:center;gap:6px;padding:9px 10px}
+.panic-step{width:32px;height:30px;border:1px solid #587078;border-radius:7px;background:#304049;color:#edf4f6;cursor:pointer;font-size:19px;font-weight:900}
+.panic-step.plus{background:#9f5550;border-color:#d17870}.panic-step:disabled{opacity:.38;cursor:not-allowed}
+.panic-level-value{flex:1;text-align:center;color:#eaf3f3;font-size:12px;font-weight:900}
+.panic-footnote{margin-top:12px;padding:11px 12px;background:#302c25;border:1px solid #6c5841;border-radius:9px;color:#d2c1a1;font-size:10.5px;line-height:1.6}
+.panic-empty{grid-column:1/-1;padding:38px;text-align:center;color:#9cadb4;font-size:13px}
+body.panic-modal-open{overflow:hidden}
+@media(max-width:1000px){.panic-city-list{grid-template-columns:repeat(3,minmax(0,1fr))}.panic-level-guide{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){.panic-overlay{padding:8px;align-items:flex-start}.panic-dialog{height:calc(100dvh - 16px);border-radius:12px}.panic-head{padding:12px 13px}.panic-scroll{padding:12px}.panic-head h3{font-size:18px}.panic-head p{font-size:10px}.panic-overview{grid-template-columns:repeat(2,minmax(0,1fr))}.panic-level-guide{grid-template-columns:repeat(2,minmax(0,1fr))}.panic-city-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.panic-city-top,.panic-city-action{padding:8px}.panic-city-name{font-size:12px}.panic-metric strong{font-size:19px}}
+
 </style>
 
 <style>
@@ -305,6 +370,7 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
         <div class="hero-title-actions">
           <div class="spoiler">⚠ 이 페이지에는 캠페인 스포일러가 포함됩니다.</div>
           <button id="openInfectionTracker" class="hero-tracker-btn" type="button">감염 도시 트래커</button>
+          <button id="openPanicTracker" class="hero-tracker-btn hero-panic-btn" type="button">도시 패닉 레벨</button>
         </div>
       </div>
       <aside class="hero-schedule-panel">
@@ -325,7 +391,7 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
     </section>
 
     <section class="section status-section">
-      <div class="section-head"><div><h2>현재 캠페인 상태</h2><div class="section-desc">다음 모임 시작 전에 제일 먼저 보는 영역 · 메모 자동 저장</div></div></div>
+      <div class="section-head"><div><h2>진행하는 플레이 월</h2><div class="section-desc">현재 플레이 중인 월을 기록 · 게임 종료 후 저장하면 회차 기록으로 자동 이동</div></div></div>
       <div id="statusArea"></div>
     </section>
   </div>
@@ -336,7 +402,7 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
   </section>
 
   <section class="section sessions-section">
-    <div class="section-head"><div><h2>회차 기록</h2><div class="section-desc">게임이 끝날 때마다 한 장씩 남겨두기</div></div><div id="sessionToolbar" class="session-toolbar hidden"><button id="addSessionBtn" class="primary">+ 회차 기록</button></div></div>
+    <div class="section-head"><div><h2>회차 기록</h2><div class="section-desc">위에서 저장한 완료 회차가 자동으로 쌓이는 과거 기록</div></div></div>
     <div id="sessionList" class="session-list"></div>
   </section>
 </main>
@@ -389,6 +455,36 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
   </div>
 </div>
 
+
+<div id="panicModal" class="panic-overlay hidden" role="presentation">
+  <div class="panic-dialog" role="dialog" aria-modal="true" aria-labelledby="panicTitle">
+    <div class="panic-head">
+      <div>
+        <div class="panic-kicker">PERMANENT CITY STATUS</div>
+        <h3 id="panicTitle">도시 패닉 레벨 트래커</h3>
+        <p>아웃브레이크가 발생한 도시만 레벨을 1 올리세요. 기록은 게임이 끝나도 유지됩니다.</p>
+      </div>
+      <button id="closePanicTracker" class="panic-close" type="button" aria-label="패닉 트래커 닫기">×</button>
+    </div>
+    <div class="panic-scroll">
+      <div class="panic-overview" id="panicOverview" aria-live="polite"></div>
+      <div class="panic-controls">
+        <input id="panicSearch" type="search" placeholder="도시 검색" aria-label="패닉 도시 검색" autocomplete="off">
+        <label class="panic-filter"><input id="panicOnlyActive" type="checkbox"> 패닉 발생 도시만</label>
+      </div>
+      <div class="panic-level-guide">
+        <div><b>0 · 정상</b><span>패닉 없음</span></div>
+        <div><b>1 · 불안정</b><span>추가 효과 없음</span></div>
+        <div><b>2~3 · 폭동</b><span>직항/전세기 이용 불가 · 연구소 파괴/건설 불가</span></div>
+        <div><b>4 · 붕괴</b><span>차량/선박으로 진입할 때 해당 도시 색 카드 1장 버림</span></div>
+        <div><b>5 · 몰락</b><span>진입 시 2장 버림 · 처음 몰락할 때 도시에 있던 캐릭터 상실</span></div>
+      </div>
+      <div id="panicCityList" class="panic-city-list"></div>
+      <div class="panic-footnote">공식 기본 규칙 기준. 효과는 누적되며, 나중에 공개되는 레거시 규칙·스티커는 실제 게임판을 우선하세요. 아웃브레이크 1회당 해당 도시의 패닉 레벨이 1 상승하고 최대 5입니다. 일반 감염만으로는 상승하지 않습니다.</div>
+    </div>
+  </div>
+</div>
+
 <div id="scheduleModal" class="modal-bg schedule-modal hidden"><div class="modal">
   <h3 id="scheduleModalTitle">레거시 일정 추가</h3>
   <form id="scheduleForm" class="form-grid">
@@ -401,14 +497,14 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
 </div></div>
 
 <div id="sessionModal" class="modal-bg hidden"><div class="modal">
-  <h3 id="modalTitle">회차 기록 추가</h3>
+  <h3 id="modalTitle">회차 기록 수정</h3>
   <form id="sessionForm" class="form-grid">
     <input type="hidden" id="sessionId">
     <div class="field"><label>플레이 날짜</label><input id="sDate" type="date"></div>
     <div class="field"><label>월</label><select id="sMonth"></select></div>
     <div class="field"><label>도전 횟수</label><input id="sAttempt" type="number" min="1" value="1"></div>
     <div class="field"><label>결과</label><select id="sResult"><option value="">선택</option><option value="WIN">WIN</option><option value="LOSE">LOSE</option></select></div>
-    <div class="field"><label>종료 시 자금 지원</label><input id="sFunding" type="number" min="0" max="10"></div>
+    <div class="field"><label>이 회차에 사용한 자금 지원 카드 수</label><input id="sFunding" type="number" min="0" max="10"></div>
     <div class="field"><label>참여 캐릭터</label><input id="sCharacters" placeholder="예: 제이-연구원, 승연-의무관"></div>
     <div class="field wide"><label>이번 회차 목표</label><textarea id="sObjectives" placeholder="이번에 해결하려고 했던 목표"></textarea></div>
     <div class="field wide"><label>주요 내용</label><textarea id="sHighlights" placeholder="다음에 기억해야 할 중요한 진행 내용"></textarea></div>
@@ -439,7 +535,7 @@ let sessionPhotoCache=new Map(),modalExistingPhotos=[],modalPendingPhotos=[],mod
 
 function defaultInfectionTracker(){return {current_round:0,round_counts:{},city_card_counts:{},epidemics:0,configured_total:48};}
 function defaultPlayerDeckTracker(){return {drawn:0};}
-function defaultState(){return {meta:{current_month:'1월',attempt:1,funding:'',last_result:'',next_note:'',current_objectives:'',current_rules:'',permanent_summary:''},players:[{name:'제이',character:'',role:'',detail:''},{name:'우리',character:'',role:'',detail:''},{name:'승연',character:'',role:'',detail:''},{name:'종우',character:'',role:'',detail:''}],infection_tracker:defaultInfectionTracker(),player_deck_tracker:defaultPlayerDeckTracker(),schedules:[{id:'legacy-1',round:'1회차',date:'2026-10-17',note:'1시~'}],sessions:[]};}
+function defaultState(){return {meta:{current_month:'1월',attempt:1,funding:'',last_result:'',next_note:'',next_note_draft:'',play_date:'',session_result:'',play_log:'',current_objectives:'',current_rules:'',permanent_summary:'',current_upgrades:''},players:[{name:'제이',character:'',role:'',detail:''},{name:'우리',character:'',role:'',detail:''},{name:'승연',character:'',role:'',detail:''},{name:'종우',character:'',role:'',detail:''}],infection_tracker:defaultInfectionTracker(),player_deck_tracker:defaultPlayerDeckTracker(),panic_levels:{},schedules:[{id:'legacy-1',round:'1회차',date:'2026-10-17',note:'1시~'}],sessions:[]};}
 function normalizeInfectionCityName(name){return ({'하르툼':'카르툼','호치민시':'호치민'}[name]||name);}
 function normalizeRoundCounts(raw){
   const out={};
@@ -462,13 +558,137 @@ function migrateInfectionTracker(raw){
   mark(it.danger2,round-2);mark(it.danger1,round-1);mark(it.current,round);
   return {...base,current_round:round,epidemics:round,configured_total:Math.max(1,parseInt(it.configured_total,10)||48),round_counts:counts,city_card_counts:normalizeCityCardCounts(it.city_card_counts)};
 }
-function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s.players:[];return {meta:{...d.meta,...(s?.meta||{})},players:d.players.map((p,i)=>{const saved=stored.find(x=>x?.name===p.name)||stored[i]||{};return {...p,...saved,name:p.name};}),infection_tracker:migrateInfectionTracker(s?.infection_tracker),player_deck_tracker:{...defaultPlayerDeckTracker(),...(s?.player_deck_tracker||{})},schedules:Array.isArray(s?.schedules)?s.schedules:d.schedules,sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
+function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s.players:[];return {meta:{...d.meta,...(s?.meta||{})},players:d.players.map((p,i)=>{const saved=stored.find(x=>x?.name===p.name)||stored[i]||{};return {...p,...saved,name:p.name};}),infection_tracker:migrateInfectionTracker(s?.infection_tracker),player_deck_tracker:{...defaultPlayerDeckTracker(),...(s?.player_deck_tracker||{})},panic_levels:normalizePanicLevels(s?.panic_levels),schedules:Array.isArray(s?.schedules)?s.schedules:d.schedules,sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
 async function boot(){const {data:{session}}=await db.auth.getSession();isAdmin=!!session;if(isAdmin){const {data,error}=await db.from('pandemic_legacy_s1_state').select('data').eq('id',1).single();if(!error&&data){state=mergeState(data.data);canEdit=true;openApp();return;}}}
 async function unlock(){const code=$('#codeInput').value.trim();if(!code)return;$('#gateError').textContent='';const {data,error}=await db.rpc('get_pandemic_legacy_s1',{p_code:code});if(error){console.error(error);$('#gateError').textContent=error.code==='P0001'?'비밀번호가 맞지 않아요.':'연결 설정을 확인해주세요.';return;}accessCode=code;state=mergeState(data);canEdit=true;sessionStorage.setItem('pandemicLegacyS1Code',code);openApp();}
-function openApp(){$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');$('#sessionToolbar').classList.toggle('hidden',!canEdit);$('#addScheduleBtn').classList.toggle('hidden',!canEdit);render();}
+function openApp(){$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');$('#addScheduleBtn').classList.toggle('hidden',!canEdit);render();}
 function render(){renderPlayers();renderStatus();renderMonths();renderInfectionTracker();renderPlayerDeckTracker();renderSchedules();renderSessions();}
 function renderPlayers(){const wrap=$('#players');wrap.innerHTML=state.players.map((p,i)=>`<div class="player-card"><div class="player-name">${p.name}</div>${canEdit?`<input data-player="${i}" data-key="character" value="${escapeAttr(p.character)}" placeholder="캐릭터명"><input class="role-input" data-player="${i}" data-key="role" value="${escapeAttr(p.role)}" placeholder="역할 / 직업"><textarea class="detail-input" data-player="${i}" data-key="detail" placeholder="상처 · 관계 · 업그레이드 메모">${esc(p.detail||'')}</textarea>`:`<div class="player-character">${esc(p.character||'캐릭터 미정')}</div><div class="player-role">${esc(p.role||'')}</div><div class="player-detail-read">${esc(p.detail||'상태 메모 없음')}</div>`}</div>`).join('');if(canEdit){wrap.querySelectorAll('input,textarea').forEach(el=>el.oninput=()=>{state.players[+el.dataset.player][el.dataset.key]=el.value;queueSave();});}}
-function renderStatus(){const m=state.meta;$('#statusArea').innerHTML=canEdit?`<div class="status-grid"><div class="stat"><label>현재 월</label><select id="metaMonth">${months.map(x=>`<option ${x===m.current_month?'selected':''}>${x}</option>`).join('')}</select></div><div class="stat"><label>현재 도전</label><input id="metaAttempt" type="number" min="1" value="${m.attempt||1}"></div><div class="stat"><label>자금 지원</label><input id="metaFunding" type="number" min="0" max="10" value="${escapeAttr(m.funding??'')}"></div><div class="stat"><label>직전 결과</label><select id="metaResult"><option value="">-</option><option value="WIN" ${m.last_result==='WIN'?'selected':''}>WIN</option><option value="LOSE" ${m.last_result==='LOSE'?'selected':''}>LOSE</option></select></div></div><div class="campaign-brief-grid"><div class="brief-card"><label>현재 활성 목표</label><textarea id="metaObjectives" placeholder="이번 달/이번 회차에서 현재 적용 중인 목표">${esc(m.current_objectives||'')}</textarea></div><div class="brief-card"><label>이번 달 추가 규칙 · 예외</label><textarea id="metaRules" placeholder="새로 열린 규칙, setup 때 잊기 쉬운 변화">${esc(m.current_rules||'')}</textarea></div><div class="brief-card"><label>영구 상태 요약</label><textarea id="metaPermanent" placeholder="도시 상태 · 연구소 · 질병 변화 등 꼭 기억할 것">${esc(m.permanent_summary||'')}</textarea></div></div><div class="next-note"><div class="note-title">📌 다음 게임 시작 전에 읽기</div><textarea id="metaNext" placeholder="다음 판 시작 전에 꼭 기억할 것">${esc(m.next_note||'')}</textarea></div>`:`<div class="status-grid"><div class="stat"><label>현재 월</label><strong>${esc(m.current_month||'-')}</strong></div><div class="stat"><label>현재 도전</label><strong>${esc(m.attempt||'-')}</strong></div><div class="stat"><label>자금 지원</label><strong>${esc(m.funding||'-')}</strong></div><div class="stat"><label>직전 결과</label><strong class="${m.last_result==='WIN'?'result-win':m.last_result==='LOSE'?'result-lose':''}">${esc(m.last_result||'-')}</strong></div></div><div class="campaign-brief-grid"><div class="brief-card"><label>현재 활성 목표</label><div class="brief-read">${esc(m.current_objectives||'-')}</div></div><div class="brief-card"><label>이번 달 추가 규칙 · 예외</label><div class="brief-read">${esc(m.current_rules||'-')}</div></div><div class="brief-card"><label>영구 상태 요약</label><div class="brief-read">${esc(m.permanent_summary||'-')}</div></div></div><div class="next-note"><div class="note-title">📌 다음 게임 시작 전에 읽기</div><div class="readonly">${esc(m.next_note||'아직 메모가 없어요.')}</div></div>`;if(canEdit){const saveMeta=()=>{state.meta.current_month=$('#metaMonth').value;state.meta.attempt=+$('#metaAttempt').value||1;state.meta.funding=$('#metaFunding').value;state.meta.last_result=$('#metaResult').value;state.meta.current_objectives=$('#metaObjectives').value;state.meta.current_rules=$('#metaRules').value;state.meta.permanent_summary=$('#metaPermanent').value;state.meta.next_note=$('#metaNext').value;queueSave();renderMonths();renderPlayerDeckTracker();};['metaMonth','metaAttempt','metaFunding','metaResult'].forEach(id=>$('#'+id).onchange=saveMeta);['metaObjectives','metaRules','metaPermanent','metaNext'].forEach(id=>$('#'+id).oninput=saveMeta);}}
+function latestCompletedSession(){
+  const arr=[...(state.sessions||[])];
+  arr.sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))||String(b.created_at||'').localeCompare(String(a.created_at||'')));
+  return arr[0]||null;
+}
+function currentIncomingNote(){
+  const prev=latestCompletedSession();
+  return {note:String(prev?.next||state.meta.next_note||'').trim(),prev};
+}
+function currentCharacterText(){
+  return (state.players||[]).map(p=>p.character?`${p.name}(${p.character})`:p.name).join(' · ');
+}
+function renderStatus(){
+  const m=state.meta;
+  if(!m.play_date)m.play_date=new Date().toISOString().slice(0,10);
+  const {note:incoming,prev}=currentIncomingNote();
+  $('#statusArea').innerHTML=canEdit?`
+    <div class="current-brief"><b>📌 다음 게임 시작 전에 읽기</b><div class="brief-copy">${incoming?esc(incoming):'이전 회차에서 남긴 메모가 없어요.'}${prev?`<span class="brief-meta">${esc(prev.month||'')} · ${esc(prev.attempt||1)}차에서 남긴 메모</span>`:''}</div></div>
+    <div class="current-play-grid">
+      <div class="current-play-stat"><label>플레이 월</label><select id="metaMonth">${months.map(x=>`<option ${x===m.current_month?'selected':''}>${x}</option>`).join('')}</select><small>지금 실제로 진행 중인 월</small></div>
+      <div class="current-play-stat"><label>이번 도전</label><input id="metaAttempt" type="number" min="1" max="2" value="${+m.attempt||1}"><small>같은 달 1차 / 재도전 2차</small></div>
+      <div class="current-play-stat"><label>자금 지원 카드 수</label><input id="metaFunding" type="number" min="0" max="10" value="${escapeAttr(m.funding??'')}"><small>이번 게임 플레이어 덱에 추가할 자금 지원 이벤트 카드 수</small></div>
+      <div class="current-play-stat"><label>플레이 날짜</label><input id="metaPlayDate" type="date" value="${escapeAttr(m.play_date||'')}"><small>실제 플레이 날짜</small></div>
+    </div>
+    <div class="current-objective"><label>이번 회차 목표</label><textarea id="metaObjectives" placeholder="현재 월에 적용되는 목표를 적어두세요.">${esc(m.current_objectives||'')}</textarea></div>
+    <div class="play-log-panel"><label>게임 기록</label><textarea id="metaPlayLog" placeholder="플레이하면서 있었던 일, 중요한 선택, 사건 등을 편하게 줄줄 적어두세요.">${esc(m.play_log||'')}</textarea></div>
+    <div class="end-wrap">
+      <div class="end-head"><b>게임 종료 정리</b><span>게임이 끝난 뒤 작성 · 저장하면 회차 기록으로 이동</span></div>
+      <div class="end-grid">
+        <div class="end-card"><label>이번 회차 결과</label><select id="metaSessionResult"><option value="">선택</option><option value="WIN" ${m.session_result==='WIN'?'selected':''}>WIN</option><option value="LOSE" ${m.session_result==='LOSE'?'selected':''}>LOSE</option></select></div>
+        <div class="end-card"><label>현재 적용 중 추가 규칙 · 예외</label><textarea id="metaRules">${esc(m.current_rules||'')}</textarea></div>
+        <div class="end-card"><label>영구 상태 요약</label><textarea id="metaPermanent">${esc(m.permanent_summary||'')}</textarea></div>
+        <div class="end-card wide"><label>게임 종료 업그레이드 2개</label><textarea id="metaUpgrades" placeholder="이번 게임 종료 후 선택한 업그레이드 2개">${esc(m.current_upgrades||'')}</textarea></div>
+        <div class="end-card wide next-draft"><label>다음 회차에 남길 메모</label><textarea id="metaNextDraft" placeholder="다음 게임 시작 전에 꼭 읽어야 할 내용을 적어두세요.">${esc(m.next_note_draft||'')}</textarea></div>
+      </div>
+      <div class="current-photo-panel"><div class="current-photo-head"><b>회차 사진 · 최대 3장</b><span id="currentPhotoStatus" class="photo-status"></span></div><input id="currentPhotos" type="file" accept="image/*" multiple><div id="currentPhotoPreview" class="current-preview"></div></div>
+      <div class="current-save-row"><span class="current-save-note">저장하면 현재 내용이 아래 회차 기록으로 이동하고 다음 월/도전/자금 지원 카드 수가 갱신됩니다.</span><button id="saveCurrentSessionBtn" class="current-save-btn" type="button">현재 회차 저장 →</button></div>
+    </div>`:
+    `<div class="current-brief"><b>📌 다음 게임 시작 전에 읽기</b><div class="brief-copy">${incoming?esc(incoming):'이전 회차에서 남긴 메모가 없어요.'}</div></div>
+     <div class="status-grid"><div class="stat"><label>플레이 월</label><strong>${esc(m.current_month||'-')}</strong></div><div class="stat"><label>이번 도전</label><strong>${esc(m.attempt||'-')}</strong></div><div class="stat"><label>자금 지원 카드 수</label><strong>${esc(m.funding===''||m.funding==null?'-':m.funding)}</strong></div><div class="stat"><label>플레이 날짜</label><strong>${esc(m.play_date||'-')}</strong></div></div>
+     <div class="campaign-brief-grid"><div class="brief-card"><label>이번 회차 목표</label><div class="brief-read">${esc(m.current_objectives||'-')}</div></div><div class="brief-card"><label>현재 적용 규칙 · 예외</label><div class="brief-read">${esc(m.current_rules||'-')}</div></div><div class="brief-card"><label>영구 상태 요약</label><div class="brief-read">${esc(m.permanent_summary||'-')}</div></div></div>`;
+  if(canEdit){
+    const sync=()=>{
+      m.current_month=$('#metaMonth').value;
+      m.attempt=Math.max(1,Math.min(2,+$('#metaAttempt').value||1));
+      m.funding=$('#metaFunding').value===''?'':Math.max(0,Math.min(10,+$('#metaFunding').value||0));
+      m.play_date=$('#metaPlayDate').value;
+      m.current_objectives=$('#metaObjectives').value;
+      m.play_log=$('#metaPlayLog').value;
+      m.session_result=$('#metaSessionResult').value;
+      m.current_rules=$('#metaRules').value;
+      m.permanent_summary=$('#metaPermanent').value;
+      m.current_upgrades=$('#metaUpgrades').value;
+      m.next_note_draft=$('#metaNextDraft').value;
+      queueSave();renderMonths();renderPlayerDeckTracker();
+    };
+    ['metaMonth','metaAttempt','metaFunding','metaPlayDate','metaSessionResult'].forEach(id=>$('#'+id).onchange=sync);
+    ['metaObjectives','metaPlayLog','metaRules','metaPermanent','metaUpgrades','metaNextDraft'].forEach(id=>$('#'+id).oninput=sync);
+    $('#currentPhotos').onchange=handleCurrentPhotos;
+    $('#saveCurrentSessionBtn').onclick=saveCurrentSession;
+    renderCurrentPhotoPreview();
+  }
+}
+
+// Panic levels are permanent city stickers; infection card draws are NOT outbreaks.
+function normalizePanicLevels(raw){
+  const out={};
+  infectionCities.forEach(c=>{const n=Number(raw?.[c]);if(Number.isFinite(n)&&n>0)out[c]=Math.min(5,Math.max(0,Math.floor(n)))});
+  return out;
+}
+const panicCollator=new Intl.Collator('ko-KR',{sensitivity:'base',numeric:true});
+let panicOpenScroll=0;
+function panicLevel(city){return Math.min(5,Math.max(0,+state.panic_levels?.[city]||0))}
+function renderPanicTracker(){
+  if(!state)return;
+  const all=infectionCities;
+  const active=all.filter(c=>panicLevel(c)>0);
+  $('#panicOverview').innerHTML=[
+    ['전체 도시',`${all.length}`],
+    ['패닉 발생 도시',`${active.length}`],
+    ['폭동 이상 (2~5)',`${active.filter(c=>panicLevel(c)>=2).length}`],
+    ['몰락 (5)',`${active.filter(c=>panicLevel(c)===5).length}`]
+  ].map(([label,value])=>`<div class="panic-metric"><label>${label}</label><strong>${value}</strong></div>`).join('');
+  const q=($('#panicSearch').value||'').trim().toLocaleLowerCase('ko-KR');
+  const onlyActive=$('#panicOnlyActive').checked;
+  const cities=all.filter(c=>(!q||c.toLocaleLowerCase('ko-KR').includes(q))&&(!onlyActive||panicLevel(c)>0))
+    .sort((a,b)=>(panicLevel(b)-panicLevel(a))||panicCollator.compare(a,b));
+  const labels=['정상','불안정','폭동','폭동','붕괴','몰락'];
+  $('#panicCityList').innerHTML=cities.length?cities.map(c=>{
+    const lvl=panicLevel(c),band=lvl===0?'':lvl===1?'alert-1':lvl<=3?'alert-2':lvl===4?'alert-4':'alert-5';
+    return `<div class="panic-city level-${lvl}">
+      <div class="panic-city-top"><b class="panic-city-name"><i class="panic-city-color ${infectionColorByCity[c]||'blue'}"></i>${esc(c)}</b><span class="panic-level-chip ${band}">${lvl} · ${labels[lvl]}</span></div>
+      <div class="panic-city-action"><button class="panic-step minus" type="button" data-panic-city="${esc(c)}" data-panic-delta="-1" ${!canEdit||lvl===0?'disabled':''} aria-label="${esc(c)} 패닉 레벨 내리기">−</button>
+      <span class="panic-level-value">패닉 ${lvl} / 5</span>
+      <button class="panic-step plus" type="button" data-panic-city="${esc(c)}" data-panic-delta="1" ${!canEdit||lvl===5?'disabled':''} aria-label="${esc(c)} 패닉 레벨 올리기">+</button></div>
+    </div>`;
+  }).join(''):'<div class="panic-empty">조건에 맞는 도시가 없어요.</div>';
+  $('#panicCityList').querySelectorAll('[data-panic-delta]').forEach(btn=>{
+    btn.onclick=()=>changeCityPanic(btn.dataset.panicCity,Number(btn.dataset.panicDelta));
+  });
+}
+function changeCityPanic(city,delta){
+  if(!canEdit||!infectionCities.includes(city))return;
+  const before=panicLevel(city),next=Math.max(0,Math.min(5,before+delta));
+  if(before===next)return;
+  if(delta<0&&!confirm(`${city}의 패닉 레벨을 ${before}에서 ${next}(으)로 낮출까요?\n실제 게임판 스티커 변경 여부를 확인해주세요.`))return;
+  state.panic_levels??={};
+  if(next===0)delete state.panic_levels[city];else state.panic_levels[city]=next;
+  renderPanicTracker();queueSave();
+}
+function openPanicTracker(){
+  panicOpenScroll=window.scrollY||window.pageYOffset||0;
+  document.body.classList.add('panic-modal-open');
+  document.body.style.position='fixed';document.body.style.top=`-${panicOpenScroll}px`;
+  document.body.style.left='0';document.body.style.right='0';document.body.style.width='100%';
+  $('#panicModal').classList.remove('hidden');renderPanicTracker();
+}
+function closePanicTracker(){
+  if($('#panicModal').classList.contains('hidden'))return;
+  $('#panicModal').classList.add('hidden');
+  document.body.classList.remove('panic-modal-open');
+  for(const prop of ['position','top','left','right','width'])document.body.style[prop]='';
+  window.scrollTo(0,panicOpenScroll);
+}
+
 function renderMonths(){$('#monthStrip').innerHTML=months.map(x=>`<div class="month-chip ${x===state.meta.current_month?'active':''}">${x}</div>`).join('');}
 
 
@@ -592,7 +812,7 @@ function openSchedule(data={}){$('#scheduleId').value=data.id||'';$('#scheduleRo
 window.editSchedule=id=>{const s=(state.schedules||[]).find(x=>x.id===id);if(s)openSchedule(s);};
 window.deleteSchedule=async id=>{if(!canEdit||!confirm('이 레거시 일정을 삭제할까요?'))return;state.schedules=(state.schedules||[]).filter(x=>x.id!==id);await saveState();renderSchedules();};
 async function saveSchedule(){if(!canEdit)return;const id=$('#scheduleId').value||crypto.randomUUID();const row={id,round:$('#scheduleRound').value.trim()||'일정',date:$('#scheduleDate').value,note:$('#scheduleNote').value.trim()};const arr=state.schedules||(state.schedules=[]);const idx=arr.findIndex(x=>x.id===id);if(idx>=0)arr[idx]=row;else arr.push(row);await saveState();$('#scheduleModal').classList.add('hidden');renderSchedules();}
-function renderSessions(){const list=$('#sessionList');const sessions=[...state.sessions].sort((a,b)=>(b.date||'').localeCompare(a.date||'')||String(b.created_at||'').localeCompare(String(a.created_at||'')));if(!sessions.length){list.innerHTML='<div class="empty">아직 기록된 회차가 없어요.</div>';return;}list.innerHTML=sessions.map((s,i)=>`<article class="session-card"><div class="session-summary" onclick="toggleSession('${s.id}',this)"><div class="session-index">${esc(s.month||'?')}</div><div><div class="session-title">${esc(s.month||'')} · ${esc(s.attempt||1)}차 ${s.result?`<span class="${s.result==='WIN'?'result-win':'result-lose'}">${esc(s.result)}</span>`:''}</div><div class="session-sub">${esc(s.date||'날짜 미정')}${s.funding!==''&&s.funding!=null?` · 자금 지원 ${esc(s.funding)}`:''}</div></div><div class="session-open">⌄</div></div><div class="session-body hidden"><div class="record-grid">${record('참여 캐릭터',s.characters)}${record('이번 회차 목표',s.objectives)}${record('주요 내용',s.highlights,true)}${record('영구 변경사항',s.permanent,true)}${record('게임 종료 업그레이드',s.upgrades,true)}${record('다음 게임에서 기억할 것',s.next,true)}<div class="session-photo-block"><b>회차 사진</b><div id="sessionPhotos-${s.id}" class="session-photo-grid"><div class="photo-loading">펼치면 사진을 불러옵니다.</div></div></div></div>${canEdit?`<div class="session-actions"><button class="ghost" onclick="event.stopPropagation();editSession('${s.id}')">수정</button><button class="ghost danger" onclick="event.stopPropagation();deleteSession('${s.id}')">삭제</button></div>`:''}</div></article>`).join('');}
+function renderSessions(){const list=$('#sessionList');const sessions=[...state.sessions].sort((a,b)=>(b.date||'').localeCompare(a.date||'')||String(b.created_at||'').localeCompare(String(a.created_at||'')));if(!sessions.length){list.innerHTML='<div class="empty">아직 기록된 회차가 없어요.</div>';return;}list.innerHTML=sessions.map((s,i)=>`<article class="session-card"><div class="session-summary" onclick="toggleSession('${s.id}',this)"><div class="session-index">${esc(s.month||'?')}</div><div><div class="session-title">${esc(s.month||'')} · ${esc(s.attempt||1)}차 ${s.result?`<span class="${s.result==='WIN'?'result-win':'result-lose'}">${esc(s.result)}</span>`:''}</div><div class="session-sub">${esc(s.date||'날짜 미정')}${s.funding!==''&&s.funding!=null?` · 자금 지원 카드 ${esc(s.funding)}장`:''}</div></div><div class="session-open">⌄</div></div><div class="session-body hidden"><div class="record-grid">${record('참여 캐릭터',s.characters)}${record('이번 회차 목표',s.objectives)}${record('주요 내용',s.highlights,true)}${s.rules?record('추가 규칙 · 예외',s.rules,true):''}${record('영구 변경사항',s.permanent,true)}${record('게임 종료 업그레이드',s.upgrades,true)}${record('다음 게임에서 기억할 것',s.next,true)}<div class="session-photo-block"><b>회차 사진</b><div id="sessionPhotos-${s.id}" class="session-photo-grid"><div class="photo-loading">펼치면 사진을 불러옵니다.</div></div></div></div>${canEdit?`<div class="session-actions"><button class="ghost" onclick="event.stopPropagation();editSession('${s.id}')">수정</button><button class="ghost danger" onclick="event.stopPropagation();deleteSession('${s.id}')">삭제</button></div>`:''}</div></article>`).join('');}
 window.toggleSession=async(id,summary)=>{const body=summary.nextElementSibling;const opening=body.classList.contains('hidden');body.classList.toggle('hidden');if(opening)await renderSessionPhotos(id);};
 function record(label,value,wide=false){return `<div class="record ${wide?'wide':''}"><b>${label}</b><div>${esc(value||'-')}</div></div>`;}
 
@@ -670,15 +890,100 @@ async function syncSessionPhotos(sessionId){
 }
 async function saveState(){if(!canEdit)return;$('#saveState').textContent='저장 중...';let error=null;if(isAdmin){({error}=await db.from('pandemic_legacy_s1_state').update({data:state,updated_at:new Date().toISOString()}).eq('id',1));}else{({error}=await db.rpc('save_pandemic_legacy_s1',{p_code:accessCode,p_data:state}));}$('#saveState').textContent=error?'저장 실패':'자동 저장됨';if(error){console.error(error);$('#saveState').textContent='저장 실패';}setTimeout(()=>{if($('#saveState').textContent==='자동 저장됨')$('#saveState').textContent='';},1200);}
 function queueSave(){clearTimeout(saveTimer);$('#saveState').textContent='입력 중...';saveTimer=setTimeout(saveState,650);}
+
+let currentPendingPhotos=[];
+function renderCurrentPhotoPreview(){
+  const el=$('#currentPhotoPreview'),status=$('#currentPhotoStatus');if(!el)return;
+  el.innerHTML=currentPendingPhotos.length?currentPendingPhotos.map((p,i)=>`<div class="photo-item"><img src="${p.data_url}" alt="회차 사진"><button class="photo-remove" type="button" data-current-photo="${i}">×</button></div>`).join(''):'<div class="photo-empty">첨부된 사진이 없어요.</div>';
+  if(status)status.textContent=`${currentPendingPhotos.length}/3장`;
+  el.querySelectorAll('[data-current-photo]').forEach(b=>b.onclick=()=>{currentPendingPhotos.splice(+b.dataset.currentPhoto,1);renderCurrentPhotoPreview();});
+}
+async function handleCurrentPhotos(e){
+  const room=3-currentPendingPhotos.length,files=[...e.target.files].slice(0,Math.max(0,room));
+  for(const f of files)try{currentPendingPhotos.push(await compressPhoto(f))}catch(err){console.error(err);alert(err.message||'사진 처리 중 오류가 발생했어요.')}
+  e.target.value='';renderCurrentPhotoPreview();
+}
+async function uploadCurrentPhotos(sessionId){
+  for(const p of currentPendingPhotos){const {error}=await db.rpc('save_pandemic_legacy_s1_photo',{p_code:accessCode,p_session_id:sessionId,p_data_url:p.data_url});if(error)throw error}
+  sessionPhotoCache.delete(sessionId);
+}
+function nextCampaignMonth(month){
+  const i=months.indexOf(month);return i>=0&&i<months.length-1?months[i+1]:month;
+}
+function clearCurrentWorkspace({keepObjectives=false}={}){
+  const m=state.meta;
+  m.play_date=new Date().toISOString().slice(0,10);
+  m.session_result='';m.play_log='';m.current_upgrades='';m.next_note_draft='';
+  if(!keepObjectives)m.current_objectives='';
+  /* 규칙/영구 상태는 다음 게임에도 이어지는 현재 상태라서 유지 */
+  currentPendingPhotos=[];
+}
+async function saveCurrentSession(){
+  const m=state.meta;
+  if(!m.session_result)return alert('이번 회차 결과(WIN/LOSE)를 먼저 선택해주세요.');
+  if(!m.play_date)return alert('플레이 날짜를 입력해주세요.');
+  const id=crypto.randomUUID(),row={
+    id,date:m.play_date,month:m.current_month,attempt:+m.attempt||1,result:m.session_result,
+    funding:m.funding,characters:currentCharacterText(),objectives:String(m.current_objectives||'').trim(),
+    highlights:String(m.play_log||'').trim(),permanent:String(m.permanent_summary||'').trim(),
+    upgrades:String(m.current_upgrades||'').trim(),next:String(m.next_note_draft||'').trim(),
+    rules:String(m.current_rules||'').trim(),created_at:new Date().toISOString()
+  };
+  state.sessions.push(row);
+  state.meta.last_result=row.result;
+  state.meta.next_note=row.next;
+
+  const usedFunding=Math.max(0,Math.min(10,+row.funding||0));
+  if(row.result==='WIN'){
+    state.meta.funding=Math.max(0,usedFunding-2);
+    state.meta.current_month=nextCampaignMonth(row.month);
+    state.meta.attempt=1;
+    clearCurrentWorkspace({keepObjectives:false});
+  }else{
+    state.meta.funding=Math.min(10,usedFunding+2);
+    if((+row.attempt||1)<2){
+      state.meta.current_month=row.month;
+      state.meta.attempt=2;
+      clearCurrentWorkspace({keepObjectives:true});
+    }else{
+      state.meta.current_month=nextCampaignMonth(row.month);
+      state.meta.attempt=1;
+      clearCurrentWorkspace({keepObjectives:false});
+    }
+  }
+  await saveState();
+  try{await uploadCurrentPhotos(id)}catch(e){console.error(e);alert(e.message||'사진 저장 중 오류가 발생했어요. 회차 기록 자체는 저장되었습니다.');}
+  render();
+}
+
 async function openSession(data={}){$('#sessionId').value=data.id||'';$('#sDate').value=data.date||new Date().toISOString().slice(0,10);$('#sMonth').innerHTML=months.map(x=>`<option ${x===(data.month||state.meta.current_month)?'selected':''}>${x}</option>`).join('');$('#sAttempt').value=data.attempt||state.meta.attempt||1;$('#sResult').value=data.result||'';$('#sFunding').value=data.funding??state.meta.funding??'';$('#sCharacters').value=data.characters||'';$('#sObjectives').value=data.objectives||'';$('#sHighlights').value=data.highlights||'';$('#sPermanent').value=data.permanent||'';$('#sUpgrades').value=data.upgrades||'';$('#sNext').value=data.next||'';$('#modalTitle').textContent=data.id?'회차 기록 수정':'회차 기록 추가';modalPendingPhotos=[];modalDeletedPhotoIds=[];modalExistingPhotos=[];$('#sPhotos').value='';$('#sessionModal').classList.remove('hidden');renderModalPhotos();if(data.id){$('#photoStatus').textContent='기존 사진 불러오는 중...';modalExistingPhotos=await getSessionPhotos(data.id,true);renderModalPhotos();}}
 window.editSession=id=>{const s=state.sessions.find(x=>x.id===id);if(s)openSession(s)};
 window.deleteSession=async id=>{if(!confirm('이 회차 기록과 첨부 사진을 삭제할까요?'))return;const {error:photoError}=await db.rpc('delete_pandemic_legacy_s1_session_photos',{p_code:accessCode,p_session_id:id});if(photoError){console.error(photoError);return alert('사진 삭제 중 오류가 발생했어요.');}sessionPhotoCache.delete(id);state.sessions=state.sessions.filter(x=>x.id!==id);await saveState();renderSessions();};
-async function saveSession(){const id=$('#sessionId').value||crypto.randomUUID();const visibleExisting=modalExistingPhotos.filter(p=>!modalDeletedPhotoIds.includes(p.id)).length;if(visibleExisting+modalPendingPhotos.length>3)return alert('회차 사진은 최대 3장까지 첨부할 수 있어요.');const row={id,date:$('#sDate').value,month:$('#sMonth').value,attempt:+$('#sAttempt').value||1,result:$('#sResult').value,funding:$('#sFunding').value,characters:$('#sCharacters').value.trim(),objectives:$('#sObjectives').value.trim(),highlights:$('#sHighlights').value.trim(),permanent:$('#sPermanent').value.trim(),upgrades:$('#sUpgrades').value.trim(),next:$('#sNext').value.trim(),created_at:new Date().toISOString()};const idx=state.sessions.findIndex(x=>x.id===id);if(idx>=0)row.created_at=state.sessions[idx].created_at||row.created_at, state.sessions[idx]=row;else state.sessions.push(row);state.meta.current_month=row.month;state.meta.attempt=row.attempt;state.meta.funding=row.funding;state.meta.last_result=row.result;state.meta.next_note=row.next||state.meta.next_note;$('#photoStatus').textContent='기록 저장 중...';await saveState();try{$('#photoStatus').textContent='사진 저장 중...';await syncSessionPhotos(id);}catch(err){console.error(err);$('#photoStatus').textContent='사진 저장 실패';return alert(err.message||'사진 저장 중 오류가 발생했어요.');}$('#sessionModal').classList.add('hidden');render();}
+async function saveSession(){
+  const id=$('#sessionId').value||crypto.randomUUID();
+  const visibleExisting=modalExistingPhotos.filter(p=>!modalDeletedPhotoIds.includes(p.id)).length;
+  if(visibleExisting+modalPendingPhotos.length>3)return alert('회차 사진은 최대 3장까지 첨부할 수 있어요.');
+  const old=state.sessions.find(x=>x.id===id);
+  const row={
+    id,date:$('#sDate').value,month:$('#sMonth').value,attempt:+$('#sAttempt').value||1,
+    result:$('#sResult').value,funding:$('#sFunding').value,characters:$('#sCharacters').value.trim(),
+    objectives:$('#sObjectives').value.trim(),highlights:$('#sHighlights').value.trim(),
+    permanent:$('#sPermanent').value.trim(),upgrades:$('#sUpgrades').value.trim(),
+    next:$('#sNext').value.trim(),rules:old?.rules||'',created_at:old?.created_at||new Date().toISOString()
+  };
+  const idx=state.sessions.findIndex(x=>x.id===id);
+  if(idx>=0)state.sessions[idx]=row;else state.sessions.push(row);
+  $('#photoStatus').textContent='기록 저장 중...';
+  await saveState();
+  try{$('#photoStatus').textContent='사진 저장 중...';await syncSessionPhotos(id);}
+  catch(err){console.error(err);$('#photoStatus').textContent='사진 저장 실패';return alert(err.message||'사진 저장 중 오류가 발생했어요.');}
+  $('#sessionModal').classList.add('hidden');renderSessions();
+}
 function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}function escapeAttr(v){return esc(v).replace(/`/g,'&#96;');}
 const rememberedCode=sessionStorage.getItem('pandemicLegacyS1Code');if(rememberedCode&&!isAdmin){$('#codeInput').value=rememberedCode;setTimeout(unlock,0);}
 $('#sPhotos').onchange=e=>handlePhotoFiles(e.target.files);
-$('#openInfectionTracker').onclick=openInfectionTracker;$('#closeInfectionTracker').onclick=closeInfectionTracker;$('#infectionEpidemic').onclick=infectionEpidemic;$('#infectionReset').onclick=resetInfectionTracker;$('#infectionUndo').onclick=undoInfectionTracker;$('#infectionClearRound').onclick=clearCurrentInfectionRound;
-$('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#addScheduleBtn').onclick=()=>openSchedule();$('#cancelSchedule').onclick=()=>$('#scheduleModal').classList.add('hidden');$('#saveSchedule').onclick=saveSchedule;$('#addSessionBtn').onclick=()=>openSession();$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#infectionModal').classList.contains('hidden')){closeInfectionTracker();return;}if(e.key==='Escape'&&!$('#photoLightbox').classList.contains('hidden')){closePhotoLightbox();return;}if(!$('#photoLightbox').classList.contains('hidden')){if(e.key==='ArrowLeft'){lightboxIndex--;renderPhotoLightbox();}else if(e.key==='ArrowRight'){lightboxIndex++;renderPhotoLightbox();}return;}if(e.key==='Escape'&&!$('#scheduleModal').classList.contains('hidden')){$('#scheduleModal').classList.add('hidden');return;}if(e.key==='Escape'&&!$('#sessionModal').classList.contains('hidden'))$('#sessionModal').classList.add('hidden')});
+$('#openPanicTracker').onclick=openPanicTracker;$('#closePanicTracker').onclick=closePanicTracker;$('#panicSearch').oninput=renderPanicTracker;$('#panicOnlyActive').onchange=renderPanicTracker;$('#openInfectionTracker').onclick=openInfectionTracker;$('#closeInfectionTracker').onclick=closeInfectionTracker;$('#infectionEpidemic').onclick=infectionEpidemic;$('#infectionReset').onclick=resetInfectionTracker;$('#infectionUndo').onclick=undoInfectionTracker;$('#infectionClearRound').onclick=clearCurrentInfectionRound;
+$('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#addScheduleBtn').onclick=()=>openSchedule();$('#cancelSchedule').onclick=()=>$('#scheduleModal').classList.add('hidden');$('#saveSchedule').onclick=saveSchedule;$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#panicModal').classList.contains('hidden')){closePanicTracker();return;}if(e.key==='Escape'&&!$('#infectionModal').classList.contains('hidden')){closeInfectionTracker();return;}if(e.key==='Escape'&&!$('#photoLightbox').classList.contains('hidden')){closePhotoLightbox();return;}if(!$('#photoLightbox').classList.contains('hidden')){if(e.key==='ArrowLeft'){lightboxIndex--;renderPhotoLightbox();}else if(e.key==='ArrowRight'){lightboxIndex++;renderPhotoLightbox();}return;}if(e.key==='Escape'&&!$('#scheduleModal').classList.contains('hidden')){$('#scheduleModal').classList.add('hidden');return;}if(e.key==='Escape'&&!$('#sessionModal').classList.contains('hidden'))$('#sessionModal').classList.add('hidden')});
 boot();
 </script>
 </body></html>
