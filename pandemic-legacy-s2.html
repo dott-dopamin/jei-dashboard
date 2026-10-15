@@ -606,11 +606,11 @@ html{background:#e7ece8!important}
   <div class="s2x-dialog" role="dialog" aria-modal="true" aria-labelledby="s2xTitle">
     <div class="s2x-head"><div><div class="s2x-kicker">INFECTION DECK / EXCEL LOGIC</div><h2 id="s2xTitle">감염 카드 더미 트래커</h2><p>엑셀 VBA 기준 · 도시 클릭 시 최근 감염 차수에서 1장 차감 · 전염 시 뽑힌 카드를 다음 차수로 이동</p></div><button id="s2xClose" class="s2x-btn" type="button">닫기 ×</button></div>
     <div class="s2x-scroll" id="s2xScroll">
-      <div class="s2x-toolbar"><div><button id="s2xInitialize" class="s2x-btn primary" type="button">① 시작 덱 배치</button><button id="s2xEpidemic" class="s2x-btn warn" type="button">유행병 발생 · 덱 하단 체크</button><button id="s2xUndo" class="s2x-btn" type="button">↶ 되돌리기</button></div><div><button id="s2xAdd" class="s2x-btn" type="button">+ 도시 / 카드 추가</button><button id="s2xReset" class="s2x-btn" type="button">차수 초기화</button><span id="s2xSaveStatus" class="s2x-save"></span></div></div>
+      <div class="s2x-toolbar"><div><button id="s2xEpidemic" class="s2x-btn warn" type="button">유행병 발생 · 덱 하단 체크</button><button id="s2xUndo" class="s2x-btn" type="button">↶ 되돌리기</button></div><div><button id="s2xAdd" class="s2x-btn" type="button">+ 도시 / 카드 추가</button><button id="s2xReset" class="s2x-btn" type="button">차수 초기화</button><span id="s2xSaveStatus" class="s2x-save"></span></div></div>
       <div class="s2x-stats" id="s2xStats"></div>
       <div class="s2x-risk"><div class="s2x-risk-head"><strong>🚨 현재 재등장 위험군</strong><span id="s2xRiskCount">0장</span></div><div id="s2xRiskList" class="s2x-risk-items"></div></div>
       <div class="s2x-table-wrap" id="s2xTableScroll"><table class="s2x-table"><thead><tr><th>도시 / 카드 (클릭하여 1장 처리)</th><th>총 카드</th><th>1차</th><th>2차</th><th>3차</th><th>4차</th><th>5차</th><th>현재 뽑힌 카드</th><th>편집</th></tr></thead><tbody id="s2xBody"></tbody><tfoot id="s2xFoot"></tfoot></table></div>
-      <div class="s2x-info"><b>엑셀과 같은 계산법</b> · 처음에는 <b>시작 덱 배치</b>를 눌러 Phase 1에 카드 수를 채웁니다. 도시명을 누르면 가장 최근에 남아 있는 Phase의 카드가 1장 감소하고 <b>현재 뽑힌 카드</b>가 1장 증가합니다. 전염이 발생했을 때 실제 맨 아래 카드를 선택하면 그 카드도 1장 처리하고, 지금까지 뽑힌 카드를 다음 Phase에 옮깁니다. 잘못 누른 경우 <b>되돌리기</b>를 사용하세요.</div>
+      <div class="s2x-info"><b>엑셀과 같은 계산법</b> · 기본 카드 수는 첫 감염 차수에 자동 배치됩니다. 도시명을 누르면 가장 최근에 남아 있는 Phase의 카드가 1장 감소하고 <b>현재 뽑힌 카드</b>가 1장 증가합니다. 전염이 발생했을 때 실제 맨 아래 카드를 선택하면 그 카드도 1장 처리하고, 지금까지 뽑힌 카드를 다음 Phase에 옮깁니다. 잘못 누른 경우 <b>되돌리기</b>를 사용하세요.</div>
     </div>
   </div>
 </div>
@@ -932,6 +932,36 @@ function renderPlayerDeck(){const d=state.player_deck_tracker,start=Math.max(0,+
 $('#playerDeckPanel').innerHTML=`<div class="player-deck-grid"><div class="deck-stat"><label>시작 덱 장수</label><input id="deckStart" type="number" min="0" value="${esc(d.start_cards)}"></div><div class="deck-stat"><label>유행병 카드 수</label><input id="deckEpi" type="number" min="1" value="${epi}"></div><div class="deck-stat"><label>지금까지 뽑음</label><strong>${drawn}</strong></div><div class="deck-stat"><label>남은 카드</label><strong>${remain}</strong></div></div><div class="deck-actions"><button id="draw2" class="deck-mini">+2 카드</button><button id="draw1" class="deck-mini">+1</button><button id="drawMinus" class="deck-mini">-1</button><button id="deckReset" class="deck-mini">카운터 초기화</button></div><div class="deck-note">${esc(next)}</div>`;$('#deckStart').onchange=()=>{d.start_cards=$('#deckStart').value;queueSave();renderPlayerDeck()};$('#deckEpi').onchange=()=>{d.epidemic_cards=+$('#deckEpi').value||5;queueSave();renderPlayerDeck()};$('#draw2').onclick=()=>{d.drawn=(+d.drawn||0)+2;queueSave();renderPlayerDeck()};$('#draw1').onclick=()=>{d.drawn=(+d.drawn||0)+1;queueSave();renderPlayerDeck()};$('#drawMinus').onclick=()=>{d.drawn=Math.max(0,(+d.drawn||0)-1);queueSave();renderPlayerDeck()};$('#deckReset').onclick=()=>{if(confirm('플레이어 덱 카운터를 0으로 초기화할까요?')){d.drawn=0;queueSave();renderPlayerDeck()}};}
 function record(label,value,wide=false){return`<div class="record ${wide?'wide':''}"><b>${label}</b><div>${esc(value||'-')}</div></div>`}
 function renderSessions(){const arr=[...state.sessions].sort((a,b)=>(b.date||'').localeCompare(a.date||''));$('#sessionList').innerHTML=arr.length?arr.map(s=>`<article class="session-card"><div class="session-summary" data-session="${s.id}"><div class="session-index">${esc(s.month||'?')}</div><div><div class="session-title">${esc(s.month||'')} · ${esc(s.attempt||1)}차 ${s.result?`<span class="${s.result==='WIN'?'result-win':'result-lose'}">${esc(s.result)}</span>`:''}</div><div class="session-sub">${esc(s.date||'날짜 미정')}${s.connected_cities!==''&&s.connected_cities!=null?` · 공급망 연결 도시 ${esc(s.connected_cities)}개`:''}</div></div><div>⌄</div></div><div class="session-body hidden"><div class="record-grid">${record('참여 캐릭터',s.characters)}${record('이번 회차 목표 결과',s.objectives)}${record('게임 기록',s.highlights,true)}${record('추가 규칙 · 예외',s.rules,true)}${record('영구 상태 요약',s.permanent_summary,true)}${record('그리드 · 인구 · 보급망 변화',s.grid_changes,true)}${record('생산 유닛 사용 내역',s.production,true)}${record('다음 게임에서 기억할 것',s.next,true)}<div class="session-photo-block"><b>회차 사진</b><div id="photos-${s.id}" class="session-photo-grid"><div class="photo-help">펼치면 사진을 불러옵니다.</div></div></div></div><div class="session-actions"><button class="ghost" data-edit="${s.id}">수정</button><button class="ghost danger" data-delete="${s.id}">삭제</button></div></div></article>`).join(''):'<div class="empty">아직 기록된 회차가 없어요.</div>';$('#sessionList').querySelectorAll('.session-summary').forEach(el=>el.onclick=()=>{const body=el.nextElementSibling;body.classList.toggle('hidden');if(!body.classList.contains('hidden'))loadSessionPhotos(el.dataset.session)});$('#sessionList').querySelectorAll('[data-edit]').forEach(b=>b.onclick=e=>{e.stopPropagation();openSession(state.sessions.find(x=>x.id===b.dataset.edit))});$('#sessionList').querySelectorAll('[data-delete]').forEach(b=>b.onclick=e=>{e.stopPropagation();deleteSession(b.dataset.delete)});}
+async function deleteSession(id){
+  if(!canEdit)return alert('삭제 권한이 없습니다.');
+  const record=state.sessions.find(s=>s.id===id);
+  if(!record)return;
+  if(!confirm(`${record.month||'해당'} ${record.attempt||1}차 회차 기록과 첨부 사진을 삭제할까요?`))return;
+  const button=[...document.querySelectorAll('#sessionList [data-delete]')].find(b=>b.dataset.delete===id);
+  if(button){button.disabled=true;button.textContent='삭제 중...';}
+  // Do not allow a queued autosave with the old session list to run after deletion.
+  clearTimeout(saveTimer);
+  try{
+    const {error:photoError}=await db.rpc('delete_pandemic_legacy_s2_session_photos',{
+      p_code:accessCode||null,p_session_id:id
+    });
+    if(photoError)throw photoError;
+    const original=state.sessions;
+    state.sessions=original.filter(s=>s.id!==id);
+    const saved=await saveState();
+    if(!saved){
+      state.sessions=original;
+      throw new Error('회차 기록 저장에 실패했어요. 다시 시도해 주세요.');
+    }
+    photoCache.delete(id);
+    renderSessions();
+  }catch(err){
+    console.error('회차 기록 삭제 오류',err);
+    alert(err?.message==='INVALID_CODE'?'비밀번호 확인에 실패했어요. 다시 로그인해 주세요.':(err?.message||'회차 기록 삭제 중 오류가 발생했어요.'));
+    if(button){button.disabled=false;button.textContent='삭제';}
+  }
+}
+
 let photoCache=new Map(),modalExisting=[],modalPending=[],modalDeleted=[],lightboxPhotos=[],lightboxIndex=0;
 async function getSessionPhotos(id,force=false){if(!force&&photoCache.has(id))return photoCache.get(id);const {data,error}=await db.rpc('get_pandemic_legacy_s2_photos',{p_code:accessCode,p_session_id:id});if(error){console.error(error);return[]}photoCache.set(id,data||[]);return data||[]}
 async function loadSessionPhotos(id){const el=$('#photos-'+CSS.escape(id));if(!el)return;el.innerHTML='<div class="photo-help">불러오는 중...</div>';const ps=await getSessionPhotos(id);el.innerHTML=ps.length?ps.map(p=>`<div class="session-photo" data-photo="${p.id}" data-session="${id}"><img src="${p.data_url}" loading="lazy" alt="회차 사진"></div>`).join(''):'<div class="photo-help">첨부된 사진이 없어요.</div>';el.querySelectorAll('.session-photo').forEach(x=>x.onclick=()=>openLightbox(id,x.dataset.photo));}
@@ -1062,7 +1092,19 @@ async function changePassword(){
   $('#newPassword').value='';$('#newPasswordConfirm').value='';
 }
 
-async function saveState(){if(!canEdit)return;$('#saveState').textContent='저장 중...';let error;if(isAdmin)({error}=await db.from('pandemic_legacy_s2_state').update({data:state,updated_at:new Date().toISOString()}).eq('id',1));else({error}=await db.rpc('save_pandemic_legacy_s2',{p_code:accessCode,p_data:state}));$('#saveState').textContent=error?'저장 실패':'자동 저장됨';if(error)console.error(error);setTimeout(()=>{if($('#saveState').textContent==='자동 저장됨')$('#saveState').textContent=''},1000)}
+async function saveState(){
+  if(!canEdit)return false;
+  $('#saveState').textContent='저장 중...';
+  let error=null;
+  try{
+    if(isAdmin)({error}=await db.from('pandemic_legacy_s2_state').update({data:state,updated_at:new Date().toISOString()}).eq('id',1));
+    else ({error}=await db.rpc('save_pandemic_legacy_s2',{p_code:accessCode,p_data:state}));
+  }catch(e){error=e;}
+  $('#saveState').textContent=error?'저장 실패':'자동 저장됨';
+  if(error)console.error('S2 데이터 저장 오류',error);
+  setTimeout(()=>{if($('#saveState').textContent==='자동 저장됨')$('#saveState').textContent=''},1000);
+  return !error;
+}
 function queueSave(){clearTimeout(saveTimer);$('#saveState').textContent='입력 중...';saveTimer=setTimeout(saveState,650)}
 $('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#changePasswordBtn').onclick=()=>{$('#passwordError').textContent='';$('#newPassword').value='';$('#newPasswordConfirm').value='';$('#passwordModal').classList.remove('hidden');setTimeout(()=>$('#newPassword').focus(),30)};$('#cancelPassword').onclick=()=>$('#passwordModal').classList.add('hidden');$('#savePassword').onclick=changePassword;$('#newPasswordConfirm').onkeydown=e=>{if(e.key==='Enter')changePassword()};$('#closeInfection').onclick=()=>$('#infectionModal').classList.add('hidden');$('#epidemicBtn').onclick=openEpidemic;$('#reshuffleDeckBtn').onclick=reshuffleExhaustedDeck;$('#cancelEpidemic').onclick=()=>$('#epidemicModal').classList.add('hidden');$('#manageCitiesBtn').onclick=()=>{$('#manageModal').classList.remove('hidden');renderManage()};$('#closeManage').onclick=()=>$('#manageModal').classList.add('hidden');$('#addCityBtn').onclick=addCity;$('#undoInfectionBtn').onclick=undoTracker;$('#resetInfectionBtn').onclick=resetInfectionGame;$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;$('#sPhotos').onchange=async e=>{const files=[...e.target.files],room=3-(modalExisting.filter(p=>!modalDeleted.includes(p.id)).length+modalPending.length);for(const f of files.slice(0,Math.max(0,room)))try{modalPending.push({data_url:await compressImage(f)})}catch(err){console.error(err)}e.target.value='';renderPhotoPreview()};$('#lightboxClose').onclick=closeLightbox;$('#lightboxPrev').onclick=()=>{lightboxIndex--;renderLightbox()};$('#lightboxNext').onclick=()=>{lightboxIndex++;renderLightbox()};document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#passwordModal').classList.contains('hidden'))return $('#passwordModal').classList.add('hidden');if(!$('#lightbox').classList.contains('hidden'))return closeLightbox();if(!$('#manageModal').classList.contains('hidden'))return $('#manageModal').classList.add('hidden');if(!$('#epidemicModal').classList.contains('hidden'))return $('#epidemicModal').classList.add('hidden');if(!$('#infectionModal').classList.contains('hidden'))return $('#infectionModal').classList.add('hidden');if(!$('#sessionModal').classList.contains('hidden'))return $('#sessionModal').classList.add('hidden')}});
 
@@ -1096,13 +1138,25 @@ const S2X_SOURCE_CITIES=[{"id":"xl-5","name":"뉴욕","color":"blue","type":"cit
 const s2xSortColor={blue:0,yellow:1,black:2,red:3,none:4};
 const s2xCollator=new Intl.Collator('ko-KR',{numeric:true,sensitivity:'base'});
 let s2xEditId=null,s2xPriorOverflow='';
-function s2xBlank(){return{version:101,seed:'uploaded_261014',cities:S2X_SOURCE_CITIES.map(c=>({...c,phases:[...c.phases]})),created:[],history:[]};}
+function s2xBlank(){return{version:102,seed:'uploaded_261014',cities:S2X_SOURCE_CITIES.map(c=>({...c,phases:[c.total,0,0,0,0]})),created:[0],history:[]};}
 function s2xTracker(){
   if(!state.excel_deck_v101)state.excel_deck_v101=s2xBlank();
   const t=state.excel_deck_v101;
   if(!Array.isArray(t.cities))t.cities=[];
   if(!Array.isArray(t.created))t.created=[];
   if(!Array.isArray(t.history))t.history=[];
+  // Upgrade only uninitialized V101 trackers. Preserve every existing phase/count.
+  if(t.created.length===0){
+    const occupied=[0,1,2,3,4].filter(i=>t.cities.some(c=>(+c.phases?.[i]||0)>0));
+    if(occupied.length){
+      t.created=occupied;
+      queueSave();
+    }else if(t.cities.some(c=>(+c.total||0)>0)){
+      t.cities.forEach(c=>{c.phases=[Math.max(0,+c.total||0),0,0,0,0]});
+      t.created=[0];
+      queueSave();
+    }
+  }
   return t;
 }
 function s2xRemain(c){return Math.max(0,(+c.total||0)-c.phases.reduce((n,v)=>n+(+v||0),0));}
@@ -1120,22 +1174,20 @@ function s2xRender(){
   $('#s2xStats').innerHTML=[['기록된 감염 차수',t.created.length+' / 5'],['도시 / 카드 종류',String(rows.length)],['감염 더미에 남은 카드',left+'장'],['현재 뽑힌 카드',drawn+'장']].map(([title,value])=>`<div class="s2x-stat"><span>${title}</span><b>${value}</b></div>`).join('');
   $('#s2xRiskCount').textContent=riskNum+'장';
   $('#s2xRiskList').innerHTML=risk.length?risk.map(c=>`<span class="s2x-chip">${s2xEscape(c.name)} <b>×${c.phases[top]}</b></span>`).join(''):'<span class="s2x-empty">현재 가장 최근 재등장 묶음에 남은 카드가 없어요.</span>';
-  $('#s2xInitialize').disabled=t.created.length>0||!drawn;
   $('#s2xEpidemic').disabled=t.created.length===0||(!left)||t.created.length>=5;
   $('#s2xUndo').disabled=t.history.length===0;
-  $('#s2xBody').innerHTML=rows.map(c=>`<tr><td class="s2x-city-cell ${c.type==='other'?'none':c.color}"><button type="button" class="s2x-city-button" data-s2x-draw="${s2xEscape(c.id)}" ${s2xLatestIndex(c)<0?'disabled':''}><span>${s2xEscape(c.name)}<small>${c.type==='other'?'기타 카드':'남은 더미에서 1장 차감'}</small></span><span>−1</span></button></td><td>${c.total}</td>${c.phases.map((n,i)=>`<td class="${t.created.includes(i)?'s2x-activephase':'s2x-emptyphase'}">${n}</td>`).join('')}<td class="s2x-remain">${s2xRemain(c)}</td><td><button class="s2x-btn" type="button" data-s2x-edit="${s2xEscape(c.id)}">수정</button></td></tr>`).join('');
+  $('#s2xBody').innerHTML=rows.map(c=>`<tr><td class="s2x-city-cell ${c.type==='other'?'none':c.color}"><button type="button" class="s2x-city-button" data-s2x-draw="${s2xEscape(c.id)}" ${s2xLatestIndex(c)<0?'disabled':''}><span>${s2xEscape(c.name)}<small>${c.type==='other'?'기타 카드':'클릭하면 1장 사용 처리'}</small></span></button></td><td>${c.total}</td>${c.phases.map((n,i)=>`<td class="${t.created.includes(i)?'s2x-activephase':'s2x-emptyphase'}">${n}</td>`).join('')}<td class="s2x-remain">${s2xRemain(c)}</td><td><button class="s2x-btn" type="button" data-s2x-edit="${s2xEscape(c.id)}">수정</button></td></tr>`).join('');
   $('#s2xFoot').innerHTML=`<tr class="s2x-totrow"><td>전체 합계</td><td>${total}</td>${[0,1,2,3,4].map(i=>`<td>${rows.reduce((n,c)=>n+c.phases[i],0)}</td>`).join('')}<td>${drawn}</td><td></td></tr>`;
   $('#s2xBody').querySelectorAll('[data-s2x-draw]').forEach(b=>b.onclick=()=>s2xDraw(b.dataset.s2xDraw));
   $('#s2xBody').querySelectorAll('[data-s2x-edit]').forEach(b=>b.onclick=()=>s2xEdit(b.dataset.s2xEdit));
 }
 function s2xEscape(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function s2xDraw(id,save=true){const t=s2xTracker(),c=t.cities.find(c=>c.id===id);if(!c)return false;const i=s2xLatestIndex(c);if(i<0)return false;if(save)s2xSnapshot(t);c.phases[i]--;if(save)s2xPersist();return true;}
-function s2xInit(){const t=s2xTracker();if(t.created.length)return;const which=t.created.length;const total=t.cities.reduce((n,c)=>n+s2xRemain(c),0);if(!total)return alert('배치할 카드가 없어요. 도시 카드 수를 확인해 주세요.');s2xSnapshot(t);t.cities.forEach(c=>c.phases[which]=s2xRemain(c));t.created.push(which);s2xPersist();}
 function s2xNextPhase(t){const which=[0,1,2,3,4].find(i=>!t.created.includes(i));if(which===undefined)return false;const before=t.cities.map(c=>s2xRemain(c));t.cities.forEach((c,j)=>c.phases[which]=before[j]);t.created.push(which);return true;}
-function s2xBottomOpen(){const t=s2xTracker();if(!t.created.length)return alert('먼저 시작 덱 배치를 해주세요.');if(t.created.length>=5)return alert('엑셀 원본은 5차까지만 기록할 수 있어요.');const rows=s2xSorted(t).filter(c=>s2xLatestIndex(c)>=0);$('#s2xBottomGrid').innerHTML=rows.map(c=>`<button type="button" data-s2x-bottom="${s2xEscape(c.id)}" class="s2x-bottom-button ${c.type==='other'?'none':c.color}">${s2xEscape(c.name)}<small>더미에 남은 ${c.phases.reduce((n,v)=>n+v,0)}장</small></button>`).join('');$('#s2xBottomError').textContent='';$('#s2xBottomShade').classList.remove('hidden');$('#s2xBottomGrid').querySelectorAll('[data-s2x-bottom]').forEach(b=>b.onclick=()=>s2xBottomConfirm(b.dataset.s2xBottom));}
+function s2xBottomOpen(){const t=s2xTracker();if(!t.created.length)return alert('등록된 감염 카드가 없어요. 도시 / 카드 수를 먼저 입력해주세요.');if(t.created.length>=5)return alert('엑셀 원본은 5차까지만 기록할 수 있어요.');const rows=s2xSorted(t).filter(c=>s2xLatestIndex(c)>=0);$('#s2xBottomGrid').innerHTML=rows.map(c=>`<button type="button" data-s2x-bottom="${s2xEscape(c.id)}" class="s2x-bottom-button ${c.type==='other'?'none':c.color}">${s2xEscape(c.name)}<small>더미에 남은 ${c.phases.reduce((n,v)=>n+v,0)}장</small></button>`).join('');$('#s2xBottomError').textContent='';$('#s2xBottomShade').classList.remove('hidden');$('#s2xBottomGrid').querySelectorAll('[data-s2x-bottom]').forEach(b=>b.onclick=()=>s2xBottomConfirm(b.dataset.s2xBottom));}
 function s2xBottomConfirm(id){const t=s2xTracker(),c=t.cities.find(c=>c.id===id);if(!c||s2xLatestIndex(c)<0)return;const empty=[0,1,2,3,4].find(i=>!t.created.includes(i));if(empty===undefined)return;s2xSnapshot(t);/* workbook's Minus macro always decrements latest occupied Phase */s2xDraw(id,false);/* workbook's epidemic macro copies Column H into next empty phase */s2xNextPhase(t);$('#s2xBottomShade').classList.add('hidden');s2xPersist();}
 function s2xUndo(){const t=s2xTracker();if(!t.history.length)return;const prev=JSON.parse(t.history.pop());t.cities=prev.cities;t.created=prev.created;s2xPersist();}
-function s2xReset(){if(!confirm('감염 차수 기록을 초기화할까요? 도시 이름·색상·총 카드 수는 유지됩니다.'))return;const t=s2xTracker();s2xSnapshot(t);t.cities.forEach(c=>c.phases=[0,0,0,0,0]);t.created=[];s2xPersist();}
+function s2xReset(){if(!confirm('감염 차수를 처음부터 다시 시작할까요? 도시 이름·색상·총 카드 수는 유지됩니다.'))return;const t=s2xTracker();s2xSnapshot(t);t.cities.forEach(c=>c.phases=[Math.max(0,+c.total||0),0,0,0,0]);t.created=t.cities.some(c=>+c.total>0)?[0]:[];s2xPersist();}
 function s2xEdit(id=null){const t=s2xTracker(),c=id?t.cities.find(c=>c.id===id):null;s2xEditId=c?.id||null;$('#s2xEditTitle').textContent=c?'도시 / 카드 수정':'도시 / 카드 추가';$('#s2xName').value=c?.name||'';$('#s2xType').value=c?.type||'city';$('#s2xColor').value=c?.color||'blue';$('#s2xTotal').value=c?.total??1;$('#s2xPlacement').value='deck';$('#s2xPlacementLabel').classList.toggle('hidden',!!c||t.created.length===0);$('#s2xEditPhases').innerHTML=[0,1,2,3,4].map(i=>`<label>${i+1}차<input type="number" min="0" max="999" id="s2xP${i}" value="${c?.phases?.[i]||0}"></label>`).join('');$('#s2xDelete').classList.toggle('hidden',!c);$('#s2xEditError').textContent='';s2xUpdateColor();$('#s2xEditShade').classList.remove('hidden');}
 function s2xUpdateColor(){$('#s2xColor').disabled=$('#s2xType').value==='other';}
 function s2xEditClose(){$('#s2xEditShade').classList.add('hidden');}
@@ -1144,7 +1196,6 @@ function s2xDelete(){if(!s2xEditId)return;const t=s2xTracker(),c=t.cities.find(x
 function s2xWheel(){const tab=$('#s2xTableScroll'),box=$('#s2xScroll');tab.addEventListener('wheel',e=>{if(e.shiftKey||Math.abs(e.deltaX)>Math.abs(e.deltaY))return;if(e.deltaY){e.preventDefault();box.scrollTop+=e.deltaY;}},{passive:false});}
 $('#openInfection').onclick=s2xOpen;
 $('#s2xClose').onclick=s2xClose;
-$('#s2xInitialize').onclick=s2xInit;
 $('#s2xEpidemic').onclick=s2xBottomOpen;
 $('#s2xUndo').onclick=s2xUndo;
 $('#s2xReset').onclick=s2xReset;
