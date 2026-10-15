@@ -309,6 +309,30 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
 @media(max-width:820px){.hero-grid{grid-template-columns:1fr}.hero-title{grid-column:auto}.hero-schedule-panel,.hero-month-panel{width:100%}.schedule-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.hero-schedule-panel{padding:11px}.hero-schedule-item{gap:5px;padding:7px 8px}.hero-schedule-round,.hero-schedule-date,.hero-schedule-note{font-size:10px}.schedule-list{grid-template-columns:1fr 1fr}.schedule-modal .form-grid{grid-template-columns:1fr}.schedule-modal .field.wide{grid-column:auto}}
 @media(max-width:430px){.schedule-list{grid-template-columns:1fr}}
+
+/* V100 — Left column is a natural flow stack. The legacy schedule follows
+   the entire session-history height (including expanded session cards). */
+.dashboard-grid{align-items:start}
+.dashboard-col-left,.dashboard-col-right{min-width:0}
+.dashboard-col-left{display:flex;flex-direction:column;gap:14px}
+.dashboard-col-left>.section{height:auto;min-height:0;margin:0;overflow:visible}
+.dashboard-col-left .sessions-section{flex:0 0 auto}
+.dashboard-col-left .session-list{max-height:none;overflow:visible}
+.dashboard-col-left .schedule-section{flex:0 0 auto}
+.dashboard-col-left .schedule-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(max-width:1100px){
+  .dashboard-grid{grid-template-columns:minmax(0,1fr)}
+  .dashboard-col{display:contents}
+  .dashboard-grid .players-section{order:1}
+  .dashboard-grid .status-section{order:2}
+  .dashboard-grid .sessions-section{order:3}
+  .dashboard-grid .schedule-section{order:4}
+  .dashboard-grid .section{margin:0;min-width:0;height:auto}
+  .dashboard-col-left .schedule-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:430px){
+  .dashboard-col-left .schedule-list{grid-template-columns:minmax(0,1fr)}
+}
 </style>
 
 <link rel="stylesheet" href="archive-header.css">
@@ -395,6 +419,11 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
         <div class="section-head"><div><h2>회차 기록</h2><div class="section-desc">위에서 저장한 완료 회차가 자동으로 쌓이는 과거 기록</div></div></div>
         <div id="sessionList" class="session-list"></div>
       </section>
+
+      <section class="section schedule-section">
+        <div class="section-head"><div><h2>레거시 일정</h2><div class="section-desc">월 1회 모임 일정 관리</div></div><div class="schedule-toolbar"><button id="addScheduleBtn" class="primary" type="button">+ 일정 추가</button></div></div>
+        <div id="scheduleList" class="schedule-list"></div>
+      </section>
     </div>
 
     <div class="dashboard-col dashboard-col-right">
@@ -404,11 +433,6 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
       </section>
     </div>
   </div>
-
-  <section class="section schedule-section">
-    <div class="section-head"><div><h2>레거시 일정</h2><div class="section-desc">월 1회 모임 일정 관리</div></div><div class="schedule-toolbar"><button id="addScheduleBtn" class="primary" type="button">+ 일정 추가</button></div></div>
-    <div id="scheduleList" class="schedule-list"></div>
-  </section>
 </main>
 
 
