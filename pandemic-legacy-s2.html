@@ -301,6 +301,94 @@ html{background:#e7ece8!important}
 @media(max-width:900px){.current-play-grid{grid-template-columns:1fr 1fr}.end-grid{grid-template-columns:1fr 1fr}.end-card:first-child{grid-column:1/-1}}
 @media(max-width:600px){.current-brief{grid-template-columns:1fr}.current-play-grid{grid-template-columns:1fr 1fr}.end-grid{grid-template-columns:1fr}.end-card:first-child{grid-column:auto}.play-log-panel textarea{min-height:190px}.current-save-row{align-items:stretch;flex-direction:column}.current-save-btn{width:100%}.current-preview{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
+
+/* ===== V94: S2 light select / dropdown palette fix ===== */
+.season2-theme select{
+  color-scheme:light!important;
+  background:#fffef8!important;
+  color:#243f43!important;
+  border-color:#aebebb!important;
+}
+.season2-theme select option{
+  background:#fffef8!important;
+  color:#243f43!important;
+}
+.season2-theme select option:disabled{
+  color:#9aa7a4!important;
+}
+.season2-theme select:focus{
+  border-color:#6f9693!important;
+  box-shadow:0 0 0 3px rgba(68,123,119,.12)!important;
+  outline:none!important;
+}
+
+
+/* ===== V96: WORLD STATUS + LEFT SESSION STACK ===== */
+.world-status-btn{margin-top:18px;border:1px solid #7fa49d;border-radius:7px;background:#e1ece8;color:#274c50;font-size:11px;font-weight:900;padding:8px 11px;cursor:pointer}
+.world-status-btn:hover{background:#d4e5df;border-color:#668f87}
+.dashboard-left-stack{display:grid;gap:14px;align-content:start;min-width:0}
+.dashboard-left-stack>.section{margin-top:0}
+.dashboard-left-stack .session-list{grid-template-columns:1fr}
+.compact-session-section .session-summary{padding:10px 11px}
+.compact-session-section .session-index{width:34px;height:34px}
+.compact-session-section .session-title{font-size:12px}
+.compact-session-section .session-sub{font-size:9.5px}
+.compact-session-section .session-body{padding:11px}
+.compact-session-section .record-grid{grid-template-columns:1fr}
+.compact-session-section .record.wide{grid-column:auto}
+
+.world-status-modal{width:min(860px,100%);max-height:calc(100dvh - 40px);overflow:auto;-webkit-overflow-scrolling:touch}
+.world-status-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:11px;border-bottom:1px solid #c4ceca}
+.world-status-top h3{margin:2px 0 3px;font-size:22px;color:#29464a}
+.world-status-top p{margin:0;max-width:650px;color:#718487;font-size:10px;line-height:1.5}
+.world-status-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:11px 0}
+.world-summary-card{border:1px solid #bcc9c5;border-radius:9px;background:#f7f6ef;padding:9px 11px}
+.world-summary-card span{display:block;color:#718487;font-size:9px;font-weight:850}
+.world-summary-card strong{display:block;margin-top:3px;color:#29464a;font-size:20px}
+.world-status-toolbar{display:flex;justify-content:flex-end;margin-bottom:9px}
+
+.world-city-editor{border:1px solid #aebfba;border-radius:10px;background:#eef2ec;padding:11px;margin-bottom:10px}
+.world-editor-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;color:#31565a}
+.world-editor-head button{width:28px;height:28px;border:0;border-radius:50%;background:#dce6e1;color:#3e5d61;font-size:17px;cursor:pointer}
+.world-editor-grid{display:grid;grid-template-columns:1.6fr .8fr .8fr 1.1fr;gap:8px;align-items:end}
+.world-editor-grid label{font-size:9px;color:#6d8183;font-weight:850}
+.world-editor-grid input,.world-editor-grid select{width:100%;margin-top:4px;border:1px solid #afc0bb;border-radius:8px;background:#fffef8;color:#294247;padding:8px 9px;outline:none}
+.world-connected-check{display:flex!important;align-items:center;gap:7px;height:36px;margin-top:13px;border:1px solid #afc0bb;border-radius:8px;background:#fffef8;padding:0 9px}
+.world-connected-check input{width:16px!important;height:16px;margin:0!important;accent-color:#397c72}
+.world-connected-check span{font-size:10px;color:#3e5c60}
+.world-editor-error{min-height:14px;margin-top:6px;color:#ae523f;font-size:9px}
+.world-editor-actions{display:flex;justify-content:flex-end;gap:6px;margin-top:8px}
+
+.world-city-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.world-city-card{position:relative;border:1px solid #c1ccc8;border-left:6px solid var(--world-color,#829497);border-radius:10px;background:#f9f8f1;padding:10px 11px}
+.world-city-card.blue{--world-color:#5a9bd7;background:#edf6fe}
+.world-city-card.yellow{--world-color:#d5af37;background:#fff8db}
+.world-city-card.black{--world-color:#242b2e;background:#ecefee}
+.world-city-card.red{--world-color:#c76161;background:#fdecec}
+.world-city-main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:start}
+.world-city-name{font-size:14px;font-weight:950;color:#274348}
+.world-city-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:5px;color:#63797b;font-size:10px;font-weight:800}
+.world-connected-badge{display:inline-flex;align-items:center;border-radius:999px;background:#dceee6;color:#33745f;padding:4px 7px;font-size:9px;font-weight:950}
+.world-disconnected-badge{display:inline-flex;align-items:center;border-radius:999px;background:#edece6;color:#7c8583;padding:4px 7px;font-size:9px;font-weight:900}
+.world-edit-btn{border:1px solid #b9c6c2;border-radius:8px;background:#fffef8;color:#50676a;padding:6px 8px;font-size:9px;font-weight:900;cursor:pointer}
+.world-empty{grid-column:1/-1;text-align:center;padding:40px 10px;color:#899795;font-size:11px}
+
+#metaConnectedCities[readonly]{background:#eef2ed!important;color:#2f6262!important;font-weight:950;cursor:default}
+
+@media(max-width:760px){
+  .world-status-summary{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .world-editor-grid{grid-template-columns:1fr 1fr}
+  .world-city-list{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .world-status-modal{max-height:calc(100dvh - 20px);padding:14px}
+  .world-status-top{gap:8px}
+  .world-status-top h3{font-size:20px}
+  .world-status-summary{grid-template-columns:1fr 1fr}
+  .world-summary-card:last-child{grid-column:1/-1}
+  .world-status-btn{margin-top:12px}
+}
+
 </style>
 </head>
 <body class="season2-theme">
@@ -309,17 +397,67 @@ html{background:#e7ece8!important}
 <main id="app" class="page hidden">
   <div class="topbar archive-header archive-header-s2"><div class="archive-brand"><nav class="archive-nav" aria-label="게임 아카이브"><span class="archive-kicker">GAME ARCHIVE</span><a class="archive-link" href="games.html">보드게임 책장 <span>📚</span></a><span class="archive-divider">|</span><a class="archive-link" href="play-log.html">플레이 로그 <span>📅</span></a><span class="archive-divider">|</span><a class="archive-link" href="rules-notes.html">잔룰 노트 <span>📝</span></a><span class="archive-divider">|</span><a class="archive-link" href="pandemic-legacy-s1.html">팬데믹 S1 로그 <span>🔒</span></a><span class="archive-divider">|</span><a class="archive-link active" href="pandemic-legacy-s2.html">팬데믹 S2 로그 <span>🔒</span></a></nav></div><a class="back" href="index.html">← HOME</a></div>
 
-  <section class="hero"><div class="hero-grid"><div class="hero-title"><h1>PANDEMIC LEGACY : SEASON 2</h1><div class="hero-actions"><div class="spoiler">⚠ 이 페이지에는 캠페인 스포일러가 포함됩니다.</div><button id="openInfection" class="hero-tracker-btn" type="button">감염 카드 더미 트래커</button><button id="changePasswordBtn" class="password-change-btn" type="button">비밀번호 변경</button></div></div><aside class="hero-month-panel"><div class="hero-month-head"><b>월별 진행</b><span>JAN — DEC</span></div><div id="monthStrip" class="months"></div></aside></div></section>
+  <section class="hero"><div class="hero-grid"><div class="hero-title"><h1>PANDEMIC LEGACY : SEASON 2</h1><div class="hero-actions"><div class="spoiler">⚠ 이 페이지에는 캠페인 스포일러가 포함됩니다.</div><button id="openInfection" class="hero-tracker-btn" type="button">감염 카드 더미 트래커</button><button id="openWorldStatus" class="world-status-btn" type="button">세계 현황</button><button id="changePasswordBtn" class="password-change-btn" type="button">비밀번호 변경</button></div></div><aside class="hero-month-panel"><div class="hero-month-head"><b>월별 진행</b><span>JAN — DEC</span></div><div id="monthStrip" class="months"></div></aside></div></section>
 
   <div class="dashboard-grid">
-    <section class="section"><div class="section-head"><div><h2>플레이어 & 캐릭터</h2><div class="section-desc">캐릭터명 · 역할 · 상처/능력 메모 자동 저장</div></div><span id="saveState" class="save-state"></span></div><div id="players" class="grid4"></div></section>
-    <section class="section"><div class="section-head"><div><h2>진행하는 플레이 월</h2><div class="section-desc">현재 플레이 중인 월을 여기서 기록 · 게임 종료 후 저장하면 아래 회차 기록으로 자동 이동</div></div></div><div id="statusArea"></div></section>
+    <div class="dashboard-left-stack">
+      <section class="section"><div class="section-head"><div><h2>플레이어 & 캐릭터</h2><div class="section-desc">캐릭터명 · 역할 · 상처/능력 메모 자동 저장</div></div><span id="saveState" class="save-state"></span></div><div id="players" class="grid4"></div></section>
+      <section class="section compact-session-section"><div class="section-head"><div><h2>회차 기록</h2><div class="section-desc">저장한 완료 회차가 자동으로 쌓이는 과거 기록</div></div></div><div id="sessionList" class="session-list"></div></section>
+    </div>
+    <section class="section"><div class="section-head"><div><h2>진행하는 플레이 월</h2><div class="section-desc">현재 플레이 중인 월을 여기서 기록 · 게임 종료 후 저장하면 회차 기록으로 자동 이동</div></div></div><div id="statusArea"></div></section>
   </div>
-
-  <section class="section"><div class="section-head"><div><h2>회차 기록</h2><div class="section-desc">위에서 저장한 완료 회차가 자동으로 쌓이는 과거 기록</div></div></div><div id="sessionList" class="session-list"></div></section>
 </main>
 
-<div id="sessionModal" class="modal-bg hidden"><div class="modal"><h3 id="sessionModalTitle">회차 기록 추가</h3><form id="sessionForm" class="form-grid"><input id="sessionId" type="hidden"><div class="field"><label>플레이 날짜</label><input id="sDate" type="date"></div><div class="field"><label>월</label><select id="sMonth"></select></div><div class="field"><label>도전</label><input id="sAttempt" type="number" min="1"></div><div class="field"><label>결과</label><select id="sResult"><option value="">-</option><option>WIN</option><option>LOSE</option></select></div><div class="field"><label>이 회차에 사용한 배급 레벨</label><input id="sRationing" type="number" min="0" max="10"></div><div class="field"><label>참여 캐릭터</label><input id="sCharacters" placeholder="캐릭터명"></div><div class="field wide"><label>이번 회차 목표 결과</label><textarea id="sObjectives" placeholder="다음 게임 준비의 목표 체크 결과가 자동으로 들어옵니다."></textarea></div><div class="field wide"><label>게임 기록</label><textarea id="sHighlights"></textarea></div><div class="field wide"><label>추가 규칙 · 예외</label><textarea id="sRules"></textarea></div><div class="field wide"><label>영구 상태 요약</label><textarea id="sPermanent"></textarea></div><div class="field wide"><label>그리드 · 인구 · 보급망 변화</label><textarea id="sGridChanges"></textarea></div><div class="field wide"><label>생산 유닛 사용 내역</label><textarea id="sProduction"></textarea></div><div class="field wide"><label>다음 회차에 남긴 메모</label><textarea id="sNext"></textarea></div><div class="field wide"><label>회차 사진 · 최대 3장</label><input id="sPhotos" type="file" accept="image/*" multiple><div class="photo-help">게임 종료 직후 보드판 상태를 남겨두면 다음 모임 때 기억 복구가 빨라요.</div><div id="photoPreview" class="photo-grid"></div><div id="photoStatus" class="photo-status"></div></div></form><div class="modal-actions"><button id="cancelSession" class="ghost" type="button">취소</button><button id="saveSession" class="primary" type="button">저장</button></div></div></div>
+
+<div id="worldStatusModal" class="modal-bg hidden">
+  <div class="modal world-status-modal">
+    <div class="world-status-top">
+      <div>
+        <div class="modal-kicker">KNOWN WORLD</div>
+        <h3>세계 현황</h3>
+        <p>현재 공개된 도시의 인구와 공급망 연결 여부를 관리합니다. 연결 체크된 도시 수는 진행 중인 플레이 월에 자동 반영됩니다.</p>
+      </div>
+      <button id="closeWorldStatus" class="ghost" type="button">닫기</button>
+    </div>
+
+    <div id="worldStatusSummary" class="world-status-summary"></div>
+
+    <div class="world-status-toolbar">
+      <button id="addWorldCity" class="primary" type="button">+ 도시 추가</button>
+    </div>
+
+    <div id="worldCityEditor" class="world-city-editor hidden">
+      <input id="worldEditId" type="hidden">
+      <div class="world-editor-head">
+        <b id="worldEditorTitle">도시 추가</b>
+        <button id="closeWorldEditor" type="button">×</button>
+      </div>
+      <div class="world-editor-grid">
+        <label>도시명<input id="worldCityName" placeholder="도시명"></label>
+        <label>색상
+          <select id="worldCityColor">
+            <option value="blue">블루</option>
+            <option value="yellow">옐로우</option>
+            <option value="black">블랙</option>
+            <option value="red">레드</option>
+          </select>
+        </label>
+        <label>현재 인구<input id="worldCityPopulation" type="number" min="0" value="1"></label>
+        <label class="world-connected-check"><input id="worldCityConnected" type="checkbox"><span>현재 공급망에 연결</span></label>
+      </div>
+      <div id="worldEditorError" class="world-editor-error"></div>
+      <div class="world-editor-actions">
+        <button id="deleteWorldCity" class="ghost danger hidden" type="button">도시 삭제</button>
+        <button id="cancelWorldCity" class="ghost" type="button">취소</button>
+        <button id="saveWorldCity" class="primary" type="button">적용</button>
+      </div>
+    </div>
+
+    <div id="worldCityList" class="world-city-list"></div>
+  </div>
+</div>
+
+<div id="sessionModal" class="modal-bg hidden"><div class="modal"><h3 id="sessionModalTitle">회차 기록 추가</h3><form id="sessionForm" class="form-grid"><input id="sessionId" type="hidden"><div class="field"><label>플레이 날짜</label><input id="sDate" type="date"></div><div class="field"><label>월</label><select id="sMonth"></select></div><div class="field"><label>도전</label><input id="sAttempt" type="number" min="1"></div><div class="field"><label>결과</label><select id="sResult"><option value="">-</option><option>WIN</option><option>LOSE</option></select></div><div class="field"><label>현재 공급망에 연결된 도시 수</label><input id="sConnectedCities" type="number" min="0"></div><div class="field"><label>참여 캐릭터</label><input id="sCharacters" placeholder="캐릭터명"></div><div class="field wide"><label>이번 회차 목표 결과</label><textarea id="sObjectives" placeholder="다음 게임 준비의 목표 체크 결과가 자동으로 들어옵니다."></textarea></div><div class="field wide"><label>게임 기록</label><textarea id="sHighlights"></textarea></div><div class="field wide"><label>추가 규칙 · 예외</label><textarea id="sRules"></textarea></div><div class="field wide"><label>영구 상태 요약</label><textarea id="sPermanent"></textarea></div><div class="field wide"><label>그리드 · 인구 · 보급망 변화</label><textarea id="sGridChanges"></textarea></div><div class="field wide"><label>생산 유닛 사용 내역</label><textarea id="sProduction"></textarea></div><div class="field wide"><label>다음 회차에 남긴 메모</label><textarea id="sNext"></textarea></div><div class="field wide"><label>회차 사진 · 최대 3장</label><input id="sPhotos" type="file" accept="image/*" multiple><div class="photo-help">게임 종료 직후 보드판 상태를 남겨두면 다음 모임 때 기억 복구가 빨라요.</div><div id="photoPreview" class="photo-grid"></div><div id="photoStatus" class="photo-status"></div></div></form><div class="modal-actions"><button id="cancelSession" class="ghost" type="button">취소</button><button id="saveSession" class="primary" type="button">저장</button></div></div></div>
 
 <div id="infectionModal" class="modal-bg infection-modal hidden"><div class="modal s2-tracker-dialog phase-tracker-dialog">
   <div class="infection-topbar phase-topbar">
@@ -500,17 +638,129 @@ function deleteS2PhaseCity(){const t=s2PhaseTracker(),id=$('#phaseEditId').value
 function openS2BottomDraw(){const t=s2PhaseTracker(),sorted=sortS2PhaseCities(t.cities),rows=sorted.filter(c=>s2PhaseRemaining(c)>0),N=rows.reduce((s,c)=>s+s2PhaseRemaining(c),0);$('#s2BottomSummary').textContent=`현재 감염 ${t.current_phase}차 · 덱 하단 후보 ${N}장 · 실제로 나온 카드를 선택하세요.`;$('#bottomCityGrid').innerHTML=rows.length?rows.map(c=>{const k=s2PhaseRemaining(c),p=N?k/N:0;return`<button type="button" class="s2-bottom-card ${c.color}" data-bottom-phase-card="${c.id}"><div class="name">${esc(c.name)}</div><div class="meta">남음 ${k}장 · 하단 후보 ${formatS2Pct(p)}</div></button>`}).join(''):'<div class="probability-empty">현재 남은 카드가 없어요.</div>';$('#bottomCityGrid').querySelectorAll('[data-bottom-phase-card]').forEach(b=>b.onclick=()=>selectS2BottomCard(b.dataset.bottomPhaseCard));$('#epidemicModal').classList.remove('hidden');}
 function selectS2BottomCard(id){const t=s2PhaseTracker(),c=t.cities.find(x=>x.id===id);if(!c||s2PhaseRemaining(c)<=0)return;snapshotS2Phase();const p=t.current_phase-1,key=s2QuickKey(t.current_phase,id);c.phases[p]=(c.phases[p]||0)+1;t.quick_selected[key]=true;t.discard_since_epidemic[id]=(+t.discard_since_epidemic?.[id]||0)+1;t.risk_group=clone(t.discard_since_epidemic);t.discard_since_epidemic={};t.risk_consumed={};const old=t.current_phase;if(t.current_phase<S2_PHASE_COUNT)t.current_phase++;$('#epidemicModal').classList.add('hidden');saveAndRenderS2Phase();setTimeout(()=>{const total=s2RiskTotal(t);if(total)alert(`유행병 처리 완료 · 재등장 위험군 ${total}장이 생성됐어요.`);if(old>=S2_PHASE_COUNT)alert('하단 카드는 5차에 기록했어요. 감염 차수는 더 이상 자동으로 넘어가지 않습니다.');},50);}
 function enableS2PhaseWheelBridge(){const wrap=$('#phaseTableWrap'),dialog=$('#infectionModal .phase-tracker-dialog');if(!wrap||!dialog||wrap.dataset.wheelBridge==='1')return;wrap.dataset.wheelBridge='1';wrap.addEventListener('wheel',e=>{if(e.shiftKey||Math.abs(e.deltaX)>Math.abs(e.deltaY))return;if(e.deltaY){e.preventDefault();dialog.scrollTop+=e.deltaY;}},{passive:false});}
-function openS2PhaseTracker(){$('#infectionModal').classList.remove('hidden');renderS2PhaseTracker();requestAnimationFrame(enableS2PhaseWheelBridge);}
+function openS2PhaseTracker(){
+  const modal=$('#infectionModal');
+  if(!modal)return alert('감염 카드 트래커 창을 찾지 못했어요.');
+  modal.classList.remove('hidden');
+  try{
+    renderS2PhaseTracker();
+    requestAnimationFrame(enableS2PhaseWheelBridge);
+  }catch(err){
+    console.error('S2 tracker open error',err);
+    modal.classList.add('hidden');
+    alert('감염 카드 트래커를 여는 중 오류가 발생했어요. 콘솔 오류를 확인해주세요.');
+  }
+}
 
-function defaultState(){return{meta:{current_month:'1월',attempt:1,rationing:4,last_result:'',next_note:'',next_note_draft:'',play_date:'',session_result:'',play_log:'',current_objectives:'',objective_items:[],current_rules:'',permanent_summary:''},players:[{name:'다은',color:'pink',character:'',role:'',detail:''},{name:'한철',color:'black',character:'',role:'',detail:''},{name:'승민',color:'blue',character:'',role:'',detail:''},{name:'제이',color:'white',character:'',role:'',detail:''}],infection_tracker:defaultInfectionTracker(),infection_phase_tracker:defaultS2PhaseTracker(),player_deck_tracker:defaultPlayerDeck(),sessions:[]};}
+function defaultState(){return{meta:{current_month:'1월',attempt:1,rationing:4,connected_cities:'',last_result:'',next_note:'',next_note_draft:'',play_date:'',session_result:'',play_log:'',current_objectives:'',objective_items:[],current_rules:'',permanent_summary:''},players:[{name:'다은',color:'pink',character:'',role:'',detail:''},{name:'한철',color:'black',character:'',role:'',detail:''},{name:'승민',color:'blue',character:'',role:'',detail:''},{name:'제이',color:'white',character:'',role:'',detail:''}],infection_tracker:defaultInfectionTracker(),infection_phase_tracker:defaultS2PhaseTracker(),player_deck_tracker:defaultPlayerDeck(),world_status:[],sessions:[]};}
 function normalizeTracker(t){const d=defaultInfectionTracker(),x=t||{};return{cities:Array.isArray(x.cities)&&x.cities.length?x.cities:d.cities,groups:Array.isArray(x.groups)&&x.groups.length?x.groups:d.groups,discard:x.discard&&typeof x.discard==='object'?x.discard:{},game_end:x.game_end&&typeof x.game_end==='object'?x.game_end:{},epidemics:+x.epidemics||0,rate_step:Number.isFinite(+x.rate_step)?Math.max(0,Math.min(7,+x.rate_step)) : Math.max(0,Math.min(7,+x.epidemics||0)),history:Array.isArray(x.history)?x.history.slice(-20):[],configured_total:Number.isFinite(+x.configured_total)?+x.configured_total:27};}
-function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s.players:[],rawMeta={...d.meta,...(s?.meta||{})};if(!Array.isArray(rawMeta.objective_items))rawMeta.objective_items=[];if(!rawMeta.objective_items.length&&String(rawMeta.current_objectives||'').trim()){rawMeta.objective_items=String(rawMeta.current_objectives).split(/\n+/).map(x=>x.trim()).filter(Boolean).map((text,i)=>({id:`legacy-${i}-${Date.now()}`,text,done:false}));}return{meta:rawMeta,players:d.players.map((p,i)=>{const z=stored.find(x=>x?.name===p.name)||stored[i]||{};return{...p,...z,name:p.name,color:p.color}}),infection_tracker:normalizeTracker(s?.infection_tracker),infection_phase_tracker:normalizeS2PhaseTracker(s?.infection_phase_tracker),player_deck_tracker:{...d.player_deck_tracker,...(s?.player_deck_tracker||{})},sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
-async function boot(){const {data:{session}}=await db.auth.getSession();isAdmin=!!session;if(isAdmin){const {data,error}=await db.from('pandemic_legacy_s2_state').select('data').eq('id',1).single();if(!error&&data){state=mergeState(data.data);canEdit=true;openApp();return;}}const remembered=sessionStorage.getItem('pandemicLegacyS2Code');if(remembered){$('#codeInput').value=remembered;unlock();}}
-async function unlock(){const code=$('#codeInput').value.trim();if(!code)return;$('#gateError').textContent='';const {data,error}=await db.rpc('get_pandemic_legacy_s2',{p_code:code});if(error){console.error(error);$('#gateError').textContent=error.code==='P0001'?'비밀번호가 맞지 않아요.':'연결 설정을 확인해주세요.';return;}accessCode=code;sessionStorage.setItem('pandemicLegacyS2Code',code);state=mergeState(data);canEdit=true;openApp();}
+function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s.players:[],rawMeta={...d.meta,...(s?.meta||{})};if(!Array.isArray(rawMeta.objective_items))rawMeta.objective_items=[];if(!rawMeta.objective_items.length&&String(rawMeta.current_objectives||'').trim()){rawMeta.objective_items=String(rawMeta.current_objectives).split(/\n+/).map(x=>x.trim()).filter(Boolean).map((text,i)=>({id:`legacy-${i}-${Date.now()}`,text,done:false}));}return{meta:rawMeta,players:d.players.map((p,i)=>{const z=stored.find(x=>x?.name===p.name)||stored[i]||{};return{...p,...z,name:p.name,color:p.color}}),infection_tracker:normalizeTracker(s?.infection_tracker),infection_phase_tracker:normalizeS2PhaseTracker(s?.infection_phase_tracker),player_deck_tracker:{...d.player_deck_tracker,...(s?.player_deck_tracker||{})},world_status:Array.isArray(s?.world_status)?s.world_status:[],sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
+async function boot(){const {data:{session}}=await db.auth.getSession();isAdmin=!!session;if(isAdmin){const {data,error}=await db.from('pandemic_legacy_s2_state').select('data').eq('id',1).single();if(!error&&data){state=mergeState(data.data);canEdit=true;openApp();return;}}const remembered=rememberedS2AccessCode();if(remembered){$('#codeInput').value=remembered;unlock(true);}}
+async function unlock(auto=false){const code=$('#codeInput').value.trim();if(!code)return;$('#gateError').textContent='';const {data,error}=await db.rpc('get_pandemic_legacy_s2',{p_code:code});if(error){console.error(error);if(auto)forgetS2AccessCode();$('#gateError').textContent=error.code==='P0001'?'비밀번호가 맞지 않아요.':'연결 설정을 확인해주세요.';return;}accessCode=code;rememberS2AccessCode(code);state=mergeState(data);canEdit=true;openApp();}
 function openApp(){$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');render();}
-function render(){renderMonths();renderPlayers();renderStatus();renderSessions();}
+function render(){syncWorldConnectedCount(false);renderMonths();renderPlayers();renderStatus();renderSessions();}
 function renderMonths(){$('#monthStrip').innerHTML=months.map(x=>`<div class="month-chip ${x===state.meta.current_month?'active':''}">${x}</div>`).join('');}
 function playerColor(c){return c==='pink'?'#f58bb2':c==='black'?'#111418':c==='blue'?'#4d8fe8':'#f4f4f2'}
+
+const worldColorOrder={blue:0,yellow:1,black:2,red:3};
+const worldCollator=new Intl.Collator('ko-KR',{numeric:true,sensitivity:'base'});
+function worldCities(){
+  if(!Array.isArray(state.world_status))state.world_status=[];
+  return state.world_status;
+}
+function worldConnectedCount(){
+  const cities=worldCities();
+  if(!cities.length)return state.meta.connected_cities===''?'':Math.max(0,+state.meta.connected_cities||0);
+  return cities.filter(c=>!!c.connected).length;
+}
+function syncWorldConnectedCount(save=false){
+  const cities=worldCities();
+  if(cities.length)state.meta.connected_cities=cities.filter(c=>!!c.connected).length;
+  if(save)queueSave();
+}
+function sortedWorldCities(){
+  return [...worldCities()].sort((a,b)=>
+    (worldColorOrder[a.color]??9)-(worldColorOrder[b.color]??9) ||
+    worldCollator.compare(a.name||'',b.name||'')
+  );
+}
+function renderWorldStatus(){
+  const cities=sortedWorldCities(),connected=cities.filter(c=>c.connected).length,
+        population=cities.reduce((s,c)=>s+Math.max(0,+c.population||0),0);
+  syncWorldConnectedCount(false);
+  $('#worldStatusSummary').innerHTML=`
+    <div class="world-summary-card"><span>등록 도시</span><strong>${cities.length}</strong></div>
+    <div class="world-summary-card"><span>공급망 연결 도시</span><strong>${connected}</strong></div>
+    <div class="world-summary-card"><span>현재 인구 합계</span><strong>${population}</strong></div>`;
+  $('#worldCityList').innerHTML=cities.length?cities.map(c=>`
+    <article class="world-city-card ${c.color}">
+      <div class="world-city-main">
+        <div>
+          <div class="world-city-name">${esc(c.name)}</div>
+          <div class="world-city-meta">
+            <span>인구 ${Math.max(0,+c.population||0)}</span>
+            ${c.connected?'<span class="world-connected-badge">공급망 연결</span>':'<span class="world-disconnected-badge">미연결</span>'}
+          </div>
+        </div>
+        <button class="world-edit-btn" type="button" data-world-edit="${c.id}">수정</button>
+      </div>
+    </article>`).join(''):'<div class="world-empty">등록된 도시가 없어요. 현재 공개된 도시부터 추가해 주세요.</div>';
+  $('#worldCityList').querySelectorAll('[data-world-edit]').forEach(b=>b.onclick=()=>openWorldCityEditor(b.dataset.worldEdit));
+  const field=$('#metaConnectedCities');if(field)field.value=state.meta.connected_cities??'';
+}
+function openWorldStatus(){
+  $('#worldStatusModal').classList.remove('hidden');
+  closeWorldCityEditor();
+  renderWorldStatus();
+}
+function closeWorldStatus(){
+  $('#worldStatusModal').classList.add('hidden');
+  closeWorldCityEditor();
+}
+function openWorldCityEditor(id=null){
+  const c=id?worldCities().find(x=>x.id===id):null;
+  $('#worldEditId').value=c?.id||'';
+  $('#worldEditorTitle').textContent=c?'도시 수정':'도시 추가';
+  $('#worldCityName').value=c?.name||'';
+  $('#worldCityColor').value=c?.color||'blue';
+  $('#worldCityPopulation').value=c?.population??1;
+  $('#worldCityConnected').checked=!!c?.connected;
+  $('#deleteWorldCity').classList.toggle('hidden',!c);
+  $('#worldEditorError').textContent='';
+  $('#worldCityEditor').classList.remove('hidden');
+  setTimeout(()=>$('#worldCityName').focus(),30);
+}
+function closeWorldCityEditor(){
+  $('#worldCityEditor').classList.add('hidden');
+  $('#worldEditorError').textContent='';
+}
+function saveWorldCity(){
+  const id=$('#worldEditId').value,name=$('#worldCityName').value.trim(),
+        color=$('#worldCityColor').value,population=Math.max(0,+$('#worldCityPopulation').value||0),
+        connected=$('#worldCityConnected').checked,cities=worldCities();
+  if(!name)return $('#worldEditorError').textContent='도시명을 입력해주세요.';
+  if(cities.some(c=>c.id!==id&&String(c.name||'').trim()===name))return $('#worldEditorError').textContent='같은 도시명이 이미 있어요.';
+  if(id){
+    const c=cities.find(x=>x.id===id);if(!c)return;
+    Object.assign(c,{name,color,population,connected});
+  }else{
+    cities.push({id:crypto.randomUUID(),name,color,population,connected});
+  }
+  syncWorldConnectedCount(true);
+  closeWorldCityEditor();
+  renderWorldStatus();
+  renderStatus();
+}
+function deleteWorldCity(){
+  const id=$('#worldEditId').value,c=worldCities().find(x=>x.id===id);if(!c)return;
+  if(!confirm(`${c.name} 도시를 세계 현황에서 삭제할까요?`))return;
+  state.world_status=worldCities().filter(x=>x.id!==id);
+  syncWorldConnectedCount(true);
+  closeWorldCityEditor();
+  renderWorldStatus();
+  renderStatus();
+}
+
 function renderPlayers(){$('#players').innerHTML=state.players.map((p,i)=>`<div class="player-card" style="--player-color:${playerColor(p.color)}"><div class="player-name"><span class="player-dot"></span>${esc(p.name)}</div><input data-p="${i}" data-k="character" value="${esc(p.character)}" placeholder="캐릭터명"><input data-p="${i}" data-k="role" value="${esc(p.role)}" placeholder="역할 / 직업"><textarea data-p="${i}" data-k="detail" placeholder="상처 · 능력 · 기타 메모">${esc(p.detail)}</textarea></div>`).join('');$('#players').querySelectorAll('input,textarea').forEach(el=>el.oninput=()=>{state.players[+el.dataset.p][el.dataset.k]=el.value;queueSave();});}
 function objectiveSummaryText(items){
   const arr=Array.isArray(items)?items.filter(x=>String(x.text||'').trim()):[];
@@ -547,7 +797,7 @@ function renderStatus(){
     <div class="current-play-grid">
       <div class="current-play-stat"><label>플레이 월</label><select id="metaMonth">${months.map(x=>`<option ${x===m.current_month?'selected':''}>${x}</option>`).join('')}</select><small>지금 실제로 진행 중인 월</small></div>
       <div class="current-play-stat"><label>이번 도전</label><input id="metaAttempt" type="number" min="1" max="2" value="${+m.attempt||1}"><small>같은 달 1차 / 재도전 2차</small></div>
-      <div class="current-play-stat"><label>배급 레벨</label><input id="metaRationing" type="number" min="0" max="10" value="${esc(m.rationing??'')}"><small>이번 게임 플레이어 덱에 넣는 배급 이벤트 카드 수</small></div>
+      <div class="current-play-stat"><label>현재 공급망에 연결된 도시 수</label><input id="metaConnectedCities" type="number" min="0" value="${esc(m.connected_cities??'')}" readonly><small>세계 현황의 연결 체크 도시를 자동 계산</small></div>
       <div class="current-play-stat"><label>플레이 날짜</label><input id="metaPlayDate" type="date" value="${esc(m.play_date||'')}"><small>실제 플레이 날짜</small></div>
     </div>
     <div class="objective-panel">
@@ -567,8 +817,8 @@ function renderStatus(){
       <div class="current-photo-panel"><div class="current-photo-head"><b>회차 사진 · 최대 3장</b><span id="currentPhotoStatus" class="photo-status"></span></div><input id="currentPhotos" type="file" accept="image/*" multiple><div id="currentPhotoPreview" class="current-preview"></div></div>
       <div class="current-save-row"><span class="current-save-note">저장하면 현재 내용이 아래 회차 기록으로 이동하고 다음 월/도전 상태로 전환됩니다.</span><button id="saveCurrentSessionBtn" class="current-save-btn" type="button">현재 회차 저장 →</button></div>
     </div>`;
-  const sync=()=>{m.current_month=$('#metaMonth').value;m.attempt=Math.max(1,Math.min(2,+$('#metaAttempt').value||1));m.rationing=Math.max(0,Math.min(10,+$('#metaRationing').value||0));m.play_date=$('#metaPlayDate').value;m.session_result=$('#metaSessionResult').value;m.play_log=$('#metaPlayLog').value;m.current_rules=$('#metaRules').value;m.permanent_summary=$('#metaPermanent').value;m.next_note_draft=$('#metaNextDraft').value;syncLegacyObjectiveText();queueSave();renderMonths();};
-  ['metaMonth','metaAttempt','metaRationing','metaPlayDate','metaSessionResult'].forEach(id=>$('#'+id).onchange=sync);
+  const sync=()=>{m.current_month=$('#metaMonth').value;m.attempt=Math.max(1,Math.min(2,+$('#metaAttempt').value||1));m.connected_cities=worldConnectedCount();m.play_date=$('#metaPlayDate').value;m.session_result=$('#metaSessionResult').value;m.play_log=$('#metaPlayLog').value;m.current_rules=$('#metaRules').value;m.permanent_summary=$('#metaPermanent').value;m.next_note_draft=$('#metaNextDraft').value;syncLegacyObjectiveText();queueSave();renderMonths();};
+  ['metaMonth','metaAttempt','metaConnectedCities','metaPlayDate','metaSessionResult'].forEach(id=>$('#'+id).onchange=sync);
   ['metaPlayLog','metaRules','metaPermanent','metaNextDraft'].forEach(id=>$('#'+id).oninput=sync);
   $('#addObjectiveBtn').onclick=addCurrentObjective;
   $('#objectiveList')?.querySelectorAll('.objective-row').forEach((row,i)=>{
@@ -645,7 +895,7 @@ function addCity(){const name=$('#newCityName').value.trim(),copies=Math.max(0,+
 function renderPlayerDeck(){const d=state.player_deck_tracker,start=Math.max(0,+d.start_cards||0),drawn=Math.max(0,+d.drawn||0),remain=Math.max(0,start-drawn),epi=Math.max(1,+d.epidemic_cards||5);let next='시작 장수를 입력하세요';if(start>0){const pile=Math.ceil(start/epi);const current=Math.min(epi,Math.floor(drawn/pile)+1);next=`약 ${current}번째 유행병 구간 · 더미당 약 ${pile}장`;}
 $('#playerDeckPanel').innerHTML=`<div class="player-deck-grid"><div class="deck-stat"><label>시작 덱 장수</label><input id="deckStart" type="number" min="0" value="${esc(d.start_cards)}"></div><div class="deck-stat"><label>유행병 카드 수</label><input id="deckEpi" type="number" min="1" value="${epi}"></div><div class="deck-stat"><label>지금까지 뽑음</label><strong>${drawn}</strong></div><div class="deck-stat"><label>남은 카드</label><strong>${remain}</strong></div></div><div class="deck-actions"><button id="draw2" class="deck-mini">+2 카드</button><button id="draw1" class="deck-mini">+1</button><button id="drawMinus" class="deck-mini">-1</button><button id="deckReset" class="deck-mini">카운터 초기화</button></div><div class="deck-note">${esc(next)}</div>`;$('#deckStart').onchange=()=>{d.start_cards=$('#deckStart').value;queueSave();renderPlayerDeck()};$('#deckEpi').onchange=()=>{d.epidemic_cards=+$('#deckEpi').value||5;queueSave();renderPlayerDeck()};$('#draw2').onclick=()=>{d.drawn=(+d.drawn||0)+2;queueSave();renderPlayerDeck()};$('#draw1').onclick=()=>{d.drawn=(+d.drawn||0)+1;queueSave();renderPlayerDeck()};$('#drawMinus').onclick=()=>{d.drawn=Math.max(0,(+d.drawn||0)-1);queueSave();renderPlayerDeck()};$('#deckReset').onclick=()=>{if(confirm('플레이어 덱 카운터를 0으로 초기화할까요?')){d.drawn=0;queueSave();renderPlayerDeck()}};}
 function record(label,value,wide=false){return`<div class="record ${wide?'wide':''}"><b>${label}</b><div>${esc(value||'-')}</div></div>`}
-function renderSessions(){const arr=[...state.sessions].sort((a,b)=>(b.date||'').localeCompare(a.date||''));$('#sessionList').innerHTML=arr.length?arr.map(s=>`<article class="session-card"><div class="session-summary" data-session="${s.id}"><div class="session-index">${esc(s.month||'?')}</div><div><div class="session-title">${esc(s.month||'')} · ${esc(s.attempt||1)}차 ${s.result?`<span class="${s.result==='WIN'?'result-win':'result-lose'}">${esc(s.result)}</span>`:''}</div><div class="session-sub">${esc(s.date||'날짜 미정')}${s.rationing!==''&&s.rationing!=null?` · 사용 배급 레벨 ${esc(s.rationing)}`:''}</div></div><div>⌄</div></div><div class="session-body hidden"><div class="record-grid">${record('참여 캐릭터',s.characters)}${record('이번 회차 목표 결과',s.objectives)}${record('게임 기록',s.highlights,true)}${record('추가 규칙 · 예외',s.rules,true)}${record('영구 상태 요약',s.permanent_summary,true)}${record('그리드 · 인구 · 보급망 변화',s.grid_changes,true)}${record('생산 유닛 사용 내역',s.production,true)}${record('다음 게임에서 기억할 것',s.next,true)}<div class="session-photo-block"><b>회차 사진</b><div id="photos-${s.id}" class="session-photo-grid"><div class="photo-help">펼치면 사진을 불러옵니다.</div></div></div></div><div class="session-actions"><button class="ghost" data-edit="${s.id}">수정</button><button class="ghost danger" data-delete="${s.id}">삭제</button></div></div></article>`).join(''):'<div class="empty">아직 기록된 회차가 없어요.</div>';$('#sessionList').querySelectorAll('.session-summary').forEach(el=>el.onclick=()=>{const body=el.nextElementSibling;body.classList.toggle('hidden');if(!body.classList.contains('hidden'))loadSessionPhotos(el.dataset.session)});$('#sessionList').querySelectorAll('[data-edit]').forEach(b=>b.onclick=e=>{e.stopPropagation();openSession(state.sessions.find(x=>x.id===b.dataset.edit))});$('#sessionList').querySelectorAll('[data-delete]').forEach(b=>b.onclick=e=>{e.stopPropagation();deleteSession(b.dataset.delete)});}
+function renderSessions(){const arr=[...state.sessions].sort((a,b)=>(b.date||'').localeCompare(a.date||''));$('#sessionList').innerHTML=arr.length?arr.map(s=>`<article class="session-card"><div class="session-summary" data-session="${s.id}"><div class="session-index">${esc(s.month||'?')}</div><div><div class="session-title">${esc(s.month||'')} · ${esc(s.attempt||1)}차 ${s.result?`<span class="${s.result==='WIN'?'result-win':'result-lose'}">${esc(s.result)}</span>`:''}</div><div class="session-sub">${esc(s.date||'날짜 미정')}${s.connected_cities!==''&&s.connected_cities!=null?` · 공급망 연결 도시 ${esc(s.connected_cities)}개`:''}</div></div><div>⌄</div></div><div class="session-body hidden"><div class="record-grid">${record('참여 캐릭터',s.characters)}${record('이번 회차 목표 결과',s.objectives)}${record('게임 기록',s.highlights,true)}${record('추가 규칙 · 예외',s.rules,true)}${record('영구 상태 요약',s.permanent_summary,true)}${record('그리드 · 인구 · 보급망 변화',s.grid_changes,true)}${record('생산 유닛 사용 내역',s.production,true)}${record('다음 게임에서 기억할 것',s.next,true)}<div class="session-photo-block"><b>회차 사진</b><div id="photos-${s.id}" class="session-photo-grid"><div class="photo-help">펼치면 사진을 불러옵니다.</div></div></div></div><div class="session-actions"><button class="ghost" data-edit="${s.id}">수정</button><button class="ghost danger" data-delete="${s.id}">삭제</button></div></div></article>`).join(''):'<div class="empty">아직 기록된 회차가 없어요.</div>';$('#sessionList').querySelectorAll('.session-summary').forEach(el=>el.onclick=()=>{const body=el.nextElementSibling;body.classList.toggle('hidden');if(!body.classList.contains('hidden'))loadSessionPhotos(el.dataset.session)});$('#sessionList').querySelectorAll('[data-edit]').forEach(b=>b.onclick=e=>{e.stopPropagation();openSession(state.sessions.find(x=>x.id===b.dataset.edit))});$('#sessionList').querySelectorAll('[data-delete]').forEach(b=>b.onclick=e=>{e.stopPropagation();deleteSession(b.dataset.delete)});}
 let photoCache=new Map(),modalExisting=[],modalPending=[],modalDeleted=[],lightboxPhotos=[],lightboxIndex=0;
 async function getSessionPhotos(id,force=false){if(!force&&photoCache.has(id))return photoCache.get(id);const {data,error}=await db.rpc('get_pandemic_legacy_s2_photos',{p_code:accessCode,p_session_id:id});if(error){console.error(error);return[]}photoCache.set(id,data||[]);return data||[]}
 async function loadSessionPhotos(id){const el=$('#photos-'+CSS.escape(id));if(!el)return;el.innerHTML='<div class="photo-help">불러오는 중...</div>';const ps=await getSessionPhotos(id);el.innerHTML=ps.length?ps.map(p=>`<div class="session-photo" data-photo="${p.id}" data-session="${id}"><img src="${p.data_url}" loading="lazy" alt="회차 사진"></div>`).join(''):'<div class="photo-help">첨부된 사진이 없어요.</div>';el.querySelectorAll('.session-photo').forEach(x=>x.onclick=()=>openLightbox(id,x.dataset.photo));}
@@ -654,7 +904,7 @@ function renderLightbox(){if(!lightboxPhotos.length)return;lightboxIndex=(lightb
 function closeLightbox(){$('#lightbox').classList.add('hidden');$('#lightboxImage').removeAttribute('src')}
 async function compressImage(file){return new Promise((resolve,reject)=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{const max=1400,scale=Math.min(1,max/Math.max(img.width,img.height)),w=Math.round(img.width*scale),h=Math.round(img.height*scale),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);resolve(c.toDataURL('image/jpeg',.78))};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('이미지를 읽지 못했어요.'))};img.src=url})}
 function renderPhotoPreview(){const items=[...modalExisting.filter(p=>!modalDeleted.includes(p.id)).map(p=>({...p,kind:'old'})),...modalPending.map((p,i)=>({...p,kind:'new',idx:i}))];$('#photoPreview').innerHTML=items.length?items.map(p=>`<div class="photo-item"><img src="${p.data_url}"><button class="photo-remove" type="button" data-kind="${p.kind}" data-id="${p.kind==='old'?p.id:p.idx}">×</button></div>`).join(''):'<div class="photo-help">첨부된 사진 없음</div>';$('#photoPreview').querySelectorAll('.photo-remove').forEach(b=>b.onclick=()=>{if(b.dataset.kind==='old')modalDeleted.push(b.dataset.id);else modalPending.splice(+b.dataset.id,1);renderPhotoPreview()});$('#photoStatus').textContent=`${items.length}/3장`;}
-async function openSession(s={}){const row=s||{};$('#sessionId').value=row.id||'';$('#sDate').value=row.date||new Date().toISOString().slice(0,10);$('#sMonth').innerHTML=months.map(x=>`<option ${x===(row.month||state.meta.current_month)?'selected':''}>${x}</option>`).join('');$('#sAttempt').value=row.attempt||state.meta.attempt||1;$('#sResult').value=row.result||'';$('#sRationing').value=row.rationing??state.meta.rationing??'';$('#sCharacters').value=row.characters||'';$('#sObjectives').value=row.objectives||objectiveSummaryText(state.meta.objective_items)||'';$('#sHighlights').value=row.highlights||'';$('#sRules').value=row.rules||'';$('#sPermanent').value=row.permanent_summary||'';$('#sGridChanges').value=row.grid_changes||'';$('#sProduction').value=row.production||'';$('#sNext').value=row.next||'';$('#sessionModalTitle').textContent='회차 기록 수정';modalPending=[];modalDeleted=[];modalExisting=[];$('#sPhotos').value='';$('#sessionModal').classList.remove('hidden');if(row.id)modalExisting=await getSessionPhotos(row.id,true);renderPhotoPreview();}
+async function openSession(s={}){const row=s||{};$('#sessionId').value=row.id||'';$('#sDate').value=row.date||new Date().toISOString().slice(0,10);$('#sMonth').innerHTML=months.map(x=>`<option ${x===(row.month||state.meta.current_month)?'selected':''}>${x}</option>`).join('');$('#sAttempt').value=row.attempt||state.meta.attempt||1;$('#sResult').value=row.result||'';$('#sConnectedCities').value=row.connected_cities??state.meta.connected_cities??'';$('#sCharacters').value=row.characters||'';$('#sObjectives').value=row.objectives||objectiveSummaryText(state.meta.objective_items)||'';$('#sHighlights').value=row.highlights||'';$('#sRules').value=row.rules||'';$('#sPermanent').value=row.permanent_summary||'';$('#sGridChanges').value=row.grid_changes||'';$('#sProduction').value=row.production||'';$('#sNext').value=row.next||'';$('#sessionModalTitle').textContent='회차 기록 수정';modalPending=[];modalDeleted=[];modalExisting=[];$('#sPhotos').value='';$('#sessionModal').classList.remove('hidden');if(row.id)modalExisting=await getSessionPhotos(row.id,true);renderPhotoPreview();}
 async function syncPhotos(sessionId){for(const id of modalDeleted){const {error}=await db.rpc('delete_pandemic_legacy_s2_photo',{p_code:accessCode,p_photo_id:id});if(error)throw error}for(const p of modalPending){const {error}=await db.rpc('save_pandemic_legacy_s2_photo',{p_code:accessCode,p_session_id:sessionId,p_data_url:p.data_url});if(error)throw error}photoCache.delete(sessionId)}
 let currentPendingPhotos=[];
 function renderCurrentPhotoPreview(){
@@ -683,14 +933,12 @@ async function saveCurrentSession(){
   if(!m.session_result)return alert('이번 회차 결과(WIN/LOSE)를 먼저 선택해주세요.');
   if(!m.play_date)return alert('플레이 날짜를 입력해주세요.');
   const id=crypto.randomUUID(),objectiveText=objectiveSummaryText(m.objective_items),row={
-    id,date:m.play_date,month:m.current_month,attempt:+m.attempt||1,result:m.session_result,rationing:m.rationing,characters:currentCharacterText(),objectives:objectiveText,highlights:String(m.play_log||'').trim(),rules:String(m.current_rules||'').trim(),permanent_summary:String(m.permanent_summary||'').trim(),grid_changes:'',production:'',next:String(m.next_note_draft||'').trim(),created_at:new Date().toISOString()
+    id,date:m.play_date,month:m.current_month,attempt:+m.attempt||1,result:m.session_result,connected_cities:m.connected_cities,characters:currentCharacterText(),objectives:objectiveText,highlights:String(m.play_log||'').trim(),rules:String(m.current_rules||'').trim(),permanent_summary:String(m.permanent_summary||'').trim(),grid_changes:'',production:'',next:String(m.next_note_draft||'').trim(),created_at:new Date().toISOString()
   };
   state.sessions.push(row);state.meta.last_result=row.result;state.meta.next_note=row.next;
-  const usedRation=Math.max(0,Math.min(10,+row.rationing||0));
   if(row.result==='WIN'){
-    state.meta.rationing=Math.max(0,usedRation-2);state.meta.current_month=nextCampaignMonth(row.month);state.meta.attempt=1;clearCurrentWorkspace({keepGoals:false});
+    state.meta.current_month=nextCampaignMonth(row.month);state.meta.attempt=1;clearCurrentWorkspace({keepGoals:false});
   }else{
-    state.meta.rationing=Math.min(10,usedRation+2);
     if((+row.attempt||1)<2){state.meta.current_month=row.month;state.meta.attempt=2;clearCurrentWorkspace({keepGoals:true});}
     else{state.meta.current_month=nextCampaignMonth(row.month);state.meta.attempt=1;clearCurrentWorkspace({keepGoals:false});}
   }
@@ -711,22 +959,19 @@ async function saveSession(){
   const id=$('#sessionId').value||crypto.randomUUID(),visible=modalExisting.filter(p=>!modalDeleted.includes(p.id)).length;
   if(visible+modalPending.length>3)return alert('사진은 최대 3장까지 가능해요.');
   const old=state.sessions.find(x=>x.id===id);
-  const row={id,date:$('#sDate').value,month:$('#sMonth').value,attempt:+$('#sAttempt').value||1,result:$('#sResult').value,rationing:$('#sRationing').value,characters:$('#sCharacters').value.trim(),objectives:$('#sObjectives').value.trim(),highlights:$('#sHighlights').value.trim(),rules:$('#sRules').value.trim(),permanent_summary:$('#sPermanent').value.trim(),grid_changes:$('#sGridChanges').value.trim(),production:$('#sProduction').value.trim(),next:$('#sNext').value.trim(),created_at:old?.created_at||new Date().toISOString()};
+  const row={id,date:$('#sDate').value,month:$('#sMonth').value,attempt:+$('#sAttempt').value||1,result:$('#sResult').value,connected_cities:$('#sConnectedCities').value,characters:$('#sCharacters').value.trim(),objectives:$('#sObjectives').value.trim(),highlights:$('#sHighlights').value.trim(),rules:$('#sRules').value.trim(),permanent_summary:$('#sPermanent').value.trim(),grid_changes:$('#sGridChanges').value.trim(),production:$('#sProduction').value.trim(),next:$('#sNext').value.trim(),created_at:old?.created_at||new Date().toISOString()};
   const idx=state.sessions.findIndex(x=>x.id===id);if(idx>=0)state.sessions[idx]=row;else state.sessions.push(row);
 
   state.meta.last_result=row.result;
   state.meta.next_note=row.next||state.meta.next_note;
 
-  /* 새 회차를 저장할 때만 공식 캠페인 흐름에 맞춰 '다음 게임 준비' 값을 갱신 */
+  /* 새 회차를 저장한 경우 월/도전 흐름만 갱신 */
   if(!old&&row.result){
-    const usedRation=Math.max(0,Math.min(10,+row.rationing||0));
     if(row.result==='WIN'){
-      state.meta.rationing=Math.max(0,usedRation-2);
       state.meta.current_month=nextCampaignMonth(row.month);
       state.meta.attempt=1;
       resetObjectiveChecks(true);
     }else{
-      state.meta.rationing=Math.min(10,usedRation+2);
       if((+row.attempt||1)<2){
         state.meta.current_month=row.month;
         state.meta.attempt=2;
@@ -740,16 +985,50 @@ async function saveSession(){
   }else if(!old){
     state.meta.current_month=row.month;
     state.meta.attempt=row.attempt;
-    state.meta.rationing=row.rationing;
+    state.meta.connected_cities=row.connected_cities;
   }
 
   await saveState();
   try{await syncPhotos(id)}catch(e){console.error(e);return alert(e.message||'사진 저장 오류')}
   $('#sessionModal').classList.add('hidden');render();
 }
+
+const S2_ACCESS_CODE_KEY='pandemicLegacyS2Code';
+function rememberS2AccessCode(code){
+  try{localStorage.setItem(S2_ACCESS_CODE_KEY,code)}catch(e){}
+  try{sessionStorage.setItem(S2_ACCESS_CODE_KEY,code)}catch(e){}
+}
+function forgetS2AccessCode(){
+  try{localStorage.removeItem(S2_ACCESS_CODE_KEY)}catch(e){}
+  try{sessionStorage.removeItem(S2_ACCESS_CODE_KEY)}catch(e){}
+}
+function rememberedS2AccessCode(){
+  try{return localStorage.getItem(S2_ACCESS_CODE_KEY)||sessionStorage.getItem(S2_ACCESS_CODE_KEY)||''}catch(e){
+    try{return sessionStorage.getItem(S2_ACCESS_CODE_KEY)||''}catch(e2){return ''}
+  }
+}
+async function changePassword(){
+  const next=$('#newPassword').value.trim(),confirmNext=$('#newPasswordConfirm').value.trim();
+  $('#passwordError').textContent='';
+  if(next.length<4){$('#passwordError').textContent='비밀번호는 4자 이상으로 입력해주세요.';return;}
+  if(next!==confirmNext){$('#passwordError').textContent='새 비밀번호가 서로 달라요.';return;}
+  $('#savePassword').disabled=true;$('#savePassword').textContent='변경 중...';
+  const {error}=await db.rpc('change_pandemic_legacy_s2_code',{p_current_code:accessCode||null,p_new_code:next});
+  $('#savePassword').disabled=false;$('#savePassword').textContent='변경';
+  if(error){
+    console.error(error);
+    $('#passwordError').textContent=error.code==='P0001'?'현재 비밀번호 확인에 실패했어요.':'비밀번호 변경 설정을 확인해주세요.';
+    return;
+  }
+  accessCode=next;
+  rememberS2AccessCode(next);
+  $('#passwordModal').classList.add('hidden');
+  $('#newPassword').value='';$('#newPasswordConfirm').value='';
+}
+
 async function saveState(){if(!canEdit)return;$('#saveState').textContent='저장 중...';let error;if(isAdmin)({error}=await db.from('pandemic_legacy_s2_state').update({data:state,updated_at:new Date().toISOString()}).eq('id',1));else({error}=await db.rpc('save_pandemic_legacy_s2',{p_code:accessCode,p_data:state}));$('#saveState').textContent=error?'저장 실패':'자동 저장됨';if(error)console.error(error);setTimeout(()=>{if($('#saveState').textContent==='자동 저장됨')$('#saveState').textContent=''},1000)}
 function queueSave(){clearTimeout(saveTimer);$('#saveState').textContent='입력 중...';saveTimer=setTimeout(saveState,650)}
-$('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#changePasswordBtn').onclick=()=>{$('#passwordError').textContent='';$('#newPassword').value='';$('#newPasswordConfirm').value='';$('#passwordModal').classList.remove('hidden');setTimeout(()=>$('#newPassword').focus(),30)};$('#cancelPassword').onclick=()=>$('#passwordModal').classList.add('hidden');$('#savePassword').onclick=changePassword;$('#newPasswordConfirm').onkeydown=e=>{if(e.key==='Enter')changePassword()};$('#openInfection').onclick=()=>{$('#infectionModal').classList.remove('hidden');renderTrackerSummary();renderPlayerDeck();renderInfection()};$('#closeInfection').onclick=()=>$('#infectionModal').classList.add('hidden');$('#epidemicBtn').onclick=openEpidemic;$('#reshuffleDeckBtn').onclick=reshuffleExhaustedDeck;$('#cancelEpidemic').onclick=()=>$('#epidemicModal').classList.add('hidden');$('#manageCitiesBtn').onclick=()=>{$('#manageModal').classList.remove('hidden');renderManage()};$('#closeManage').onclick=()=>$('#manageModal').classList.add('hidden');$('#addCityBtn').onclick=addCity;$('#undoInfectionBtn').onclick=undoTracker;$('#resetInfectionBtn').onclick=resetInfectionGame;$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;$('#sPhotos').onchange=async e=>{const files=[...e.target.files],room=3-(modalExisting.filter(p=>!modalDeleted.includes(p.id)).length+modalPending.length);for(const f of files.slice(0,Math.max(0,room)))try{modalPending.push({data_url:await compressImage(f)})}catch(err){console.error(err)}e.target.value='';renderPhotoPreview()};$('#lightboxClose').onclick=closeLightbox;$('#lightboxPrev').onclick=()=>{lightboxIndex--;renderLightbox()};$('#lightboxNext').onclick=()=>{lightboxIndex++;renderLightbox()};document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#passwordModal').classList.contains('hidden'))return $('#passwordModal').classList.add('hidden');if(!$('#lightbox').classList.contains('hidden'))return closeLightbox();if(!$('#manageModal').classList.contains('hidden'))return $('#manageModal').classList.add('hidden');if(!$('#epidemicModal').classList.contains('hidden'))return $('#epidemicModal').classList.add('hidden');if(!$('#infectionModal').classList.contains('hidden'))return $('#infectionModal').classList.add('hidden');if(!$('#sessionModal').classList.contains('hidden'))return $('#sessionModal').classList.add('hidden')}});boot();
+$('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#changePasswordBtn').onclick=()=>{$('#passwordError').textContent='';$('#newPassword').value='';$('#newPasswordConfirm').value='';$('#passwordModal').classList.remove('hidden');setTimeout(()=>$('#newPassword').focus(),30)};$('#cancelPassword').onclick=()=>$('#passwordModal').classList.add('hidden');$('#savePassword').onclick=changePassword;$('#newPasswordConfirm').onkeydown=e=>{if(e.key==='Enter')changePassword()};$('#closeInfection').onclick=()=>$('#infectionModal').classList.add('hidden');$('#epidemicBtn').onclick=openEpidemic;$('#reshuffleDeckBtn').onclick=reshuffleExhaustedDeck;$('#cancelEpidemic').onclick=()=>$('#epidemicModal').classList.add('hidden');$('#manageCitiesBtn').onclick=()=>{$('#manageModal').classList.remove('hidden');renderManage()};$('#closeManage').onclick=()=>$('#manageModal').classList.add('hidden');$('#addCityBtn').onclick=addCity;$('#undoInfectionBtn').onclick=undoTracker;$('#resetInfectionBtn').onclick=resetInfectionGame;$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;$('#sPhotos').onchange=async e=>{const files=[...e.target.files],room=3-(modalExisting.filter(p=>!modalDeleted.includes(p.id)).length+modalPending.length);for(const f of files.slice(0,Math.max(0,room)))try{modalPending.push({data_url:await compressImage(f)})}catch(err){console.error(err)}e.target.value='';renderPhotoPreview()};$('#lightboxClose').onclick=closeLightbox;$('#lightboxPrev').onclick=()=>{lightboxIndex--;renderLightbox()};$('#lightboxNext').onclick=()=>{lightboxIndex++;renderLightbox()};document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#passwordModal').classList.contains('hidden'))return $('#passwordModal').classList.add('hidden');if(!$('#lightbox').classList.contains('hidden'))return closeLightbox();if(!$('#manageModal').classList.contains('hidden'))return $('#manageModal').classList.add('hidden');if(!$('#epidemicModal').classList.contains('hidden'))return $('#epidemicModal').classList.add('hidden');if(!$('#infectionModal').classList.contains('hidden'))return $('#infectionModal').classList.add('hidden');if(!$('#sessionModal').classList.contains('hidden'))return $('#sessionModal').classList.add('hidden')}});
 
 /* S2 Excel-style tracker event wiring */
 $('#openInfection').onclick=openS2PhaseTracker;
@@ -766,6 +1045,16 @@ $('#savePhaseCityBtn').onclick=saveS2PhaseCity;
 $('#deletePhaseCityBtn').onclick=deleteS2PhaseCity;
 $('#phaseCardType').onchange=syncS2PhaseColorUi;
 $('#s2BottomDrawBtn').onclick=openS2BottomDraw;
+
+$('#openWorldStatus').onclick=openWorldStatus;
+$('#closeWorldStatus').onclick=closeWorldStatus;
+$('#addWorldCity').onclick=()=>openWorldCityEditor();
+$('#closeWorldEditor').onclick=closeWorldCityEditor;
+$('#cancelWorldCity').onclick=closeWorldCityEditor;
+$('#saveWorldCity').onclick=saveWorldCity;
+$('#deleteWorldCity').onclick=deleteWorldCity;
+
+boot();
 </script>
 </body>
 </html>
