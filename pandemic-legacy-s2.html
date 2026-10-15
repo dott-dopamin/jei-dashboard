@@ -227,16 +227,25 @@ html{background:#e7ece8!important}
 .phase-city-name{display:flex;align-items:center;justify-content:space-between;gap:7px}
 .phase-city-name small{font-size:8px;color:#708184;font-weight:800}
 .phase-card-edit{border:1px solid #a8b9b5;border-radius:7px;background:#f3f4ed;color:#375255;padding:6px 8px;font-size:9px;font-weight:900;cursor:pointer}
-.phase-risk-wrap,.phase-draw-wrap{border:1px solid #a8b9b5;border-radius:10px;background:#f8f8f1;padding:11px;margin-top:10px}
-.phase-risk-head,.phase-draw-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:9px}
-.phase-risk-head>div,.phase-draw-head>div{display:flex;flex-direction:column;gap:3px}.phase-risk-head b,.phase-draw-head b{font-size:12px;color:#2d4b4f}.phase-risk-head span,.phase-draw-head span{font-size:9px;color:#77898b}.phase-risk-head label{font-size:9px;color:#6f8284;font-weight:850}.phase-risk-head select{margin-left:5px;border:1px solid #9eb2ad;border-radius:7px;background:#fffef8;padding:6px 24px 6px 7px;font-weight:850;color:#314d51}
-.phase-probability-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-.phase-probability-item{border:1px solid #d2dcda;border-radius:8px;background:#fffef9;padding:8px 9px;min-width:0}
-.phase-probability-item .name{font-size:10px;font-weight:900;color:#2c464a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.phase-probability-item .meta{margin-top:4px;display:flex;justify-content:space-between;gap:6px;font-size:9px;color:#78898b}.phase-probability-item strong{font-size:12px;color:#b6533d}
-.phase-draw-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
-.phase-draw-card{border:1px solid #c5cfcc;border-radius:8px;padding:9px 8px;text-align:left;cursor:pointer;font-weight:900;font-size:10px;color:#273d40;min-width:0;transition:.12s ease}.phase-draw-card span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.phase-draw-card small{display:block;margin-top:4px;font-size:8px;color:#738587;font-weight:800}.phase-draw-card.blue{background:#eaf4ff;border-color:#b8d7ef}.phase-draw-card.yellow{background:#fff6d6;border-color:#ead886}.phase-draw-card.black{background:#e9edef;border-color:#bbc2c6}.phase-draw-card.red{background:#fdeaea;border-color:#efb7b7}.phase-draw-card.none{background:#f2f3ef;border-color:#cdd2cc}.phase-draw-card.selected{box-shadow:inset 0 0 0 2px #2f7277,0 0 0 1px #2f7277}.phase-draw-card:disabled{opacity:.35;cursor:not-allowed}
 @media(max-width:980px){.v86-editor-grid{grid-template-columns:repeat(3,1fr)!important}.phase-probability-list{grid-template-columns:repeat(2,minmax(0,1fr))}.phase-draw-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:600px){.v86-editor-grid{grid-template-columns:1fr 1fr!important}.phase-probability-list{grid-template-columns:1fr 1fr}.phase-draw-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.phase-risk-head,.phase-draw-head{align-items:flex-start;flex-direction:column}}
+
+
+/* ===== V87 S2 tracker readability + integrated probability ===== */
+.phase-tracker-dialog{font-size:12px}
+.phase-topbar h3{font-size:20px!important}.phase-topbar p{font-size:12px!important;line-height:1.5}
+.phase-current>span{font-size:12px}.phase-current select{font-size:12px;padding:9px 30px 9px 10px}
+.phase-btn{font-size:11px;padding:9px 11px}.phase-btn.epidemic-check{background:#b45f48;border-color:#a95540;color:#fff}.phase-btn.epidemic-check:hover{background:#9f513d}
+.infection-draw-count-label{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:900;color:#5f7679}.infection-draw-count-label select{border:1px solid #9eb2ad;border-radius:8px;background:#fffef8;color:#284145;padding:8px 26px 8px 8px;font-size:11px;font-weight:900}
+.phase-summary-card span{font-size:11px}.phase-summary-card strong{font-size:21px}
+.phase-legend{font-size:11px}.phase-legend small{font-size:10px}
+.phase-editor-grid label{font-size:11px}.phase-editor-grid input,.phase-editor-grid select{font-size:12px;padding:8px 9px}.phase-editor-error{font-size:11px}
+.v86-phase-table{min-width:1040px!important}.phase-table th,.phase-table td{font-size:12px;padding:9px 7px}.phase-table th{font-size:11px}.phase-total,.phase-count{font-size:13px}.phase-remaining{font-size:13px}.phase-card-edit{font-size:10px;padding:7px 9px}
+.v86-phase-table th:nth-child(1),.v86-phase-table td:nth-child(1){width:285px;min-width:285px}
+.phase-city-name{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px}.phase-city-name .city-main{min-width:0}.phase-city-name .city-title{display:block;font-size:13px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.phase-city-name .city-sub{display:block;margin-top:3px;font-size:9px;color:#6f8285;font-weight:800}.phase-city-prob{display:flex;flex-direction:column;align-items:flex-end;gap:1px;white-space:nowrap}.phase-city-prob span{font-size:8px;color:#78898b;font-weight:800}.phase-city-prob strong{font-size:12px;color:#b6533d}.phase-city-cell.quick-selected .phase-city-prob strong{color:#246d72}
+.phase-help{font-size:11px;line-height:1.65}
+.s2-bottom-modal{width:min(900px,100%)!important}.bottom-check-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.bottom-check-head h3{font-size:20px;margin:0 0 5px}.bottom-check-summary{margin:12px 0 9px;font-size:11px;color:#637a7d;font-weight:800}.s2-bottom-card-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;max-height:62vh;overflow:auto;-webkit-overflow-scrolling:touch}.s2-bottom-card{border:1px solid #b8c5c1;border-radius:9px;padding:11px 10px;text-align:left;cursor:pointer;color:#294246;font-weight:900}.s2-bottom-card .name{font-size:12px}.s2-bottom-card .meta{font-size:9px;margin-top:4px;color:#6f8285;font-weight:800}.s2-bottom-card.blue{background:#eaf4ff;border-color:#b8d7ef}.s2-bottom-card.yellow{background:#fff6d6;border-color:#ead886}.s2-bottom-card.black{background:#e9edef;border-color:#bbc2c6}.s2-bottom-card.red{background:#fdeaea;border-color:#efb7b7}.s2-bottom-card.none{background:#f2f3ef;border-color:#cdd2cc}.s2-bottom-card:disabled{opacity:.35;cursor:not-allowed}
+@media(max-width:760px){.s2-bottom-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.v86-phase-table th:nth-child(1),.v86-phase-table td:nth-child(1){width:245px;min-width:245px}.phase-table th,.phase-table td{font-size:11px}}
 
 </style>
 </head>
@@ -262,27 +271,23 @@ html{background:#e7ece8!important}
   <div class="infection-topbar phase-topbar">
     <div>
       <h3>감염 카드 더미 트래커</h3>
-      <p>첨부한 엑셀 트래커 구조를 웹에 맞게 재구성했어요. 도시별 영구 카드 수 · Phase 1~5 · 현재 남은 장수를 한 화면에서 관리합니다.</p>
+      <p>첨부한 엑셀 트래커 구조를 웹에 맞게 재구성했어요. 도시별 영구 카드 수 · 감염 차수 1~5 · 현재 남은 장수와 다음 감염 확률을 한 화면에서 관리합니다.</p>
     </div>
     <button id="closeInfection" class="ghost" type="button">닫기</button>
   </div>
 
   <div class="phase-toolbar">
     <div class="phase-current">
-      <span>현재 Phase</span>
-      <select id="phaseSelect">
-        <option value="1">Phase 1</option>
-        <option value="2">Phase 2</option>
-        <option value="3">Phase 3</option>
-        <option value="4">Phase 4</option>
-        <option value="5">Phase 5</option>
-      </select>
-      <button id="nextPhaseBtn" class="phase-btn strong" type="button">다음 Phase →</button>
+      <span>현재 감염 차수</span>
+      <select id="phaseSelect"><option value="1">1차</option><option value="2">2차</option><option value="3">3차</option><option value="4">4차</option><option value="5">5차</option></select>
+      <button id="nextPhaseBtn" class="phase-btn strong" type="button">다음 감염 차수 →</button>
+      <label class="infection-draw-count-label">다음 감염 <select id="phaseDrawCount"><option value="2">2장</option><option value="3">3장</option><option value="4">4장</option><option value="5">5장</option></select></label>
     </div>
     <div class="phase-toolbar-actions">
-      <button id="addPhaseCityBtn" class="phase-btn" type="button">+ 도시 추가</button>
+      <button id="s2BottomDrawBtn" class="phase-btn epidemic-check" type="button">유행병 발생 · 덱 하단 체크</button>
+      <button id="addPhaseCityBtn" class="phase-btn" type="button">+ 도시/카드 추가</button>
       <button id="undoPhaseBtn" class="phase-btn" type="button">↶ 되돌리기</button>
-      <button id="clearCurrentPhaseBtn" class="phase-btn" type="button">현재 Phase 비우기</button>
+      <button id="clearCurrentPhaseBtn" class="phase-btn" type="button">현재 감염 차수 비우기</button>
       <button id="resetPhaseTrackerBtn" class="phase-btn danger" type="button">기록 초기화</button>
     </div>
   </div>
@@ -295,7 +300,7 @@ html{background:#e7ece8!important}
     <span class="legend-swatch black">블랙</span>
     <span class="legend-swatch red">레드</span>
     <span class="legend-swatch none">기타 카드</span>
-    <small>도시/카드 영역을 클릭하면 현재 Phase에 1장 체크되고, 다시 클릭하면 취소됩니다.</small>
+    <small>도시/카드명을 클릭하면 현재 감염 차수에 1장이 기록되고, 다시 클릭하면 취소됩니다.</small>
   </div>
 
   <div id="phaseCityEditor" class="phase-city-editor hidden">
@@ -309,11 +314,11 @@ html{background:#e7ece8!important}
       <label>카드 종류<select id="phaseCardType"><option value="city">도시 카드</option><option value="other">기타 카드</option></select></label>
       <label id="phaseColorLabel">색상<select id="phaseCityColor"><option value="blue">블루</option><option value="yellow">옐로우</option><option value="black">블랙</option><option value="red">레드</option></select></label>
       <label>총 카드 수<input id="phaseCityTotal" type="number" min="0" value="1"></label>
-      <label>Phase 1<input id="phaseCityP1" type="number" min="0" value="0"></label>
-      <label>Phase 2<input id="phaseCityP2" type="number" min="0" value="0"></label>
-      <label>Phase 3<input id="phaseCityP3" type="number" min="0" value="0"></label>
-      <label>Phase 4<input id="phaseCityP4" type="number" min="0" value="0"></label>
-      <label>Phase 5<input id="phaseCityP5" type="number" min="0" value="0"></label>
+      <label>1차<input id="phaseCityP1" type="number" min="0" value="0"></label>
+      <label>2차<input id="phaseCityP2" type="number" min="0" value="0"></label>
+      <label>3차<input id="phaseCityP3" type="number" min="0" value="0"></label>
+      <label>4차<input id="phaseCityP4" type="number" min="0" value="0"></label>
+      <label>5차<input id="phaseCityP5" type="number" min="0" value="0"></label>
     </div>
     <div id="phaseEditorError" class="phase-editor-error"></div>
     <div class="phase-editor-actions">
@@ -329,11 +334,11 @@ html{background:#e7ece8!important}
         <tr id="phaseSingleHead">
           <th class="phase-city-sticky">도시 / 카드</th>
           <th>총 카드</th>
-          <th data-phase-head="1">Phase 1</th>
-          <th data-phase-head="2">Phase 2</th>
-          <th data-phase-head="3">Phase 3</th>
-          <th data-phase-head="4">Phase 4</th>
-          <th data-phase-head="5">Phase 5</th>
+          <th data-phase-head="1">1차</th>
+          <th data-phase-head="2">2차</th>
+          <th data-phase-head="3">3차</th>
+          <th data-phase-head="4">4차</th>
+          <th data-phase-head="5">5차</th>
           <th>현재 남음</th>
           <th>수정</th>
         </tr>
@@ -343,31 +348,10 @@ html{background:#e7ece8!important}
     </table>
   </div>
 
-  <div class="phase-risk-wrap">
-    <div class="phase-risk-head">
-      <div>
-        <b>다음 감염 후보 확률</b>
-        <span>현재 남은 카드 전체 기준 · 다음 감염에서 최소 1장 나올 확률</span>
-      </div>
-      <label>다음 감염 장수
-        <select id="phaseDrawCount"><option value="2">2장</option><option value="3">3장</option><option value="4">4장</option><option value="5">5장</option></select>
-      </label>
-    </div>
-    <div id="phaseProbabilityList" class="phase-probability-list"></div>
-  </div>
-
-  <div class="phase-draw-wrap">
-    <div class="phase-draw-head">
-      <div><b>감염 카드 체크</b><span>카드가 나오면 아래 카드명을 눌러 체크 · 다시 누르면 취소</span></div>
-      <span id="phaseSelectedCount"></span>
-    </div>
-    <div id="phaseDrawGrid" class="phase-draw-grid"></div>
-  </div>
-
   <div class="phase-help">
-    <b>사용법</b> · 표의 도시/카드 영역 또는 아래 감염 카드 체크 영역을 누르면 현재 Phase에 1장이 기록됩니다.
-    같은 카드를 다시 누르면 그 1장이 취소됩니다. 여러 장을 직접 보정해야 할 때는 <b>수정</b>에서 Phase별 숫자를 입력하세요.
-    도시 카드는 블루·옐로우·블랙·레드 색상으로 구분하고, 할로우맨처럼 색상이 없는 카드는 <b>기타 카드</b>로 추가하면 됩니다.
+    <b>사용법</b> · 표의 도시/카드명을 누르면 현재 감염 차수에 1장이 기록되고, 다시 누르면 그 기록이 취소됩니다.
+    도시명 오른쪽에는 <b>다음 감염 후보 확률</b>이 함께 표시됩니다. 같은 도시가 같은 차수에 2장 이상 나온 경우에는 <b>수정</b>에서 직접 보정하세요.
+    유행병 카드가 나오면 <b>유행병 발생 · 덱 하단 체크</b>를 눌러 실제로 덱 맨 아래에서 나온 카드를 선택하세요.
   </div>
 
   <!-- 기존 S2 트래커 코드가 남아 있어도 JS 초기화가 깨지지 않도록 호환용 요소만 숨겨둠 -->
@@ -382,7 +366,11 @@ html{background:#e7ece8!important}
   </div>
 </div></div>
 
-<div id="epidemicModal" class="modal-bg hidden"><div class="modal" style="width:min(700px,100%)"><h3>유행병 · 감염덱 맨 아래 카드</h3><div class="section-desc">실제로 맨 아래에서 뽑힌 도시를 선택하면, 그 카드와 현재 버린 더미 전체를 섞어 새로운 그룹 1로 올립니다.</div><div id="bottomCityGrid" class="bottom-city-grid" style="margin-top:12px"></div><div class="modal-actions"><button id="cancelEpidemic" class="ghost" type="button">취소</button></div></div></div>
+<div id="epidemicModal" class="modal-bg hidden"><div class="modal s2-bottom-modal">
+  <div class="bottom-check-head"><div><h3>유행병 발생 · 덱 하단 카드 체크</h3><div class="section-desc">실제로 감염덱 맨 아래에서 나온 카드를 선택하세요. 선택한 카드는 현재 감염 차수에 1장 기록되고, Intensify 처리 기준으로 다음 감염 차수로 이동합니다.</div></div><button id="cancelEpidemic" class="ghost" type="button">닫기</button></div>
+  <div id="s2BottomSummary" class="bottom-check-summary"></div>
+  <div id="bottomCityGrid" class="s2-bottom-card-grid"></div>
+</div></div>
 
 <div id="manageModal" class="modal-bg hidden"><div class="modal manage-modal"><h3>도시 / 감염 카드 편집</h3><div class="section-desc">캠페인 진행 중 공개된 도시는 직접 추가할 수 있고, 도시별 카드도 <b>덱 / 버린 더미 / 게임 종료 영역</b> 사이에서 직접 조정할 수 있어요. 실수 보정이나 카드 영구 제거 같은 상황에 사용하세요.</div><div class="manage-legend"><span>덱→버림 : 덱에 있는 카드 1장을 버린 더미로 이동</span><span>버림→덱 : 버린 카드 1장을 그룹 1로 복구</span><span>버림→종료 : 카드 1장을 이번 게임에서 제외</span></div><div id="manageList" class="manage-list"></div><div class="manage-add-city"><div class="form-grid"><div class="field"><label>새 도시명</label><input id="newCityName" placeholder="예: 런던"></div><div class="field"><label>색상</label><select id="newCityColor"><option value="blue">블루</option><option value="black">블랙</option><option value="yellow">옐로우</option><option value="red">레드</option><option value="other">기타</option></select></div><div class="field"><label>감염 카드 장수</label><input id="newCityCopies" type="number" min="0" value="1"></div><div class="field" style="justify-content:end"><label>&nbsp;</label><button id="addCityBtn" class="primary" type="button">+ 도시 추가</button></div></div></div><div class="modal-actions"><button id="closeManage" class="ghost" type="button">닫기</button></div></div></div>
 
@@ -422,21 +410,22 @@ function snapshotS2Phase(){const t=s2PhaseTracker();t.history.push(JSON.stringif
 function saveAndRenderS2Phase(){renderS2PhaseTracker();queueSave();}
 function formatS2Pct(v){return `${Math.round(v*1000)/10}%`}
 function s2AtLeastOneProbability(N,k,n){N=+N||0;k=+k||0;n=Math.max(0,Math.min(+n||0,N));if(N<=0||k<=0||n<=0)return 0;if(N-k<n)return 1;let noHit=1;for(let i=0;i<n;i++)noHit*=(N-k-i)/(N-i);return 1-noHit;}
-function renderS2PhaseProbabilities(sortedCities){const t=s2PhaseTracker(),N=sortedCities.reduce((s,c)=>s+s2PhaseRemaining(c),0),n=Math.min(t.draw_count,N);const rows=sortedCities.map(c=>({c,k:s2PhaseRemaining(c)})).filter(x=>x.k>0).map(x=>({...x,p:s2AtLeastOneProbability(N,x.k,n)})).sort((a,b)=>b.p-a.p||b.k-a.k||s2KoCollator.compare(a.c.name,b.c.name));$('#phaseProbabilityList').innerHTML=rows.length?rows.map(x=>`<div class="phase-probability-item"><div class="name">${esc(x.c.name)}</div><div class="meta"><span>남음 ${x.k}장</span><strong>${formatS2Pct(x.p)}</strong></div></div>`).join(''):'<div class="probability-empty">현재 남은 카드가 없어요.</div>';$('#phaseDrawCount').value=String(t.draw_count);}
-function renderS2DrawGrid(sortedCities){const t=s2PhaseTracker(),phase=t.current_phase;const selected=sortedCities.filter(c=>t.quick_selected[s2QuickKey(phase,c.id)]).length;$('#phaseSelectedCount').textContent=`현재 Phase 체크 ${selected}개`;$('#phaseDrawGrid').innerHTML=sortedCities.map(c=>{const key=s2QuickKey(phase,c.id),sel=!!t.quick_selected[key],remaining=s2PhaseRemaining(c);return`<button type="button" class="phase-draw-card ${c.color} ${sel?'selected':''}" data-toggle-card="${c.id}" ${(!sel&&remaining<=0)?'disabled':''}><span>${esc(c.name)}</span><small>${c.type==='other'?'기타 카드':({blue:'블루',yellow:'옐로우',black:'블랙',red:'레드'}[c.color]||'')} · 남음 ${remaining}장</small></button>`}).join('');$('#phaseDrawGrid').querySelectorAll('[data-toggle-card]').forEach(b=>b.onclick=()=>toggleS2PhaseCard(b.dataset.toggleCard));}
-function renderS2PhaseTracker(){const t=s2PhaseTracker(),phase=t.current_phase;$('#phaseSelect').value=String(phase);const sorted=sortS2PhaseCities(t.cities),total=sorted.reduce((s,c)=>s+(+c.total||0),0),assigned=sorted.reduce((s,c)=>s+s2PhaseAssigned(c),0),remain=Math.max(0,total-assigned),cityCount=sorted.filter(c=>c.type!=='other').length;$('#phaseSummary').innerHTML=`<div class="phase-summary-card"><span>현재 Phase</span><strong>${phase}</strong></div><div class="phase-summary-card"><span>등록 도시</span><strong>${cityCount}</strong></div><div class="phase-summary-card"><span>총 카드</span><strong>${total}</strong></div><div class="phase-summary-card"><span>현재 남음</span><strong>${remain}</strong></div>`;document.querySelectorAll('[data-phase-head]').forEach(th=>th.classList.toggle('phase-head-active',+th.dataset.phaseHead===phase));$('#phaseTableBody').innerHTML=sorted.map(c=>{const assignedCity=s2PhaseAssigned(c),remaining=Math.max(0,c.total-assignedCity),over=Math.max(0,assignedCity-c.total),key=s2QuickKey(phase,c.id),sel=!!t.quick_selected[key],phaseCells=c.phases.map((v,i)=>`<td class="phase-count ${i+1===phase?'active':''}">${v||0}</td>`).join('');return`<tr><td class="phase-city-cell phase-city-${c.color} ${sel?'quick-selected':''}" data-toggle-row="${c.id}" title="클릭하면 현재 Phase 체크 / 다시 클릭하면 취소"><div class="phase-city-name"><span>${esc(c.name)}</span><small>${c.type==='other'?'기타 카드':''}</small></div></td><td class="phase-total">${c.total}</td>${phaseCells}<td class="phase-remaining ${remaining===0?'zero':''}" title="${over?`Phase 합계가 총 카드 수보다 ${over}장 많아요.`:''}">${over?`초과 +${over}`:remaining}</td><td><button class="phase-card-edit" type="button" data-edit-city="${c.id}">수정</button></td></tr>`}).join('');const phaseTotals=Array.from({length:S2_PHASE_COUNT},(_,p)=>sorted.reduce((s,c)=>s+(+c.phases[p]||0),0));$('#phaseTableFoot').innerHTML=`<tr><td class="phase-city-sticky">총계</td><td>${total}</td>${phaseTotals.map((n,i)=>`<td class="${i+1===phase?'phase-head-active':''}">${n}</td>`).join('')}<td>${remain}</td><td></td></tr>`;$('#phaseTableBody').querySelectorAll('[data-toggle-row]').forEach(cell=>cell.onclick=e=>{if(e.target.closest('[data-edit-city]'))return;toggleS2PhaseCard(cell.dataset.toggleRow)});$('#phaseTableBody').querySelectorAll('[data-edit-city]').forEach(b=>b.onclick=e=>{e.stopPropagation();openS2PhaseCityEditor(b.dataset.editCity)});renderS2PhaseProbabilities(sorted);renderS2DrawGrid(sorted);}
+function s2PhaseProbabilityMap(sortedCities){const t=s2PhaseTracker(),N=sortedCities.reduce((s,c)=>s+s2PhaseRemaining(c),0),n=Math.min(t.draw_count,N),m={};sortedCities.forEach(c=>{const k=s2PhaseRemaining(c);m[c.id]={k,p:k>0?s2AtLeastOneProbability(N,k,n):0,N,n};});return m;}
+function renderS2PhaseTracker(){const t=s2PhaseTracker(),phase=t.current_phase;$('#phaseSelect').value=String(phase);const drawSel=$('#phaseDrawCount');if(drawSel)drawSel.value=String(t.draw_count);const sorted=sortS2PhaseCities(t.cities),total=sorted.reduce((s,c)=>s+(+c.total||0),0),assigned=sorted.reduce((s,c)=>s+s2PhaseAssigned(c),0),remain=Math.max(0,total-assigned),cityCount=sorted.filter(c=>c.type!=='other').length,probMap=s2PhaseProbabilityMap(sorted);$('#phaseSummary').innerHTML=`<div class="phase-summary-card"><span>현재 감염 차수</span><strong>${phase}차</strong></div><div class="phase-summary-card"><span>등록 도시</span><strong>${cityCount}</strong></div><div class="phase-summary-card"><span>총 카드</span><strong>${total}</strong></div><div class="phase-summary-card"><span>현재 남음</span><strong>${remain}</strong></div>`;document.querySelectorAll('[data-phase-head]').forEach(th=>th.classList.toggle('phase-head-active',+th.dataset.phaseHead===phase));$('#phaseTableBody').innerHTML=sorted.map(c=>{const assignedCity=s2PhaseAssigned(c),remaining=Math.max(0,c.total-assignedCity),over=Math.max(0,assignedCity-c.total),key=s2QuickKey(phase,c.id),sel=!!t.quick_selected[key],phaseCells=c.phases.map((v,i)=>`<td class="phase-count ${i+1===phase?'active':''}">${v||0}</td>`).join(''),pr=probMap[c.id]||{p:0,n:t.draw_count};return`<tr><td class="phase-city-cell phase-city-${c.color} ${sel?'quick-selected':''}" data-toggle-row="${c.id}" title="클릭하면 현재 감염 차수에 1장 기록 / 다시 클릭하면 취소"><div class="phase-city-name"><div class="city-main"><span class="city-title">${esc(c.name)}</span><span class="city-sub">${c.type==='other'?'기타 카드 · ':''}현재 남음 ${remaining}장</span></div><div class="phase-city-prob"><span>다음 ${pr.n}장</span><strong>${formatS2Pct(pr.p)}</strong></div></div></td><td class="phase-total">${c.total}</td>${phaseCells}<td class="phase-remaining ${remaining===0?'zero':''}" title="${over?`감염 차수 합계가 총 카드 수보다 ${over}장 많아요.`:''}">${over?`초과 +${over}`:remaining}</td><td><button class="phase-card-edit" type="button" data-edit-city="${c.id}">수정</button></td></tr>`}).join('');const phaseTotals=Array.from({length:S2_PHASE_COUNT},(_,p)=>sorted.reduce((s,c)=>s+(+c.phases[p]||0),0));$('#phaseTableFoot').innerHTML=`<tr><td class="phase-city-sticky">총계</td><td>${total}</td>${phaseTotals.map((n,i)=>`<td class="${i+1===phase?'phase-head-active':''}">${n}</td>`).join('')}<td>${remain}</td><td></td></tr>`;$('#phaseTableBody').querySelectorAll('[data-toggle-row]').forEach(cell=>cell.onclick=e=>{if(e.target.closest('[data-edit-city]'))return;toggleS2PhaseCard(cell.dataset.toggleRow)});$('#phaseTableBody').querySelectorAll('[data-edit-city]').forEach(b=>b.onclick=e=>{e.stopPropagation();openS2PhaseCityEditor(b.dataset.editCity)});}
 function toggleS2PhaseCard(id){const t=s2PhaseTracker(),c=t.cities.find(x=>x.id===id);if(!c)return;const p=t.current_phase-1,key=s2QuickKey(t.current_phase,id),sel=!!t.quick_selected[key];if(!sel&&s2PhaseRemaining(c)<=0)return; snapshotS2Phase(); if(sel){c.phases[p]=Math.max(0,(c.phases[p]||0)-1);delete t.quick_selected[key];}else{c.phases[p]=(c.phases[p]||0)+1;t.quick_selected[key]=true;}saveAndRenderS2Phase();}
 function changeS2Phase(v){const t=s2PhaseTracker();t.current_phase=Math.max(1,Math.min(S2_PHASE_COUNT,+v||1));saveAndRenderS2Phase();}
-function nextS2Phase(){const t=s2PhaseTracker();if(t.current_phase>=S2_PHASE_COUNT)return alert('Phase 5까지 사용하도록 엑셀 구조에 맞춰두었어요.');snapshotS2Phase();t.current_phase++;saveAndRenderS2Phase();}
+function nextS2Phase(){const t=s2PhaseTracker();if(t.current_phase>=S2_PHASE_COUNT)return alert('감염 차수는 5차까지 사용할 수 있어요.');snapshotS2Phase();t.current_phase++;saveAndRenderS2Phase();}
 function undoS2Phase(){const t=s2PhaseTracker();if(!t.history.length)return alert('되돌릴 기록이 없어요.');const prev=JSON.parse(t.history.pop());t.current_phase=prev.current_phase;t.draw_count=prev.draw_count||2;t.cities=prev.cities;t.quick_selected=prev.quick_selected||{};saveAndRenderS2Phase();}
-function clearCurrentS2Phase(){const t=s2PhaseTracker(),p=t.current_phase-1;if(!confirm(`Phase ${t.current_phase} 기록만 비울까요?`))return;snapshotS2Phase();t.cities.forEach(c=>c.phases[p]=0);Object.keys(t.quick_selected).forEach(k=>{if(k.startsWith(`${t.current_phase}:`))delete t.quick_selected[k]});saveAndRenderS2Phase();}
-function resetS2PhaseTracker(){if(!confirm('Phase 1~5 기록을 모두 초기화할까요? 카드명·색상·총 카드 수는 유지됩니다.'))return;const t=s2PhaseTracker();snapshotS2Phase();t.current_phase=1;t.cities.forEach(c=>c.phases=Array(S2_PHASE_COUNT).fill(0));t.quick_selected={};saveAndRenderS2Phase();}
+function clearCurrentS2Phase(){const t=s2PhaseTracker(),p=t.current_phase-1;if(!confirm(`현재 감염 ${t.current_phase}차 기록만 비울까요?`))return;snapshotS2Phase();t.cities.forEach(c=>c.phases[p]=0);Object.keys(t.quick_selected).forEach(k=>{if(k.startsWith(`${t.current_phase}:`))delete t.quick_selected[k]});saveAndRenderS2Phase();}
+function resetS2PhaseTracker(){if(!confirm('감염 1~5차 기록을 모두 초기화할까요? 카드명·색상·총 카드 수는 유지됩니다.'))return;const t=s2PhaseTracker();snapshotS2Phase();t.current_phase=1;t.cities.forEach(c=>c.phases=Array(S2_PHASE_COUNT).fill(0));t.quick_selected={};saveAndRenderS2Phase();}
 function closeS2PhaseEditor(){$('#phaseCityEditor').classList.add('hidden');$('#phaseEditorError').textContent='';}
 function syncS2PhaseColorUi(){const other=$('#phaseCardType').value==='other';$('#phaseColorLabel').classList.toggle('hidden',other);$('#phaseCityColor').disabled=other;}
 function openS2PhaseCityEditor(id=null){const t=s2PhaseTracker(),c=id?t.cities.find(x=>x.id===id):null;$('#phaseEditId').value=c?.id||'';$('#phaseEditorTitle').textContent=c?'카드 수정':'카드 추가';$('#phaseCityName').value=c?.name||'';$('#phaseCardType').value=c?.type==='other'?'other':'city';$('#phaseCityColor').value=(c?.color&&c.color!=='none')?c.color:'blue';$('#phaseCityTotal').value=c?.total??1;for(let i=0;i<S2_PHASE_COUNT;i++)$('#phaseCityP'+(i+1)).value=c?.phases?.[i]??0;$('#deletePhaseCityBtn').classList.toggle('hidden',!c);$('#phaseEditorError').textContent='';syncS2PhaseColorUi();$('#phaseCityEditor').classList.remove('hidden');setTimeout(()=>$('#phaseCityName').focus(),30);}
-function saveS2PhaseCity(){const t=s2PhaseTracker(),id=$('#phaseEditId').value,name=$('#phaseCityName').value.trim(),type=$('#phaseCardType').value==='other'?'other':'city',color=type==='other'?'none':$('#phaseCityColor').value,total=Math.max(0,parseInt($('#phaseCityTotal').value,10)||0),phases=Array.from({length:S2_PHASE_COUNT},(_,i)=>Math.max(0,parseInt($('#phaseCityP'+(i+1)).value,10)||0));if(!name)return $('#phaseEditorError').textContent='카드명을 입력해주세요.';if(phases.reduce((a,b)=>a+b,0)>total)return $('#phaseEditorError').textContent='Phase 합계가 총 카드 수보다 많아요. 총 카드 수 또는 Phase 기록을 조정해주세요.';if(t.cities.some(c=>c.name.trim()===name&&c.id!==id))return $('#phaseEditorError').textContent='같은 카드명이 이미 있어요.';snapshotS2Phase();if(id){const c=t.cities.find(x=>x.id===id);if(!c)return;Object.assign(c,{name,type,color,total,phases});Object.keys(t.quick_selected).forEach(k=>{if(k.endsWith(`:${id}`))delete t.quick_selected[k]});}else t.cities.push({id:crypto.randomUUID(),name,type,color,total,phases});closeS2PhaseEditor();saveAndRenderS2Phase();}
+function saveS2PhaseCity(){const t=s2PhaseTracker(),id=$('#phaseEditId').value,name=$('#phaseCityName').value.trim(),type=$('#phaseCardType').value==='other'?'other':'city',color=type==='other'?'none':$('#phaseCityColor').value,total=Math.max(0,parseInt($('#phaseCityTotal').value,10)||0),phases=Array.from({length:S2_PHASE_COUNT},(_,i)=>Math.max(0,parseInt($('#phaseCityP'+(i+1)).value,10)||0));if(!name)return $('#phaseEditorError').textContent='카드명을 입력해주세요.';if(phases.reduce((a,b)=>a+b,0)>total)return $('#phaseEditorError').textContent='감염 차수 합계가 총 카드 수보다 많아요. 총 카드 수 또는 차수 기록을 조정해주세요.';if(t.cities.some(c=>c.name.trim()===name&&c.id!==id))return $('#phaseEditorError').textContent='같은 카드명이 이미 있어요.';snapshotS2Phase();if(id){const c=t.cities.find(x=>x.id===id);if(!c)return;Object.assign(c,{name,type,color,total,phases});Object.keys(t.quick_selected).forEach(k=>{if(k.endsWith(`:${id}`))delete t.quick_selected[k]});}else t.cities.push({id:crypto.randomUUID(),name,type,color,total,phases});closeS2PhaseEditor();saveAndRenderS2Phase();}
 function deleteS2PhaseCity(){const t=s2PhaseTracker(),id=$('#phaseEditId').value,c=t.cities.find(x=>x.id===id);if(!c)return;if(!confirm(`${c.name} 카드를 트래커에서 삭제할까요?`))return;snapshotS2Phase();t.cities=t.cities.filter(x=>x.id!==id);Object.keys(t.quick_selected).forEach(k=>{if(k.endsWith(`:${id}`))delete t.quick_selected[k]});closeS2PhaseEditor();saveAndRenderS2Phase();}
 function setS2PhaseDrawCount(v){const t=s2PhaseTracker();t.draw_count=Math.max(1,Math.min(5,+v||2));queueSave();renderS2PhaseTracker();}
+function openS2BottomDraw(){const t=s2PhaseTracker(),sorted=sortS2PhaseCities(t.cities),rows=sorted.filter(c=>s2PhaseRemaining(c)>0),N=rows.reduce((s,c)=>s+s2PhaseRemaining(c),0);$('#s2BottomSummary').textContent=`현재 감염 ${t.current_phase}차 · 덱 하단 후보 ${N}장 · 실제로 나온 카드를 선택하세요.`;$('#bottomCityGrid').innerHTML=rows.length?rows.map(c=>{const k=s2PhaseRemaining(c),p=N?k/N:0;return`<button type="button" class="s2-bottom-card ${c.color}" data-bottom-phase-card="${c.id}"><div class="name">${esc(c.name)}</div><div class="meta">남음 ${k}장 · 하단 후보 ${formatS2Pct(p)}</div></button>`}).join(''):'<div class="probability-empty">현재 남은 카드가 없어요.</div>';$('#bottomCityGrid').querySelectorAll('[data-bottom-phase-card]').forEach(b=>b.onclick=()=>selectS2BottomCard(b.dataset.bottomPhaseCard));$('#epidemicModal').classList.remove('hidden');}
+function selectS2BottomCard(id){const t=s2PhaseTracker(),c=t.cities.find(x=>x.id===id);if(!c||s2PhaseRemaining(c)<=0)return;snapshotS2Phase();const p=t.current_phase-1;c.phases[p]=(c.phases[p]||0)+1;t.quick_selected[s2QuickKey(t.current_phase,id)]=true;const old=t.current_phase;if(t.current_phase<S2_PHASE_COUNT)t.current_phase++;$('#epidemicModal').classList.add('hidden');saveAndRenderS2Phase();if(old>=S2_PHASE_COUNT)setTimeout(()=>alert('하단 카드는 5차에 기록했어요. 감염 차수는 더 이상 자동으로 넘어가지 않습니다.'),50);}
 function enableS2PhaseWheelBridge(){const wrap=$('#phaseTableWrap'),dialog=$('#infectionModal .phase-tracker-dialog');if(!wrap||!dialog||wrap.dataset.wheelBridge==='1')return;wrap.dataset.wheelBridge='1';wrap.addEventListener('wheel',e=>{if(e.shiftKey||Math.abs(e.deltaX)>Math.abs(e.deltaY))return;if(e.deltaY){e.preventDefault();dialog.scrollTop+=e.deltaY;}},{passive:false});}
 function openS2PhaseTracker(){$('#infectionModal').classList.remove('hidden');renderS2PhaseTracker();requestAnimationFrame(enableS2PhaseWheelBridge);}
 
@@ -559,7 +548,7 @@ $('#cancelPhaseCityBtn').onclick=closeS2PhaseEditor;
 $('#savePhaseCityBtn').onclick=saveS2PhaseCity;
 $('#deletePhaseCityBtn').onclick=deleteS2PhaseCity;
 $('#phaseCardType').onchange=syncS2PhaseColorUi;
-$('#phaseDrawCount').onchange=e=>setS2PhaseDrawCount(e.target.value);
+$('#phaseDrawCount').onchange=e=>setS2PhaseDrawCount(e.target.value);$('#s2BottomDrawBtn').onclick=openS2BottomDraw;
 </script>
 </body>
 </html>
