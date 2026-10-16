@@ -1162,6 +1162,12 @@ function s2xTracker(){
 function s2xRemain(c){return Math.max(0,(+c.total||0)-c.phases.reduce((n,v)=>n+(+v||0),0));}
 function s2xLatestIndex(c){for(let i=4;i>=0;i--)if((+c.phases[i]||0)>0)return i;return-1;}
 function s2xNewestCreated(t){return t.created.length?t.created[t.created.length-1]:-1;}
+function s2xPileTotal(t,idx){return t.cities.reduce((n,c)=>n+Math.max(0,+c.phases?.[idx]||0),0);}
+function s2xTopPile(t){for(let i=t.created.length-1;i>=0;i--){const idx=t.created[i];if(s2xPileTotal(t,idx)>0)return idx;}return -1;}
+function s2xBottomPile(t){for(const idx of t.created){if(s2xPileTotal(t,idx)>0)return idx;}return -1;}
+/* When the latest risk pile is completely spent, the workbook-style column slot is reusable.
+   Keep old still-populated piles underneath; only remove empty columns from the top. */
+function s2xNextPileSlot(t){let len=t.created.length;while(len>1&&s2xPileTotal(t,t.created[len-1])===0)len--;return len;}
 function s2xSorted(t){return [...t.cities].sort((a,b)=>(s2xSortColor[a.type==='other'?'none':a.color]??9)-(s2xSortColor[b.type==='other'?'none':b.color]??9)||s2xCollator.compare(a.name,b.name));}
 function s2xSnapshot(t){t.history.push(JSON.stringify({cities:t.cities,created:t.created}));if(t.history.length>80)t.history.shift();}
 function s2xPersist(){queueSave();s2xRender();}
@@ -1169,11 +1175,11 @@ function s2xOpen(){if(!canEdit)return;const e=$('#s2xModal');e.classList.remove(
 function s2xClose(){if(!$('#s2xEditShade').classList.contains('hidden')||!$('#s2xBottomShade').classList.contains('hidden'))return;$('#s2xModal').classList.add('hidden');document.body.style.overflow=s2xPriorOverflow;}
 function s2xRender(){
   const t=s2xTracker(),rows=s2xSorted(t),total=rows.reduce((n,c)=>n+c.total,0),left=rows.reduce((n,c)=>n+c.phases.reduce((x,y)=>x+y,0),0),drawn=total-left;
-  const top=s2xNewestCreated(t),risk=t.created.length<2?[]:rows.filter(c=>c.phases[top]>0);
-  const riskNum=risk.reduce((n,c)=>n+c.phases[top],0);
+  const top=s2xTopPile(t),risk=t.created.length<2||top<0?[]:rows.filter(c=>(+c.phases[top]||0)>0);
+  const riskNum=risk.reduce((n,c)=>n+(+c.phases[top]||0),0);
   $('#s2xStats').innerHTML=[['기록된 감염 차수',t.created.length+' / 5'],['도시 / 카드 종류',String(rows.length)],['감염 더미에 남은 카드',left+'장'],['현재 뽑힌 카드',drawn+'장']].map(([title,value])=>`<div class="s2x-stat"><span>${title}</span><b>${value}</b></div>`).join('');
-  $('#s2xRiskCount').textContent=riskNum+'장';
-  $('#s2xRiskList').innerHTML=risk.length?risk.map(c=>`<span class="s2x-chip">${s2xEscape(c.name)} <b>×${c.phases[top]}</b></span>`).join(''):'<span class="s2x-empty">현재 가장 최근 재등장 묶음에 남은 카드가 없어요.</span>';
+  $('#s2xRiskCount').textContent=riskNum+'장'+(riskNum&&top>=0?` · ${top+1}차 묶음`:'');
+  $('#s2xRiskList').innerHTML=risk.length?risk.map(c=>`<span class="s2x-chip">${s2xEscape(c.name)} <b>×${c.phases[top]}</b></span>`).join(''):'<span class="s2x-empty">현재 재등장 묶음에 남은 카드가 없어요.</span>';
   $('#s2xEpidemic').disabled=t.created.length===0||(!left)||t.created.length>=5;
   $('#s2xUndo').disabled=t.history.length===0;
   $('#s2xBody').innerHTML=rows.map(c=>`<tr><td class="s2x-city-cell ${c.type==='other'?'none':c.color}"><button type="button" class="s2x-city-button" data-s2x-draw="${s2xEscape(c.id)}" ${s2xLatestIndex(c)<0?'disabled':''}><span>${s2xEscape(c.name)}<small>${c.type==='other'?'기타 카드':'클릭하면 1장 사용 처리'}</small></span></button></td><td>${c.total}</td>${c.phases.map((n,i)=>`<td class="${t.created.includes(i)?'s2x-activephase':'s2x-emptyphase'}">${n}</td>`).join('')}<td class="s2x-remain">${s2xRemain(c)}</td><td><button class="s2x-btn" type="button" data-s2x-edit="${s2xEscape(c.id)}">수정</button></td></tr>`).join('');
@@ -1182,10 +1188,10 @@ function s2xRender(){
   $('#s2xBody').querySelectorAll('[data-s2x-edit]').forEach(b=>b.onclick=()=>s2xEdit(b.dataset.s2xEdit));
 }
 function s2xEscape(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function s2xDraw(id,save=true){const t=s2xTracker(),c=t.cities.find(c=>c.id===id);if(!c)return false;const i=s2xLatestIndex(c);if(i<0)return false;if(save)s2xSnapshot(t);c.phases[i]--;if(save)s2xPersist();return true;}
-function s2xNextPhase(t){const which=[0,1,2,3,4].find(i=>!t.created.includes(i));if(which===undefined)return false;const before=t.cities.map(c=>s2xRemain(c));t.cities.forEach((c,j)=>c.phases[which]=before[j]);t.created.push(which);return true;}
-function s2xBottomOpen(){const t=s2xTracker();if(!t.created.length)return alert('등록된 감염 카드가 없어요. 도시 / 카드 수를 먼저 입력해주세요.');if(t.created.length>=5)return alert('엑셀 원본은 5차까지만 기록할 수 있어요.');const rows=s2xSorted(t).filter(c=>s2xLatestIndex(c)>=0);$('#s2xBottomGrid').innerHTML=rows.map(c=>`<button type="button" data-s2x-bottom="${s2xEscape(c.id)}" class="s2x-bottom-button ${c.type==='other'?'none':c.color}">${s2xEscape(c.name)}<small>더미에 남은 ${c.phases.reduce((n,v)=>n+v,0)}장</small></button>`).join('');$('#s2xBottomError').textContent='';$('#s2xBottomShade').classList.remove('hidden');$('#s2xBottomGrid').querySelectorAll('[data-s2x-bottom]').forEach(b=>b.onclick=()=>s2xBottomConfirm(b.dataset.s2xBottom));}
-function s2xBottomConfirm(id){const t=s2xTracker(),c=t.cities.find(c=>c.id===id);if(!c||s2xLatestIndex(c)<0)return;const empty=[0,1,2,3,4].find(i=>!t.created.includes(i));if(empty===undefined)return;s2xSnapshot(t);/* workbook's Minus macro always decrements latest occupied Phase */s2xDraw(id,false);/* workbook's epidemic macro copies Column H into next empty phase */s2xNextPhase(t);$('#s2xBottomShade').classList.add('hidden');s2xPersist();}
+function s2xDraw(id,save=true,phaseIndex=null){const t=s2xTracker(),c=t.cities.find(c=>c.id===id);if(!c)return false;const i=phaseIndex===null?s2xLatestIndex(c):phaseIndex;if(i<0||(+c.phases[i]||0)<=0)return false;if(save)s2xSnapshot(t);c.phases[i]--;if(save)s2xPersist();return true;}
+function s2xNextPhase(t){const which=s2xNextPileSlot(t);if(which>=5)return false;const before=t.cities.map(c=>s2xRemain(c));t.cities.forEach((c,j)=>c.phases[which]=before[j]);t.created=Array.from({length:which+1},(_,i)=>i);return true;}
+function s2xBottomOpen(){const t=s2xTracker();if(!t.created.length)return alert('등록된 감염 카드가 없어요. 도시 / 카드 수를 먼저 입력해주세요.');if(s2xNextPileSlot(t)>=5)return alert('감염 차수 5칸이 모두 사용 중이에요. 남은 카드를 확인해주세요.');const bottom=s2xBottomPile(t);if(bottom<0)return alert('감염 더미에 남은 카드가 없어요. 입력한 카드를 확인해주세요.');const rows=s2xSorted(t).filter(c=>(+c.phases[bottom]||0)>0);$('#s2xBottomGrid').innerHTML=rows.map(c=>`<button type="button" data-s2x-bottom="${s2xEscape(c.id)}" class="s2x-bottom-button ${c.type==='other'?'none':c.color}">${s2xEscape(c.name)}<small>하단 ${bottom+1}차 묶음 · ${c.phases[bottom]}장</small></button>`).join('');$('#s2xBottomError').textContent='';$('#s2xBottomShade').classList.remove('hidden');$('#s2xBottomGrid').querySelectorAll('[data-s2x-bottom]').forEach(b=>b.onclick=()=>s2xBottomConfirm(b.dataset.s2xBottom));}
+function s2xBottomConfirm(id){const t=s2xTracker(),c=t.cities.find(c=>c.id===id),bottom=s2xBottomPile(t);if(!c||bottom<0||(+c.phases[bottom]||0)<=0)return;if(s2xNextPileSlot(t)>=5)return;s2xSnapshot(t);/* Physical bottom card comes from the oldest nonempty group. */if(!s2xDraw(id,false,bottom))return;/* Put the entire discard pile back on top, reusing exhausted top columns. */if(!s2xNextPhase(t))return;$('#s2xBottomShade').classList.add('hidden');s2xPersist();}
 function s2xUndo(){const t=s2xTracker();if(!t.history.length)return;const prev=JSON.parse(t.history.pop());t.cities=prev.cities;t.created=prev.created;s2xPersist();}
 function s2xReset(){if(!confirm('감염 차수를 처음부터 다시 시작할까요? 도시 이름·색상·총 카드 수는 유지됩니다.'))return;const t=s2xTracker();s2xSnapshot(t);t.cities.forEach(c=>c.phases=[Math.max(0,+c.total||0),0,0,0,0]);t.created=t.cities.some(c=>+c.total>0)?[0]:[];s2xPersist();}
 function s2xEdit(id=null){const t=s2xTracker(),c=id?t.cities.find(c=>c.id===id):null;s2xEditId=c?.id||null;$('#s2xEditTitle').textContent=c?'도시 / 카드 수정':'도시 / 카드 추가';$('#s2xName').value=c?.name||'';$('#s2xType').value=c?.type||'city';$('#s2xColor').value=c?.color||'blue';$('#s2xTotal').value=c?.total??1;$('#s2xPlacement').value='deck';$('#s2xPlacementLabel').classList.toggle('hidden',!!c||t.created.length===0);$('#s2xEditPhases').innerHTML=[0,1,2,3,4].map(i=>`<label>${i+1}차<input type="number" min="0" max="999" id="s2xP${i}" value="${c?.phases?.[i]||0}"></label>`).join('');$('#s2xDelete').classList.toggle('hidden',!c);$('#s2xEditError').textContent='';s2xUpdateColor();$('#s2xEditShade').classList.remove('hidden');}
