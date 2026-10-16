@@ -424,6 +424,14 @@ html{background:#e7ece8!important}
 .s2x-repair-dialog button:disabled{opacity:.45;cursor:not-allowed}
 @media(max-width:600px){.s2x-repair-dialog{padding:14px}.s2x-repair-preview{font-size:11px}}
 
+
+/* V105: Risk-group city chips inherit the same pastel category color as table city cells. */
+.s2x-risk-items .s2x-chip.blue{background:#e7f2ff;border-color:#599dd8;color:#284449}
+.s2x-risk-items .s2x-chip.yellow{background:#fff5d6;border-color:#d3aa33;color:#514422}
+.s2x-risk-items .s2x-chip.black{background:#e9edee;border-color:#29383c;color:#28373a}
+.s2x-risk-items .s2x-chip.red{background:#fce6e6;border-color:#d06366;color:#613636}
+.s2x-risk-items .s2x-chip.none{background:#eff0ed;border-color:#b1b9b3;color:#4d5c59}
+
 </style>
 </head>
 <body class="season2-theme">
@@ -1209,7 +1217,7 @@ function s2xRender(){
   const riskNum=risk.reduce((n,c)=>n+(+c.phases[top]||0),0);
   $('#s2xStats').innerHTML=[['기록된 감염 차수',t.created.length+' / 5'],['도시 / 카드 종류',String(rows.length)],['감염 더미에 남은 카드',left+'장'],['현재 뽑힌 카드',drawn+'장']].map(([title,value])=>`<div class="s2x-stat"><span>${title}</span><b>${value}</b></div>`).join('');
   $('#s2xRiskCount').textContent=riskNum+'장'+(riskNum&&top>=0?` · ${top+1}차 묶음`:'');
-  $('#s2xRiskList').innerHTML=risk.length?risk.map(c=>`<span class="s2x-chip">${s2xEscape(c.name)} <b>×${c.phases[top]}</b></span>`).join(''):'<span class="s2x-empty">현재 재등장 묶음에 남은 카드가 없어요.</span>';
+  $('#s2xRiskList').innerHTML=risk.length?risk.map(c=>`<span class="s2x-chip ${c.type==='other'?'none':(['blue','yellow','black','red'].includes(c.color)?c.color:'none')}">${s2xEscape(c.name)} <b>×${c.phases[top]}</b></span>`).join(''):'<span class="s2x-empty">현재 재등장 묶음에 남은 카드가 없어요.</span>';
   $('#s2xEpidemic').disabled=t.created.length===0||(!left)||t.created.length>=5;
   $('#s2xUndo').disabled=t.history.length===0;
   $('#s2xBody').innerHTML=rows.map(c=>`<tr><td class="s2x-city-cell ${c.type==='other'?'none':c.color}"><button type="button" class="s2x-city-button" data-s2x-draw="${s2xEscape(c.id)}" ${s2xLatestIndex(c)<0?'disabled':''}><span>${s2xEscape(c.name)}<small>${c.type==='other'?'기타 카드':'클릭하면 1장 사용 처리'}</small></span></button></td><td>${c.total}</td>${c.phases.map((n,i)=>`<td class="${t.created.includes(i)?'s2x-activephase':'s2x-emptyphase'}">${n}</td>`).join('')}<td class="s2x-remain">${s2xRemain(c)}</td><td><button class="s2x-btn" type="button" data-s2x-edit="${s2xEscape(c.id)}">수정</button></td></tr>`).join('');
@@ -1304,9 +1312,7 @@ async function s2xRepairApply(){
   clearTimeout(saveTimer);
   // UI undo history is available as well as a downloadable JSON backup.
   const candidate=approved.proposed;
-  // Undo must restore the *pre-repair* pile state, not the normalized candidate.
-  candidate.history=Array.isArray(original.history)?s2xCloneData(original.history).slice(-79):[];
-  candidate.history.push(JSON.stringify({cities:original.cities,created:original.created}));
+  s2xSnapshot(candidate);
   state.excel_deck_v101=candidate;
   $('#s2xRepairApply').disabled=true;
   $('#s2xRepairError').textContent='저장 중...';
@@ -1351,8 +1357,8 @@ async function s2xImportBackup(file){
   const before=s2xCloneData(s2xTracker());
   // Keep current tracker in undo history for immediate reversibility.
   const incoming=s2xCloneData(parsed.excel_deck_v101);
-  incoming.history=Array.isArray(incoming.history)?incoming.history.slice(-79):[];
-  incoming.history.push(JSON.stringify({cities:before.cities,created:before.created}));
+  incoming.history=Array.isArray(incoming.history)?incoming.history.slice(-80):[];
+  s2xSnapshot(incoming);
   clearTimeout(saveTimer);
   state.excel_deck_v101=incoming;
   const ok=await saveState();
