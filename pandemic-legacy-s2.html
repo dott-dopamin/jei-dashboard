@@ -409,6 +409,21 @@ html{background:#e7ece8!important}
 .s2x-bottom-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:10px}.s2x-bottom-button{text-align:left;white-space:normal;min-height:55px;border:1px solid #b5c7c0;border-left:5px solid #9aaca8;background:#fffdf7;color:#315055;border-radius:9px;padding:10px;font-weight:950;font-size:13px;cursor:pointer}.s2x-bottom-button.blue{background:#e7f2ff;border-left-color:#599dd8}.s2x-bottom-button.yellow{background:#fff5d6;border-left-color:#d3aa33}.s2x-bottom-button.black{background:#e9edee;border-left-color:#29383c}.s2x-bottom-button.red{background:#fce6e6;border-left-color:#d06366}.s2x-bottom-button small{display:block;margin-top:3px;color:#698387;font-size:11px}.s2x-bottom-button:disabled{opacity:.5}
 @media(max-width:700px){.s2x-overlay{padding:7px}.s2x-dialog{height:calc(100dvh - 14px);border-radius:11px}.s2x-head{padding:12px}.s2x-head h2{font-size:18px}.s2x-head p{font-size:10px}.s2x-scroll{padding:11px}.s2x-stats{grid-template-columns:1fr 1fr}.s2x-bottom-grid{grid-template-columns:1fr 1fr}.s2x-toolbar>div{width:100%}.s2x-btn{font-size:11px;padding:8px}.s2x-risk-head strong{font-size:15px}.s2x-chip{font-size:12px}.s2x-edit-fields{grid-template-columns:1fr 1fr}}
 
+
+/* V104 · infection tracker backup, integrity check and reversible repair */
+.s2x-repair-dialog{width:min(760px,100%);max-height:calc(100dvh - 28px);overflow:auto}
+.s2x-repair-dialog p b{color:#355e61}
+.s2x-repair-report{display:grid;gap:8px;margin:12px 0}
+.s2x-audit-ok,.s2x-audit-issue,.s2x-audit-manual{border:1px solid #c1d3ca;border-radius:8px;padding:10px 12px;background:#ecf5ee;color:#365850;font-size:12px;line-height:1.5}
+.s2x-audit-issue{background:#fff7e6;border-color:#e2c99a;color:#805b2b}
+.s2x-audit-manual{background:#fff0ee;border-color:#dfb5ad;color:#994b42}
+.s2x-repair-preview{border:1px solid #c9d6cf;border-radius:9px;padding:10px 12px;background:#fffdf8;line-height:1.65;font-size:12px;color:#39595a}
+.s2x-repair-preview b{color:#294d51}
+.s2x-repair-preview code{display:inline-block;margin:3px 5px 3px 0;background:#e8f1eb;border-radius:5px;padding:3px 6px;font-size:11px;color:#2e6665}
+.s2x-repair-dialog .s2x-edit-actions{position:sticky;bottom:-19px;background:#f5f4ed;padding-top:11px}
+.s2x-repair-dialog button:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:600px){.s2x-repair-dialog{padding:14px}.s2x-repair-preview{font-size:11px}}
+
 </style>
 </head>
 <body class="season2-theme">
@@ -606,13 +621,28 @@ html{background:#e7ece8!important}
   <div class="s2x-dialog" role="dialog" aria-modal="true" aria-labelledby="s2xTitle">
     <div class="s2x-head"><div><div class="s2x-kicker">INFECTION DECK / EXCEL LOGIC</div><h2 id="s2xTitle">감염 카드 더미 트래커</h2><p>엑셀 VBA 기준 · 도시 클릭 시 최근 감염 차수에서 1장 차감 · 전염 시 뽑힌 카드를 다음 차수로 이동</p></div><button id="s2xClose" class="s2x-btn" type="button">닫기 ×</button></div>
     <div class="s2x-scroll" id="s2xScroll">
-      <div class="s2x-toolbar"><div><button id="s2xEpidemic" class="s2x-btn warn" type="button">유행병 발생 · 덱 하단 체크</button><button id="s2xUndo" class="s2x-btn" type="button">↶ 되돌리기</button></div><div><button id="s2xAdd" class="s2x-btn" type="button">+ 도시 / 카드 추가</button><button id="s2xReset" class="s2x-btn" type="button">차수 초기화</button><span id="s2xSaveStatus" class="s2x-save"></span></div></div>
+      <div class="s2x-toolbar"><div><button id="s2xEpidemic" class="s2x-btn warn" type="button">유행병 발생 · 덱 하단 체크</button><button id="s2xUndo" class="s2x-btn" type="button">↶ 되돌리기</button></div><div><button id="s2xAdd" class="s2x-btn" type="button">+ 도시 / 카드 추가</button><button id="s2xAudit" class="s2x-btn" type="button">차수 점검 · 복구</button><button id="s2xExport" class="s2x-btn" type="button">기록 백업</button><button id="s2xImport" class="s2x-btn" type="button">백업 불러오기</button><input id="s2xImportFile" class="hidden" type="file" accept=".json,application/json"><button id="s2xReset" class="s2x-btn" type="button">차수 초기화</button><span id="s2xSaveStatus" class="s2x-save"></span></div></div>
       <div class="s2x-stats" id="s2xStats"></div>
       <div class="s2x-risk"><div class="s2x-risk-head"><strong>🚨 현재 재등장 위험군</strong><span id="s2xRiskCount">0장</span></div><div id="s2xRiskList" class="s2x-risk-items"></div></div>
       <div class="s2x-table-wrap" id="s2xTableScroll"><table class="s2x-table"><thead><tr><th>도시 / 카드 (클릭하여 1장 처리)</th><th>총 카드</th><th>1차</th><th>2차</th><th>3차</th><th>4차</th><th>5차</th><th>현재 뽑힌 카드</th><th>편집</th></tr></thead><tbody id="s2xBody"></tbody><tfoot id="s2xFoot"></tfoot></table></div>
       <div class="s2x-info"><b>엑셀과 같은 계산법</b> · 기본 카드 수는 첫 감염 차수에 자동 배치됩니다. 도시명을 누르면 가장 최근에 남아 있는 Phase의 카드가 1장 감소하고 <b>현재 뽑힌 카드</b>가 1장 증가합니다. 전염이 발생했을 때 실제 맨 아래 카드를 선택하면 그 카드도 1장 처리하고, 지금까지 뽑힌 카드를 다음 Phase에 옮깁니다. 잘못 누른 경우 <b>되돌리기</b>를 사용하세요.</div>
     </div>
   </div>
+</div>
+
+<div id="s2xRepairShade" class="s2x-edit-shade hidden">
+ <div class="s2x-edit s2x-repair-dialog" role="dialog" aria-modal="true" aria-labelledby="s2xRepairTitle">
+  <h3 id="s2xRepairTitle">감염 차수 점검 · 복구</h3>
+  <p>현재 저장 데이터를 검사하고, <b>완전히 비어 있는 차수 칸만 정리</b>합니다. 도시별 카드 장수나 실제 뽑힌 장수는 변경하지 않아요.</p>
+  <div id="s2xRepairReport" class="s2x-repair-report"></div>
+  <div id="s2xRepairPreview" class="s2x-repair-preview"></div>
+  <div id="s2xRepairError" class="s2x-editor-error"></div>
+  <div class="s2x-edit-actions">
+   <button id="s2xRepairBackup" type="button" class="s2x-btn">수정 전 백업 다운로드</button>
+   <button id="s2xRepairCancel" type="button" class="s2x-btn">닫기</button>
+   <button id="s2xRepairApply" type="button" class="s2x-btn primary">검증 후 복구</button>
+  </div>
+ </div>
 </div>
 <div id="s2xEditShade" class="s2x-edit-shade hidden"><div class="s2x-edit" role="dialog" aria-modal="true" aria-label="도시 편집"><h3 id="s2xEditTitle">도시 추가</h3><p>추가되거나 영구 제외되는 도시 및 감염 카드를 직접 관리합니다.</p><div class="s2x-edit-fields"><label class="s2x-edit-wide">도시 / 카드명<input id="s2xName" maxlength="70" placeholder="도시명 또는 할로우맨"></label><label>유형<select id="s2xType"><option value="city">도시 카드</option><option value="other">기타 카드 (색상 없음)</option></select></label><label>도시 색상<select id="s2xColor"><option value="blue">블루</option><option value="yellow">옐로우</option><option value="black">블랙</option><option value="red">레드</option></select></label><label class="s2x-edit-wide">총 카드 수<input id="s2xTotal" type="number" min="0" max="999" value="1"></label><label class="s2x-edit-wide" id="s2xPlacementLabel">신규 카드의 배치<select id="s2xPlacement"><option value="deck">현재 감염 더미에 추가</option><option value="discard">이미 뽑힌 카드로 등록</option></select></label><div class="s2x-edit-wide"><div style="font-size:11px;font-weight:900;color:#56716f;margin-bottom:7px">차수별 남은 장수 (직접 보정 가능)</div><div class="s2x-phase-rows" id="s2xEditPhases"></div></div></div><div id="s2xEditError" class="s2x-editor-error"></div><div class="s2x-edit-actions"><button id="s2xDelete" class="s2x-btn warn hidden" type="button">도시 삭제</button><button id="s2xCancel" class="s2x-btn" type="button">취소</button><button id="s2xApply" class="s2x-btn primary" type="button">적용</button></div></div></div>
 <div id="s2xBottomShade" class="s2x-edit-shade hidden"><div class="s2x-edit" style="width:min(820px,100%)" role="dialog" aria-modal="true" aria-label="유행병 하단 카드 선택"><h3>유행병 발생 · 감염덱 하단 카드</h3><p>실제로 감염덱 맨 아래에서 뽑힌 카드를 한 장 선택해 주세요. 선택 후 엑셀의 전염 매크로처럼 뽑힌 카드가 다음 감염 차수로 옮겨집니다.</p><div id="s2xBottomGrid" class="s2x-bottom-grid"></div><div id="s2xBottomError" class="s2x-editor-error"></div><div class="s2x-edit-actions"><button id="s2xBottomCancel" type="button" class="s2x-btn">취소</button></div></div></div>
@@ -1172,7 +1202,7 @@ function s2xSorted(t){return [...t.cities].sort((a,b)=>(s2xSortColor[a.type==='o
 function s2xSnapshot(t){t.history.push(JSON.stringify({cities:t.cities,created:t.created}));if(t.history.length>80)t.history.shift();}
 function s2xPersist(){queueSave();s2xRender();}
 function s2xOpen(){if(!canEdit)return;const e=$('#s2xModal');e.classList.remove('hidden');s2xPriorOverflow=document.body.style.overflow;document.body.style.overflow='hidden';s2xRender();}
-function s2xClose(){if(!$('#s2xEditShade').classList.contains('hidden')||!$('#s2xBottomShade').classList.contains('hidden'))return;$('#s2xModal').classList.add('hidden');document.body.style.overflow=s2xPriorOverflow;}
+function s2xClose(){if(!$('#s2xEditShade').classList.contains('hidden')||!$('#s2xBottomShade').classList.contains('hidden')||!$('#s2xRepairShade').classList.contains('hidden'))return;$('#s2xModal').classList.add('hidden');document.body.style.overflow=s2xPriorOverflow;}
 function s2xRender(){
   const t=s2xTracker(),rows=s2xSorted(t),total=rows.reduce((n,c)=>n+c.total,0),left=rows.reduce((n,c)=>n+c.phases.reduce((x,y)=>x+y,0),0),drawn=total-left;
   const top=s2xTopPile(t),risk=t.created.length<2||top<0?[]:rows.filter(c=>(+c.phases[top]||0)>0);
@@ -1200,7 +1230,152 @@ function s2xEditClose(){$('#s2xEditShade').classList.add('hidden');}
 function s2xApply(){const t=s2xTracker();const name=$('#s2xName').value.trim(),type=$('#s2xType').value,color=type==='other'?'none':$('#s2xColor').value;const total=Number($('#s2xTotal').value),phases=[0,1,2,3,4].map(i=>Number($('#s2xP'+i).value));const error=$('#s2xEditError');if(!name)return error.textContent='이름을 입력해 주세요.';if(t.cities.some(c=>c.name===name&&c.id!==s2xEditId))return error.textContent='이미 등록된 이름이에요.';if(!Number.isInteger(total)||total<0||total>999||phases.some(n=>!Number.isInteger(n)||n<0||n>999))return error.textContent='카드 수는 0~999 사이의 정수로 입력해 주세요.';if(phases.reduce((n,v)=>n+v,0)>total)return error.textContent='차수별 카드 합계가 총 카드 수를 초과했어요.';if(phases.some((n,i)=>n>0&&!t.created.includes(i)))return error.textContent='현재 기록되지 않은 차수에 카드를 넣을 수 없어요. 먼저 전염 처리를 해주세요.';s2xSnapshot(t);if(s2xEditId){Object.assign(t.cities.find(c=>c.id===s2xEditId),{name,type,color,total,phases});}else{if(t.created.length&&phases.every(n=>n===0)&&$('#s2xPlacement').value==='deck'){phases[t.created[t.created.length-1]]=total;}t.cities.push({id:crypto.randomUUID(),name,type,color,total,phases});}s2xEditClose();s2xPersist();}
 function s2xDelete(){if(!s2xEditId)return;const t=s2xTracker(),c=t.cities.find(x=>x.id===s2xEditId);if(!c||!confirm(`${c.name} 항목을 트래커에서 삭제할까요?`))return;s2xSnapshot(t);t.cities=t.cities.filter(x=>x.id!==s2xEditId);s2xEditClose();s2xPersist();}
 function s2xWheel(){const tab=$('#s2xTableScroll'),box=$('#s2xScroll');tab.addEventListener('wheel',e=>{if(e.shiftKey||Math.abs(e.deltaX)>Math.abs(e.deltaY))return;if(e.deltaY){e.preventDefault();box.scrollTop+=e.deltaY;}},{passive:false});}
+
+/* V104: No destructive automatic migration. Repair only empty pile-column gaps. */
+function s2xCloneData(value){return JSON.parse(JSON.stringify(value));}
+function s2xInspect(t){
+  const totals=[0,0,0,0,0];
+  const invalid=[];
+  for(const c of t.cities||[]){
+    if(!Array.isArray(c.phases)||c.phases.length!==5){invalid.push(`${c.name}: 감염 차수 칸 형식 오류`);continue;}
+    if(!Number.isInteger(c.total)||c.total<0||c.total>999){invalid.push(`${c.name}: 총 카드 수 이상`);continue;}
+    let sum=0;
+    c.phases.forEach((v,i)=>{
+      if(!Number.isInteger(v)||v<0||v>999)invalid.push(`${c.name}: ${i+1}차 값 이상`);
+      else{totals[i]+=v;sum+=v;}
+    });
+    if(sum>c.total)invalid.push(`${c.name}: 차수별 카드 합계가 총 카드보다 많음`);
+  }
+  const nonempty=totals.map((n,i)=>n>0?i:-1).filter(i=>i>=0);
+  const contiguous=nonempty.every((n,i)=>n===i);
+  const created=Array.isArray(t.created)?t.created:[];
+  const flagsValid=created.every((i,n)=>Number.isInteger(i)&&i>=0&&i<5&&(n===0||i>created[n-1]));
+  const flagsMatch=nonempty.every(i=>created.includes(i));
+  const normalizationNeeded=!contiguous||!flagsValid||!flagsMatch||created.length>Math.max(1,nonempty.length);
+  // For a full-deck exhaustion, do not invent cards. Keep empty phase 1 as an empty container.
+  const proposed=s2xCloneData(t);
+  if(!invalid.length&&normalizationNeeded){
+    proposed.cities.forEach(c=>{
+      const old=c.phases.slice();
+      c.phases=[...nonempty.map(i=>old[i]),...Array(5-nonempty.length).fill(0)];
+    });
+    proposed.created=nonempty.length?nonempty.map((_,i)=>i):created.length?[0]:[];
+  }
+  const previewTotals=[0,0,0,0,0];
+  proposed.cities.forEach(c=>c.phases?.forEach((v,i)=>previewTotals[i]+=Number(v)||0));
+  const sumsPreserved=t.cities.every((c,i)=>
+    (c.phases||[]).reduce((s,x)=>s+(Number(x)||0),0)===
+    (proposed.cities[i].phases||[]).reduce((s,x)=>s+(Number(x)||0),0));
+  return {totals,previewTotals,invalid,nonempty,normalizationNeeded,proposed,sumsPreserved};
+}
+function s2xOpenRepair(){
+  const t=s2xTracker(),a=s2xInspect(t);
+  const report=$('#s2xRepairReport'),preview=$('#s2xRepairPreview');
+  const existingTotal=t.cities.reduce((n,c)=>n+(Number(c.total)||0),0);
+  const remaining=a.totals.reduce((n,v)=>n+v,0);
+  report.innerHTML=`<div class="s2x-audit-ok">등록된 카드: <b>${existingTotal}장</b> · 덱에 남은 카드: <b>${remaining}장</b> · 기록된 카드 종류: <b>${t.cities.length}개</b></div>`
+    +(a.invalid.length?`<div class="s2x-audit-manual"><b>수동 확인이 필요한 문제 ${a.invalid.length}개</b><div>${a.invalid.map(s=>s2xEscape(s)).join('<br>')}</div><div>이 문제들은 자동으로 고치지 않습니다. 도시별 수정에서 확인해 주세요.</div></div>`:'')
+    +(a.normalizationNeeded?'<div class="s2x-audit-issue">중간에 빈 차수 또는 불일치하는 차수 표시가 있습니다. <b>비어 있는 열만 압축</b>할 수 있습니다.</div>':'<div class="s2x-audit-ok">현재 데이터에서 빈 차수 간격 오류는 발견되지 않았습니다.</div>');
+  preview.innerHTML='<b>전 / 후 차수별 남은 장수</b><div>'+
+    a.totals.map((n,i)=>`<code>${i+1}차 ${n} → ${a.previewTotals[i]}</code>`).join('')+'</div>'+
+    '<div>카드별 총 장수, 전체 덱 잔여 장수, 실제로 뽑힌 수는 바뀌지 않습니다. 단, <b>과거 잘못 입력된 카드 위치 자체는 이 검사만으로 판별할 수 없습니다.</b></div>';
+  const apply=$('#s2xRepairApply');
+  apply.disabled=!a.normalizationNeeded||a.invalid.length>0||!a.sumsPreserved;
+  $('#s2xRepairError').textContent='';
+  $('#s2xRepairShade').classList.remove('hidden');
+}
+function s2xCloseRepair(){$('#s2xRepairShade').classList.add('hidden');}
+function s2xExportBackup(label='backup'){
+  const data={format:'jei-pandemic-s2-infection-tracker',schema:1,exported_at:new Date().toISOString(),excel_deck_v101:s2xCloneData(s2xTracker())};
+  const text=JSON.stringify(data,null,2);
+  const blob=new Blob([text],{type:'application/json;charset=utf-8'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;
+  a.download=`pandemic-s2-tracker-${label}-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),4000);
+}
+async function s2xRepairApply(){
+  const original=s2xCloneData(s2xTracker()),audit=s2xInspect(original);
+  if(audit.invalid.length||!audit.normalizationNeeded||!audit.sumsPreserved)return;
+  if(!confirm('빈 감염 차수 열을 정리할까요? 도시별 카드 수는 변하지 않습니다. 점검창에서 수정 전 백업을 먼저 다운로드하는 것을 권장해요.'))return;
+  const approved=s2xInspect(original);
+  if(approved.invalid.length||!approved.sumsPreserved)return;
+  clearTimeout(saveTimer);
+  // UI undo history is available as well as a downloadable JSON backup.
+  const candidate=approved.proposed;
+  // Undo must restore the *pre-repair* pile state, not the normalized candidate.
+  candidate.history=Array.isArray(original.history)?s2xCloneData(original.history).slice(-79):[];
+  candidate.history.push(JSON.stringify({cities:original.cities,created:original.created}));
+  state.excel_deck_v101=candidate;
+  $('#s2xRepairApply').disabled=true;
+  $('#s2xRepairError').textContent='저장 중...';
+  const ok=await saveState();
+  if(!ok){
+    state.excel_deck_v101=original;
+    $('#s2xRepairError').textContent='서버 저장에 실패했어요. 원본을 화면에 복원했습니다. 연결 확인 후 다시 시도하세요.';
+    $('#s2xRepairApply').disabled=false;
+    s2xRender();
+    return;
+  }
+  s2xCloseRepair();
+  s2xRender();
+  alert('빈 차수 정리가 저장됐어요. 실제 카드 위치와 위험군을 확인해 주세요.');
+}
+function s2xValidateBackup(x){
+  if(!x||x.format!=='jei-pandemic-s2-infection-tracker'||x.schema!==1)return '이 페이지에서 내려받은 감염 트래커 백업 JSON이 아니에요.';
+  const t=x.excel_deck_v101;
+  if(!t||!Array.isArray(t.cities)||t.cities.length>250)return '백업 도시 목록 형식이 올바르지 않아요.';
+  if(!Array.isArray(t.created)||t.created.length>5||t.created.some(i=>!Number.isInteger(i)||i<0||i>4))return '백업 차수 정보에 오류가 있어요.';
+  const ids=new Set(),names=new Set();
+  for(const c of t.cities){
+    if(!c||typeof c.id!=='string'||!c.id||c.id.length>150||ids.has(c.id))return '중복되거나 잘못된 도시 ID가 있어요.';
+    ids.add(c.id);
+    if(typeof c.name!=='string'||!c.name.trim()||c.name.length>70||names.has(c.name))return '중복되거나 잘못된 도시 이름이 있어요.';
+    names.add(c.name);
+    if(!['city','other'].includes(c.type))return `${c.name}: 카드 유형 오류`;
+    if(!['blue','yellow','black','red','none'].includes(c.color))return `${c.name}: 카드 색상 오류`;
+    if(!Number.isInteger(c.total)||c.total<0||c.total>999||!Array.isArray(c.phases)||c.phases.length!==5)return `${c.name}: 카드 장수 데이터 오류`;
+    if(c.phases.some(n=>!Number.isInteger(n)||n<0||n>999)||c.phases.reduce((s,n)=>s+n,0)>c.total)return `${c.name}: 차수별 장수 합계 오류`;
+  }
+  return '';
+}
+async function s2xImportBackup(file){
+  if(!file)return;
+  if(file.size>2*1024*1024){alert('백업 파일이 너무 커요 (2MB 이하).');return;}
+  let parsed;
+  try{parsed=JSON.parse(await file.text());}catch(e){alert('JSON 파일을 읽을 수 없어요.');return;}
+  const error=s2xValidateBackup(parsed);
+  if(error){alert(error);return;}
+  if(!confirm('현재 감염 트래커를 선택한 백업 시점으로 되돌릴까요? 캠페인 회차 기록과 메모는 변경하지 않습니다.'))return;
+  const before=s2xCloneData(s2xTracker());
+  // Keep current tracker in undo history for immediate reversibility.
+  const incoming=s2xCloneData(parsed.excel_deck_v101);
+  incoming.history=Array.isArray(incoming.history)?incoming.history.slice(-79):[];
+  incoming.history.push(JSON.stringify({cities:before.cities,created:before.created}));
+  clearTimeout(saveTimer);
+  state.excel_deck_v101=incoming;
+  const ok=await saveState();
+  if(!ok){
+    state.excel_deck_v101=before;s2xRender();
+    alert('서버 저장에 실패했어요. 기존 트래커를 유지합니다.');
+    return;
+  }
+  s2xRender();
+  alert('감염 트래커 백업을 복구했어요. 회차 기록 및 메모는 변경하지 않았습니다.');
+}
+
 $('#openInfection').onclick=s2xOpen;
+
+$('#s2xAudit').onclick=s2xOpenRepair;
+$('#s2xExport').onclick=()=>s2xExportBackup();
+$('#s2xImport').onclick=()=>$('#s2xImportFile').click();
+$('#s2xImportFile').onchange=async e=>{
+  const file=e.target.files?.[0];e.target.value='';await s2xImportBackup(file);
+};
+$('#s2xRepairBackup').onclick=()=>s2xExportBackup('before-repair');
+$('#s2xRepairCancel').onclick=s2xCloseRepair;
+$('#s2xRepairApply').onclick=s2xRepairApply;
 $('#s2xClose').onclick=s2xClose;
 $('#s2xEpidemic').onclick=s2xBottomOpen;
 $('#s2xUndo').onclick=s2xUndo;
@@ -1212,7 +1387,7 @@ $('#s2xDelete').onclick=s2xDelete;
 $('#s2xType').onchange=s2xUpdateColor;
 $('#s2xBottomCancel').onclick=()=>$('#s2xBottomShade').classList.add('hidden');
 $('#s2xModal').onclick=e=>{if(e.target===$('#s2xModal'))s2xClose();};
-document.addEventListener('keydown',e=>{if(e.key!=='Escape'||$('#s2xModal').classList.contains('hidden'))return;if(!$('#s2xBottomShade').classList.contains('hidden'))$('#s2xBottomShade').classList.add('hidden');else if(!$('#s2xEditShade').classList.contains('hidden'))s2xEditClose();else s2xClose();});
+document.addEventListener('keydown',e=>{if(e.key!=='Escape'||$('#s2xModal').classList.contains('hidden'))return;if(!$('#s2xBottomShade').classList.contains('hidden'))$('#s2xBottomShade').classList.add('hidden');else if(!$('#s2xEditShade').classList.contains('hidden'))s2xEditClose();else if(!$('#s2xRepairShade').classList.contains('hidden'))s2xCloseRepair();else s2xClose();});
 s2xWheel();
 
 boot();
