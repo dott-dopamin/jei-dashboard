@@ -138,47 +138,6 @@ body{
 @media(max-width:600px){.current-brief{grid-template-columns:1fr}.current-play-grid{grid-template-columns:1fr 1fr}.end-grid{grid-template-columns:1fr}.end-card:first-child{grid-column:auto}.play-log-panel textarea{min-height:180px}.current-save-row{align-items:stretch;flex-direction:column}.current-save-btn{width:100%}.current-preview{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
 
-/* V98 · S1 city panic tracker, separate from infection deck tracking */
-.hero-panic-btn{background:rgba(106,61,52,.66);border-color:rgba(235,164,124,.50);color:#ffe8d9}
-.hero-panic-btn:hover{background:rgba(132,74,58,.85);border-color:rgba(255,196,159,.72)}
-.panic-overlay{position:fixed;inset:0;z-index:145;background:rgba(5,11,14,.84);display:flex;align-items:center;justify-content:center;padding:16px}
-.panic-dialog{width:min(1180px,100%);height:min(880px,calc(100dvh - 32px));display:flex;flex-direction:column;min-height:0;background:#27343b;border:1px solid #596971;border-radius:16px;box-shadow:0 25px 90px rgba(0,0,0,.55);overflow:hidden}
-.panic-head{flex:0 0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:17px 20px 14px;border-bottom:1px solid #41525a;background:#283840}
-.panic-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:#a6bac3;margin-bottom:4px}
-.panic-head h3{margin:0;color:#f2f6f6;font-size:21px}.panic-head p{font-size:11px;color:#adbec5;margin:5px 0 0;line-height:1.45}
-.panic-close{flex:0 0 auto;border:1px solid #556971;border-radius:50%;background:#203038;color:#fff;width:36px;height:36px;font-size:23px;cursor:pointer}
-.panic-scroll{min-height:0;flex:1 1 auto;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:16px 19px 20px}
-.panic-overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.panic-metric{border:1px solid #455861;background:#1e2b31;border-radius:9px;padding:11px 12px}
-.panic-metric label{display:block;color:#adbcc1;font-size:10px;font-weight:800}.panic-metric strong{display:block;color:#f0f5f6;font-size:22px;margin-top:3px}
-.panic-controls{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin:12px 0}
-.panic-controls input[type=search]{width:min(300px,100%);border:1px solid #52656d;border-radius:9px;background:#19272d;color:#fff;padding:11px 12px;font-size:13px;outline:none}
-.panic-controls input[type=search]:focus{border-color:#8cb4bd}
-.panic-filter{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:850;color:#d5e0e4;cursor:pointer}
-.panic-filter input{accent-color:#dc7770;width:16px;height:16px}
-.panic-level-guide{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-bottom:13px}
-.panic-level-guide>div{border:1px solid #45565e;border-radius:9px;background:#1f2d33;padding:9px 10px;min-width:0}
-.panic-level-guide b{font-size:11px;color:#f1d3af;display:block}.panic-level-guide span{font-size:10px;color:#abbabf;display:block;line-height:1.5;margin-top:4px}
-.panic-city-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
-.panic-city{min-width:0;border:1px solid #485b64;border-radius:10px;background:#202e35;overflow:hidden}
-.panic-city.level-2,.panic-city.level-3{border-color:#9d7954}.panic-city.level-4{border-color:#bd644e}.panic-city.level-5{border-color:#d44f50}
-.panic-city-top{display:flex;align-items:center;justify-content:space-between;gap:5px;padding:9px 10px;border-bottom:1px solid #3c4d55}
-.panic-city-name{font-size:13px;font-weight:900;line-height:1.3;color:#f0f5f5;overflow-wrap:anywhere}
-.panic-city-color{display:inline-block;width:7px;height:14px;border-radius:2px;margin-right:6px;vertical-align:-2px}
-.panic-city-color.blue{background:#6faee3}.panic-city-color.yellow{background:#ebc253}.panic-city-color.black{background:#a2acb0}.panic-city-color.red{background:#df7373}
-.panic-level-chip{border-radius:999px;background:#33434c;color:#bac9ce;padding:4px 7px;font-size:10px;font-weight:900;white-space:nowrap}
-.panic-level-chip.alert-1{background:#3d4a39;color:#c7db93}.panic-level-chip.alert-2{background:#5a4c32;color:#f3d29d}.panic-level-chip.alert-4{background:#6a3b30;color:#ffbca8}.panic-level-chip.alert-5{background:#753438;color:#ffd0d0}
-.panic-city-action{display:flex;align-items:center;gap:6px;padding:9px 10px}
-.panic-step{width:32px;height:30px;border:1px solid #587078;border-radius:7px;background:#304049;color:#edf4f6;cursor:pointer;font-size:19px;font-weight:900}
-.panic-step.plus{background:#9f5550;border-color:#d17870}.panic-step:disabled{opacity:.38;cursor:not-allowed}
-.panic-level-value{flex:1;text-align:center;color:#eaf3f3;font-size:12px;font-weight:900}
-.panic-footnote{margin-top:12px;padding:11px 12px;background:#302c25;border:1px solid #6c5841;border-radius:9px;color:#d2c1a1;font-size:10.5px;line-height:1.6}
-.panic-empty{grid-column:1/-1;padding:38px;text-align:center;color:#9cadb4;font-size:13px}
-body.panic-modal-open{overflow:hidden}
-@media(max-width:1000px){.panic-city-list{grid-template-columns:repeat(3,minmax(0,1fr))}.panic-level-guide{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:650px){.panic-overlay{padding:8px;align-items:flex-start}.panic-dialog{height:calc(100dvh - 16px);border-radius:12px}.panic-head{padding:12px 13px}.panic-scroll{padding:12px}.panic-head h3{font-size:18px}.panic-head p{font-size:10px}.panic-overview{grid-template-columns:repeat(2,minmax(0,1fr))}.panic-level-guide{grid-template-columns:repeat(2,minmax(0,1fr))}.panic-city-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.panic-city-top,.panic-city-action{padding:8px}.panic-city-name{font-size:12px}.panic-metric strong{font-size:19px}}
-
-
 /* V106 · infection spreadsheet VBA status sort and optional card-count column */
 .macro-display-options{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:0 0 9px;padding:8px 10px;border:1px solid #3c5158;background:#1b2b31;border-radius:9px;color:#a5bdc5;font-size:11px;line-height:1.4}
 .macro-display-options label{display:inline-flex;align-items:center;gap:6px;color:#e2ebee;white-space:nowrap;cursor:pointer;font-size:11px;font-weight:800}
@@ -446,6 +405,47 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
 
 </style>
 <!-- JEI-S1-S2-MEMO-V108-END -->
+<style>
+
+/* V115 · Season 1 occupation-based character roster */
+.role-head-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.role-add-btn{border:1px solid #668b94;background:#31515b;color:#e9f6f6;padding:9px 12px;border-radius:9px;cursor:pointer;font-size:12px;font-weight:850;white-space:nowrap}
+.role-add-btn:hover{background:#3f6470}
+.role-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.role-item{min-width:0;width:100%;text-align:left;border:1px solid #425960;border-radius:10px;background:#1c2d34;color:#f0f6f7;padding:12px 13px;cursor:pointer;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.role-item:hover{background:#25414b;border-color:#6e9aa2}
+.role-item .role-item-job{font-size:15px;font-weight:900;display:block;line-height:1.35;overflow-wrap:anywhere}
+.role-item .role-item-name{display:block;margin-top:5px;font-size:11px;color:#a9bdc4;line-height:1.35;overflow-wrap:anywhere}
+.role-item .role-item-chevron{font-size:19px;color:#8fb1b8;flex:0 0 auto}
+.role-item.is-missing{opacity:.48;background:#20292d;border-style:dashed;filter:grayscale(.65)}
+.role-item .role-missing-badge{font-size:10px;background:#703e44;color:#ffe1e1;padding:3px 7px;border-radius:999px;font-weight:800;white-space:nowrap;margin-left:6px}
+.role-item .role-item-count{font-size:10px;color:#91a4ad;font-weight:700}
+.character-role-overlay{position:fixed;inset:0;z-index:190;background:rgba(4,11,14,.78);display:flex;justify-content:center;align-items:center;padding:17px}
+.character-role-dialog{width:min(590px,100%);max-height:calc(100dvh - 34px);overflow-y:auto;border:1px solid #566d76;border-radius:16px;background:#223138;box-shadow:0 25px 70px rgba(0,0,0,.5);color:#f0f5f6}
+.character-role-header{display:flex;justify-content:space-between;gap:10px;align-items:start;padding:18px 20px 13px;border-bottom:1px solid #3d525b}
+.character-role-header span{font-size:10px;letter-spacing:.15em;color:#96b5bc;font-weight:850}.character-role-header h3{font-size:21px;margin:5px 0 0}
+.character-role-close{width:33px;height:33px;border-radius:50%;border:1px solid #66828a;background:#2b4149;color:#fff;cursor:pointer;font-size:20px}
+.character-role-body{padding:17px 20px 5px;display:grid;gap:14px}
+.character-role-body>label:not(.character-role-lost){display:grid;gap:7px;font-size:12px;font-weight:850;color:#c5d5d9}
+.character-role-body input[type=text],.character-role-body textarea{width:100%;border:1px solid #54707a;background:#15252b;border-radius:9px;padding:11px 12px;color:#f3f6f6;outline:none;font-size:14px}
+.character-role-body input:focus,.character-role-body textarea:focus{border-color:#8fc4cf;box-shadow:0 0 0 2px rgba(143,196,207,.12)}
+.character-role-body textarea{min-height:220px;resize:vertical;line-height:1.7}
+.character-role-lost{display:flex;align-items:flex-start;gap:11px;border:1px solid #765b5c;border-radius:10px;background:#3b2d30;padding:12px 13px;cursor:pointer}
+.character-role-lost input{width:19px;height:19px;margin:2px 0 0;accent-color:#c57373}
+.character-role-lost span{display:grid;gap:3px}.character-role-lost b{font-size:13px;color:#ffdada}.character-role-lost small{font-size:11px;color:#d0b5b5;line-height:1.5}
+.character-role-hint{min-height:18px;color:#a6bdc2;font-size:11px}
+.character-role-footer{display:flex;justify-content:flex-end;padding:12px 20px 19px}
+.character-role-done{border:0;border-radius:9px;background:#4b8591;color:white;padding:11px 22px;font-size:13px;font-weight:900;cursor:pointer}
+.current-character-select{margin-top:11px;border:1px solid #46616b;border-radius:10px;background:#1a2a30;padding:12px}
+.current-character-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:9px}
+.current-character-title b{font-size:13px;font-weight:900;color:#e9f5f5}.current-character-title span{font-size:11px;color:#98b5bf;font-weight:800}
+.current-character-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.current-character-slot{display:grid;gap:5px;font-size:10px;font-weight:850;color:#a8bdc4}
+.current-character-slot select{width:100%;min-width:0;background:#132127;border:1px solid #45626c;color:#eef4f6;border-radius:8px;padding:10px 8px;font-size:12px;font-weight:750;outline:none}
+.current-character-footnote{margin-top:9px;color:#91abb3;font-size:10px;line-height:1.55}
+@media(max-width:650px){.role-list{grid-template-columns:1fr}.role-head-actions{justify-content:stretch}.character-role-body{padding:14px 15px 5px}.character-role-header{padding:14px 15px}.current-character-grid{grid-template-columns:1fr}}
+
+</style>
 </head>
 <body>
 <div id="gate" class="gate">
@@ -467,7 +467,6 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
         <div class="hero-title-actions">
           <div class="spoiler">⚠ 이 페이지에는 캠페인 스포일러가 포함됩니다.</div>
           <button id="openInfectionTracker" class="hero-tracker-btn" type="button">감염 도시 트래커</button>
-          <button id="openPanicTracker" class="hero-tracker-btn hero-panic-btn" type="button">도시 패닉 레벨</button>
         </div>
       </div>
       <aside class="hero-schedule-panel">
@@ -484,8 +483,8 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
   <div class="dashboard-grid">
     <div class="dashboard-col dashboard-col-left">
       <section class="section players-section">
-        <div class="section-head"><div><h2>플레이어 & 캐릭터</h2><div class="section-desc">플레이어는 고정 · 캐릭터명과 역할은 입력하면 자동 저장</div></div><span id="saveState" class="save-state"></span></div>
-        <div id="players" class="grid4"></div>
+        <div class="section-head"><div><h2>캐릭터 · 직업 명부</h2><div class="section-desc">직업을 누르면 이름과 상처·관계·업그레이드를 기록할 수 있어요.</div></div><div class="role-head-actions"><span id="saveState" class="save-state"></span><button id="addCharacterRole" type="button" class="role-add-btn">+ 직업 추가</button></div></div>
+        <div id="players" class="role-list"></div>
       </section>
 
       <section class="section sessions-section">
@@ -561,35 +560,6 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
 </div>
 
 
-<div id="panicModal" class="panic-overlay hidden" role="presentation">
-  <div class="panic-dialog" role="dialog" aria-modal="true" aria-labelledby="panicTitle">
-    <div class="panic-head">
-      <div>
-        <div class="panic-kicker">PERMANENT CITY STATUS</div>
-        <h3 id="panicTitle">도시 패닉 레벨 트래커</h3>
-        <p>아웃브레이크가 발생한 도시만 레벨을 1 올리세요. 기록은 게임이 끝나도 유지됩니다.</p>
-      </div>
-      <button id="closePanicTracker" class="panic-close" type="button" aria-label="패닉 트래커 닫기">×</button>
-    </div>
-    <div class="panic-scroll">
-      <div class="panic-overview" id="panicOverview" aria-live="polite"></div>
-      <div class="panic-controls">
-        <input id="panicSearch" type="search" placeholder="도시 검색" aria-label="패닉 도시 검색" autocomplete="off">
-        <label class="panic-filter"><input id="panicOnlyActive" type="checkbox"> 패닉 발생 도시만</label>
-      </div>
-      <div class="panic-level-guide">
-        <div><b>0 · 정상</b><span>패닉 없음</span></div>
-        <div><b>1 · 불안정</b><span>추가 효과 없음</span></div>
-        <div><b>2~3 · 폭동</b><span>직항/전세기 이용 불가 · 연구소 파괴/건설 불가</span></div>
-        <div><b>4 · 붕괴</b><span>차량/선박으로 진입할 때 해당 도시 색 카드 1장 버림</span></div>
-        <div><b>5 · 몰락</b><span>진입 시 2장 버림 · 처음 몰락할 때 도시에 있던 캐릭터 상실</span></div>
-      </div>
-      <div id="panicCityList" class="panic-city-list"></div>
-      <div class="panic-footnote">공식 기본 규칙 기준. 효과는 누적되며, 나중에 공개되는 레거시 규칙·스티커는 실제 게임판을 우선하세요. 아웃브레이크 1회당 해당 도시의 패닉 레벨이 1 상승하고 최대 5입니다. 일반 감염만으로는 상승하지 않습니다.</div>
-    </div>
-  </div>
-</div>
-
 <div id="scheduleModal" class="modal-bg schedule-modal hidden"><div class="modal">
   <h3 id="scheduleModalTitle">레거시 일정 추가</h3>
   <form id="scheduleForm" class="form-grid">
@@ -600,6 +570,21 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
   </form>
   <div class="modal-actions"><button id="cancelSchedule" class="ghost" type="button">취소</button><button id="saveSchedule" class="primary" type="button">저장</button></div>
 </div></div>
+
+
+<div id="characterRoleModal" class="character-role-overlay hidden" role="presentation">
+  <div class="character-role-dialog" role="dialog" aria-modal="true" aria-labelledby="characterRoleTitle">
+    <div class="character-role-header"><div><span>CHARACTER / LEGACY S1</span><h3 id="characterRoleTitle">캐릭터 정보</h3></div><button id="characterRoleClose" class="character-role-close" type="button" aria-label="닫기">×</button></div>
+    <div class="character-role-body">
+      <label>직업명<input id="characterRoleJob" type="text" maxlength="70" placeholder="예: 위생병"></label>
+      <label>캐릭터 이름<input id="characterRoleName" type="text" maxlength="100" placeholder="플레이어가 지은 캐릭터 이름"></label>
+      <label>상처 · 관계 · 업그레이드 및 기타 메모<textarea id="characterRoleNotes" placeholder="게임 중 생긴 상처, 관계, 업그레이드, 중요한 사건 등을 자유롭게 기록하세요."></textarea></label>
+      <label class="character-role-lost"><input id="characterRoleMissing" type="checkbox"><span><b>실종된 캐릭터</b><small>명부에서 흐리게 표시되며, 새 회차 참여 캐릭터로 선택할 수 없어요.</small></span></label>
+      <div id="characterRoleHint" class="character-role-hint">입력하면 자동 저장됩니다.</div>
+    </div>
+    <div class="character-role-footer"><button id="characterRoleDone" type="button" class="character-role-done">완료</button></div>
+  </div>
+</div>
 
 <div id="sessionModal" class="modal-bg hidden"><div class="modal">
   <h3 id="modalTitle">회차 기록 수정</h3>
@@ -640,7 +625,7 @@ let sessionPhotoCache=new Map(),modalExistingPhotos=[],modalPendingPhotos=[],mod
 
 function defaultInfectionTracker(){return {current_round:0,round_counts:{},city_card_counts:{},epidemics:0,configured_total:48};}
 function defaultPlayerDeckTracker(){return {drawn:0};}
-function defaultState(){return {meta:{current_month:'1월',attempt:1,funding:'',last_result:'',next_note:'',next_note_draft:'',play_date:'',session_result:'',play_log:'',current_objectives:'',objective_items:[],current_rules:'',permanent_summary:'',current_upgrades:''},players:[{name:'제이',character:'',role:'',detail:''},{name:'우리',character:'',role:'',detail:''},{name:'승연',character:'',role:'',detail:''},{name:'종우',character:'',role:'',detail:''}],infection_tracker:defaultInfectionTracker(),player_deck_tracker:defaultPlayerDeckTracker(),panic_levels:{},schedules:[{id:'legacy-1',round:'1회차',date:'2026-10-17',note:'1시~'}],sessions:[]};}
+function defaultState(){return {meta:{current_month:'1월',attempt:1,funding:'',last_result:'',next_note:'',next_note_draft:'',play_date:'',session_result:'',play_log:'',current_objectives:'',objective_items:[],current_rules:'',permanent_summary:'',current_upgrades:'',current_character_ids:[]},players:[{name:'제이',character:'',role:'',detail:''},{name:'우리',character:'',role:'',detail:''},{name:'승연',character:'',role:'',detail:''},{name:'종우',character:'',role:'',detail:''}],infection_tracker:defaultInfectionTracker(),player_deck_tracker:defaultPlayerDeckTracker(),panic_levels:{},schedules:[{id:'legacy-1',round:'1회차',date:'2026-10-17',note:'1시~'}],sessions:[]};}
 function normalizeInfectionCityName(name){return ({'하르툼':'카르툼','호치민시':'호치민'}[name]||name);}
 function normalizeRoundCounts(raw){
   const out={};
@@ -663,6 +648,27 @@ function migrateInfectionTracker(raw){
   mark(it.danger2,round-2);mark(it.danger1,round-1);mark(it.current,round);
   return {...base,current_round:round,epidemics:round,configured_total:Math.max(1,parseInt(it.configured_total,10)||48),round_counts:counts,city_card_counts:normalizeCityCardCounts(it.city_card_counts)};
 }
+
+const S1_DEFAULT_ROLES=['과학자','운항관리자','위생병','연구자','종합의사','검역 전문가','건축 전문가'];
+function normalizeCharacterRoster(raw,legacyPlayers){
+  // Preserve every saved occupation, name, note and missing flag. Never delete the legacy players key.
+  if(Array.isArray(raw))return raw.map((r,i)=>({
+    ...r,id:String(r?.id||`role-existing-${i}`),role:String(r?.role||''),
+    character:String(r?.character||''),detail:String(r?.detail||''),missing:!!r?.missing
+  }));
+  const roster=S1_DEFAULT_ROLES.map((role,i)=>({id:`role-preset-${i}`,role,character:'',detail:'',missing:false}));
+  const players=Array.isArray(legacyPlayers)?legacyPlayers:[];
+  players.forEach((p,i)=>{
+    const role=String(p?.role||'').trim();
+    const character=String(p?.character||'').trim();
+    const detail=String(p?.detail||'').trim();
+    if(!role&&!character&&!detail)return;
+    const free=roster.find(r=>r.role.replace(/\s/g,'')===role.replace(/\s/g,'')&&!r.character&&!r.detail);
+    if(free){free.character=character;free.detail=detail;}
+    else roster.push({id:`role-legacy-${i}`,role:role||'직업 미정',character,detail,missing:false});
+  });
+  return roster;
+}
 function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s.players:[],meta={...d.meta,...(s?.meta||{})};
   // Backward compatibility: V106 stored free text in current_objectives.
   // Only migrate once. A deliberately empty checklist must remain empty after reload.
@@ -671,12 +677,92 @@ function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s
   }else{
     meta.objective_items=s.meta.objective_items.map((item,i)=>({id:String(item?.id||`item-${i}`),text:String(item?.text||''),done:!!item?.done}));
   }
-  return {meta,players:d.players.map((p,i)=>{const saved=stored.find(x=>x?.name===p.name)||stored[i]||{};return {...p,...saved,name:p.name};}),infection_tracker:migrateInfectionTracker(s?.infection_tracker),player_deck_tracker:{...defaultPlayerDeckTracker(),...(s?.player_deck_tracker||{})},panic_levels:normalizePanicLevels(s?.panic_levels),schedules:Array.isArray(s?.schedules)?s.schedules:d.schedules,sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
+  const character_roles=normalizeCharacterRoster(s?.character_roles,s?.players);
+  if(!Array.isArray(s?.meta?.current_character_ids)){
+    meta.current_character_ids=character_roles.filter(r=>r.id.startsWith('role-legacy-')||
+      (r.id.startsWith('role-preset-')&&(r.character||r.detail))).slice(0,4).map(r=>r.id);
+  }else{
+    meta.current_character_ids=s.meta.current_character_ids.filter(id=>character_roles.some(r=>r.id===id)).slice(0,4);
+  }
+  return {character_roles,meta,players:d.players.map((p,i)=>{const saved=stored.find(x=>x?.name===p.name)||stored[i]||{};return {...p,...saved,name:p.name};}),infection_tracker:migrateInfectionTracker(s?.infection_tracker),player_deck_tracker:{...defaultPlayerDeckTracker(),...(s?.player_deck_tracker||{})},panic_levels:normalizePanicLevels(s?.panic_levels),schedules:Array.isArray(s?.schedules)?s.schedules:d.schedules,sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
 async function boot(){const {data:{session}}=await db.auth.getSession();isAdmin=!!session;if(isAdmin){const {data,error}=await db.from('pandemic_legacy_s1_state').select('data').eq('id',1).single();if(!error&&data){state=mergeState(data.data);canEdit=true;openApp();return;}}}
 async function unlock(){const code=$('#codeInput').value.trim();if(!code)return;$('#gateError').textContent='';const {data,error}=await db.rpc('get_pandemic_legacy_s1',{p_code:code});if(error){console.error(error);$('#gateError').textContent=error.code==='P0001'?'비밀번호가 맞지 않아요.':'연결 설정을 확인해주세요.';return;}accessCode=code;state=mergeState(data);canEdit=true;sessionStorage.setItem('pandemicLegacyS1Code',code);openApp();}
 function openApp(){$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');$('#addScheduleBtn').classList.toggle('hidden',!canEdit);JEI_V114.init();render();}
 function render(){renderPlayers();renderStatus();renderMonths();renderInfectionTracker();renderPlayerDeckTracker();renderSchedules();renderSessions();}
-function renderPlayers(){const wrap=$('#players');wrap.innerHTML=state.players.map((p,i)=>`<div class="player-card"><div class="player-name">${p.name}</div>${canEdit?`<input data-player="${i}" data-key="character" value="${escapeAttr(p.character)}" placeholder="캐릭터명"><input class="role-input" data-player="${i}" data-key="role" value="${escapeAttr(p.role)}" placeholder="역할 / 직업"><textarea class="detail-input" data-player="${i}" data-key="detail" placeholder="상처 · 관계 · 업그레이드 메모">${esc(p.detail||'')}</textarea>`:`<div class="player-character">${esc(p.character||'캐릭터 미정')}</div><div class="player-role">${esc(p.role||'')}</div><div class="player-detail-read">${esc(p.detail||'상태 메모 없음')}</div>`}</div>`).join('');if(canEdit){wrap.querySelectorAll('input,textarea').forEach(el=>el.oninput=()=>{state.players[+el.dataset.player][el.dataset.key]=el.value;queueSave();});}}
+function renderPlayers(){
+  const wrap=$('#players');
+  wrap.innerHTML=(state.character_roles||[]).map(r=>`<button type="button" class="role-item ${r.missing?'is-missing':''}" data-role-id="${escapeAttr(r.id)}"><span><span class="role-item-job">${esc(r.role||'직업 미정')}${r.missing?'<span class="role-missing-badge">실종</span>':''}</span><span class="role-item-name">${r.character?esc(r.character):'<span class="role-item-count">이름 미등록</span>'}</span></span><span class="role-item-chevron">›</span></button>`).join('');
+  wrap.querySelectorAll('[data-role-id]').forEach(btn=>btn.onclick=()=>openCharacterRole(btn.dataset.roleId));
+  const add=$('#addCharacterRole');if(add)add.onclick=()=>openCharacterRole();
+}
+let activeCharacterRoleId=null;
+function openCharacterRole(id=null){
+  if(!canEdit)return;
+  activeCharacterRoleId=id;
+  const r=id?state.character_roles.find(x=>x.id===id):null;
+  if(id&&!r)return;
+  $('#characterRoleTitle').textContent=id?'캐릭터 정보 · '+(r.role||'직업 미정'):'새 직업 추가';
+  $('#characterRoleJob').value=r?.role||'';
+  $('#characterRoleName').value=r?.character||'';
+  $('#characterRoleNotes').value=r?.detail||'';
+  $('#characterRoleMissing').checked=!!r?.missing;
+  $('#characterRoleHint').textContent=id?'입력 내용은 자동 저장돼요.':'직업명을 입력하고 완료를 눌러 추가해 주세요.';
+  $('#characterRoleModal').classList.remove('hidden');
+  setTimeout(()=>{(id?$('#characterRoleNotes'):$('#characterRoleJob')).focus();},40);
+}
+function characterRoleInput(){
+  if(!activeCharacterRoleId)return; // A new role is only created after the user confirms.
+  const r=state.character_roles.find(x=>x.id===activeCharacterRoleId);if(!r)return;
+  r.role=$('#characterRoleJob').value;
+  r.character=$('#characterRoleName').value;
+  r.detail=$('#characterRoleNotes').value;
+  r.missing=$('#characterRoleMissing').checked;
+  queueSave();
+  $('#characterRoleHint').textContent='자동 저장 중...';
+}
+function closeCharacterRole(){
+  if($('#characterRoleModal').classList.contains('hidden'))return;
+  if(!activeCharacterRoleId){
+    const role=$('#characterRoleJob').value.trim();
+    const char=$('#characterRoleName').value.trim(),detail=$('#characterRoleNotes').value;
+    if(!role&&(char||detail)){ $('#characterRoleHint').textContent='직업명을 입력해 주세요.';$('#characterRoleJob').focus();return; }
+    if(role){
+      state.character_roles.push({id:crypto.randomUUID(),role,character:char,detail,missing:$('#characterRoleMissing').checked});
+      queueSave();
+    }
+  }else{
+    characterRoleInput();
+  }
+  activeCharacterRoleId=null;
+  $('#characterRoleModal').classList.add('hidden');
+  renderPlayers();renderCharacterChoices();
+}
+function currentCharacterSelection(){
+  const ids=Array.isArray(state.meta.current_character_ids)?state.meta.current_character_ids:[];
+  return ids.slice(0,4).map(id=>state.character_roles.find(r=>r.id===id)).filter(Boolean);
+}
+function characterLabel(r){return r.role+(r.character?` (${r.character})`:'');}
+function renderCharacterChoices(){
+  const grid=$('#currentCharacterGrid');if(!grid)return;
+  const ids=Array.isArray(state.meta.current_character_ids)?state.meta.current_character_ids:[];
+  grid.innerHTML=Array.from({length:4},(_,i)=>{
+    const selected=ids[i]||'';
+    const options=state.character_roles.map(r=>{
+      const taken=ids.some((id,j)=>id===r.id&&j!==i);
+      const disabled=(r.missing&&r.id!==selected)||taken;
+      return `<option value="${escapeAttr(r.id)}" ${r.id===selected?'selected':''} ${disabled?'disabled':''}>${esc(characterLabel(r))}${r.missing?' · 실종':''}</option>`;
+    }).join('');
+    return `<label class="current-character-slot">${i+1}번째 캐릭터<select class="current-character-choice" data-slot="${i}"><option value="">— 캐릭터 선택 —</option>${options}</select></label>`;
+  }).join('');
+  grid.querySelectorAll('select').forEach(select=>select.onchange=()=>{
+    const i=Number(select.dataset.slot),id=select.value;
+    const next=[...ids];next[i]=id;
+    state.meta.current_character_ids=next.slice(0,4);
+    queueSave();renderCharacterChoices();
+  });
+  const count=grid.closest('.current-character-select')?.querySelector('.current-character-count');
+  if(count)count.textContent=`${currentCharacterSelection().length} / 4명 선택`;
+}
 function latestCompletedSession(){
   const arr=[...(state.sessions||[])];
   arr.sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))||String(b.created_at||'').localeCompare(String(a.created_at||'')));
@@ -687,9 +773,8 @@ function currentIncomingNote(){
   return {note:String(prev?.next||state.meta.next_note||'').trim(),prev};
 }
 function currentCharacterText(){
-  return (state.players||[]).map(p=>p.character?`${p.name}(${p.character})`:p.name).join(' · ');
-}
-function objectiveSummaryText(items){
+  return currentCharacterSelection().map(characterLabel).join(' · ');
+}function objectiveSummaryText(items){
   const arr=Array.isArray(items)?items.filter(o=>String(o.text||'').trim()):[];
   return arr.map(o=>`${o.done?'✅ 성공':'❌ 실패'} · ${String(o.text||'').trim()}`).join('\n');
 }
@@ -727,6 +812,7 @@ function renderStatus(){
       <div class="current-play-stat"><label>자금 지원 카드 수</label><input id="metaFunding" type="number" min="0" max="10" value="${escapeAttr(m.funding??'')}"><small>이번 게임 플레이어 덱에 추가할 자금 지원 이벤트 카드 수</small></div>
       <div class="current-play-stat"><label>플레이 날짜</label><input id="metaPlayDate" type="date" value="${escapeAttr(m.play_date||'')}"><small>실제 플레이 날짜</small></div>
     </div>
+    <div class="current-character-select"><div class="current-character-title"><b>이번 회차 참여 캐릭터</b><span class="current-character-count">0 / 4명 선택</span></div><div id="currentCharacterGrid" class="current-character-grid"></div><div class="current-character-footnote">직업 명부에서 등록한 캐릭터를 최대 4명 선택할 수 있어요. 실종 캐릭터는 새로 선택할 수 없으며, 회차를 저장하면 선택한 직업과 이름이 기록에 남아요.</div></div>
     <div class="current-objective objective-panel">
       <div class="objective-head"><div><b>이번 회차 목표</b><span>플레이 전 목표 입력 · 성공한 목표만 체크</span></div><button id="addObjectiveBtn" class="objective-add" type="button">+ 목표 추가</button></div>
       <div id="objectiveList" class="objective-list">${m.objective_items.length?m.objective_items.map((o,i)=>`<div class="objective-row" data-obj="${esc(o.id)}"><input class="objective-check" type="checkbox" ${o.done?'checked':''} aria-label="목표 ${i+1} 성공 체크"><input class="objective-text" value="${escapeAttr(o.text||'')}" placeholder="이번 회차 목표 입력" aria-label="목표 ${i+1} 내용"><span class="objective-result ${o.done?'success':'fail'}">${o.done?'성공':'실패'}</span><button class="objective-delete" type="button" title="목표 삭제" aria-label="목표 ${i+1} 삭제">×</button></div>`).join(''):'<div class="objective-empty">아직 등록한 목표가 없어요. + 목표 추가로 입력하세요.</div>'}</div>
@@ -778,73 +864,14 @@ function renderStatus(){
       del.onclick=()=>{m.objective_items.splice(i,1);syncObjectiveLegacyText();renderStatus();queueSave();};
     });
     updateObjectiveCounter();
+    renderCharacterChoices();
     $('#currentPhotos').onchange=handleCurrentPhotos;
     $('#saveCurrentSessionBtn').onclick=saveCurrentSession;
     renderCurrentPhotoPreview();
   }
 }
 
-// Panic levels are permanent city stickers; infection card draws are NOT outbreaks.
-function normalizePanicLevels(raw){
-  const out={};
-  infectionCities.forEach(c=>{const n=Number(raw?.[c]);if(Number.isFinite(n)&&n>0)out[c]=Math.min(5,Math.max(0,Math.floor(n)))});
-  return out;
-}
-const panicCollator=new Intl.Collator('ko-KR',{sensitivity:'base',numeric:true});
-let panicOpenScroll=0;
-function panicLevel(city){return Math.min(5,Math.max(0,+state.panic_levels?.[city]||0))}
-function renderPanicTracker(){
-  if(!state)return;
-  const all=infectionCities;
-  const active=all.filter(c=>panicLevel(c)>0);
-  $('#panicOverview').innerHTML=[
-    ['전체 도시',`${all.length}`],
-    ['패닉 발생 도시',`${active.length}`],
-    ['폭동 이상 (2~5)',`${active.filter(c=>panicLevel(c)>=2).length}`],
-    ['몰락 (5)',`${active.filter(c=>panicLevel(c)===5).length}`]
-  ].map(([label,value])=>`<div class="panic-metric"><label>${label}</label><strong>${value}</strong></div>`).join('');
-  const q=($('#panicSearch').value||'').trim().toLocaleLowerCase('ko-KR');
-  const onlyActive=$('#panicOnlyActive').checked;
-  const cities=all.filter(c=>(!q||c.toLocaleLowerCase('ko-KR').includes(q))&&(!onlyActive||panicLevel(c)>0))
-    .sort((a,b)=>(panicLevel(b)-panicLevel(a))||panicCollator.compare(a,b));
-  const labels=['정상','불안정','폭동','폭동','붕괴','몰락'];
-  $('#panicCityList').innerHTML=cities.length?cities.map(c=>{
-    const lvl=panicLevel(c),band=lvl===0?'':lvl===1?'alert-1':lvl<=3?'alert-2':lvl===4?'alert-4':'alert-5';
-    return `<div class="panic-city level-${lvl}">
-      <div class="panic-city-top"><b class="panic-city-name"><i class="panic-city-color ${infectionColorByCity[c]||'blue'}"></i>${esc(c)}</b><span class="panic-level-chip ${band}">${lvl} · ${labels[lvl]}</span></div>
-      <div class="panic-city-action"><button class="panic-step minus" type="button" data-panic-city="${esc(c)}" data-panic-delta="-1" ${!canEdit||lvl===0?'disabled':''} aria-label="${esc(c)} 패닉 레벨 내리기">−</button>
-      <span class="panic-level-value">패닉 ${lvl} / 5</span>
-      <button class="panic-step plus" type="button" data-panic-city="${esc(c)}" data-panic-delta="1" ${!canEdit||lvl===5?'disabled':''} aria-label="${esc(c)} 패닉 레벨 올리기">+</button></div>
-    </div>`;
-  }).join(''):'<div class="panic-empty">조건에 맞는 도시가 없어요.</div>';
-  $('#panicCityList').querySelectorAll('[data-panic-delta]').forEach(btn=>{
-    btn.onclick=()=>changeCityPanic(btn.dataset.panicCity,Number(btn.dataset.panicDelta));
-  });
-}
-function changeCityPanic(city,delta){
-  if(!canEdit||!infectionCities.includes(city))return;
-  const before=panicLevel(city),next=Math.max(0,Math.min(5,before+delta));
-  if(before===next)return;
-  if(delta<0&&!confirm(`${city}의 패닉 레벨을 ${before}에서 ${next}(으)로 낮출까요?\n실제 게임판 스티커 변경 여부를 확인해주세요.`))return;
-  state.panic_levels??={};
-  if(next===0)delete state.panic_levels[city];else state.panic_levels[city]=next;
-  renderPanicTracker();queueSave();
-}
-function openPanicTracker(){
-  panicOpenScroll=window.scrollY||window.pageYOffset||0;
-  document.body.classList.add('panic-modal-open');
-  document.body.style.position='fixed';document.body.style.top=`-${panicOpenScroll}px`;
-  document.body.style.left='0';document.body.style.right='0';document.body.style.width='100%';
-  $('#panicModal').classList.remove('hidden');renderPanicTracker();
-}
-function closePanicTracker(){
-  if($('#panicModal').classList.contains('hidden'))return;
-  $('#panicModal').classList.add('hidden');
-  document.body.classList.remove('panic-modal-open');
-  for(const prop of ['position','top','left','right','width'])document.body.style[prop]='';
-  window.scrollTo(0,panicOpenScroll);
-}
-
+function normalizePanicLevels(raw){const out={};infectionCities.forEach(c=>{const n=Number(raw?.[c]);if(Number.isFinite(n)&&n>0)out[c]=Math.min(5,Math.max(0,Math.floor(n)));});return out;}
 function renderMonths(){$('#monthStrip').innerHTML=months.map(x=>`<div class="month-chip ${x===state.meta.current_month?'active':''}">${x}</div>`).join('');}
 
 
@@ -1086,6 +1113,7 @@ function clearCurrentWorkspace({keepObjectives=false}={}){
   const m=state.meta;
   m.play_date=new Date().toISOString().slice(0,10);
   m.session_result='';m.play_log='';m.current_upgrades='';m.next_note_draft='';
+  m.current_character_ids=[];
   if(keepObjectives)m.objective_items=(Array.isArray(m.objective_items)?m.objective_items:[]).map(o=>({...o,done:false}));
   else m.objective_items=[];
   syncObjectiveLegacyText();
@@ -1181,8 +1209,13 @@ async function saveSession(){
 function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}function escapeAttr(v){return esc(v).replace(/`/g,'&#96;');}
 const rememberedCode=sessionStorage.getItem('pandemicLegacyS1Code');if(rememberedCode&&!isAdmin){$('#codeInput').value=rememberedCode;setTimeout(unlock,0);}
 $('#sPhotos').onchange=e=>handlePhotoFiles(e.target.files);
-$('#openPanicTracker').onclick=openPanicTracker;$('#closePanicTracker').onclick=closePanicTracker;$('#panicSearch').oninput=renderPanicTracker;$('#panicOnlyActive').onchange=renderPanicTracker;$('#openInfectionTracker').onclick=openInfectionTracker;$('#closeInfectionTracker').onclick=closeInfectionTracker;$('#infectionEpidemic').onclick=infectionEpidemic;$('#infectionReset').onclick=resetInfectionTracker;$('#infectionUndo').onclick=undoInfectionTracker;$('#infectionClearRound').onclick=clearCurrentInfectionRound;$('#infectionShowCardCounts').onchange=e=>{infectionShowCardCounts=e.target.checked;renderInfectionTracker();};
-$('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#addScheduleBtn').onclick=()=>openSchedule();$('#cancelSchedule').onclick=()=>$('#scheduleModal').classList.add('hidden');$('#saveSchedule').onclick=saveSchedule;$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#panicModal').classList.contains('hidden')){closePanicTracker();return;}if(e.key==='Escape'&&!$('#infectionModal').classList.contains('hidden')){closeInfectionTracker();return;}if(e.key==='Escape'&&!$('#photoLightbox').classList.contains('hidden')){closePhotoLightbox();return;}if(!$('#photoLightbox').classList.contains('hidden')){if(e.key==='ArrowLeft'){lightboxIndex--;renderPhotoLightbox();}else if(e.key==='ArrowRight'){lightboxIndex++;renderPhotoLightbox();}return;}if(e.key==='Escape'&&!$('#scheduleModal').classList.contains('hidden')){$('#scheduleModal').classList.add('hidden');return;}if(e.key==='Escape'&&!$('#sessionModal').classList.contains('hidden'))$('#sessionModal').classList.add('hidden')});
+$('#openInfectionTracker').onclick=openInfectionTracker;$('#closeInfectionTracker').onclick=closeInfectionTracker;$('#infectionEpidemic').onclick=infectionEpidemic;$('#infectionReset').onclick=resetInfectionTracker;$('#infectionUndo').onclick=undoInfectionTracker;$('#infectionClearRound').onclick=clearCurrentInfectionRound;$('#infectionShowCardCounts').onchange=e=>{infectionShowCardCounts=e.target.checked;renderInfectionTracker();};
+$('#characterRoleDone').onclick=closeCharacterRole;
+$('#characterRoleClose').onclick=closeCharacterRole;
+$('#characterRoleModal').onclick=e=>{if(e.target===$('#characterRoleModal'))closeCharacterRole();};
+['characterRoleJob','characterRoleName','characterRoleNotes'].forEach(id=>$('#'+id).oninput=characterRoleInput);
+$('#characterRoleMissing').onchange=characterRoleInput;
+$('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#addScheduleBtn').onclick=()=>openSchedule();$('#cancelSchedule').onclick=()=>$('#scheduleModal').classList.add('hidden');$('#saveSchedule').onclick=saveSchedule;$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#characterRoleModal').classList.contains('hidden')){closeCharacterRole();return;}if(e.key==='Escape'&&!$('#infectionModal').classList.contains('hidden')){closeInfectionTracker();return;}if(e.key==='Escape'&&!$('#photoLightbox').classList.contains('hidden')){closePhotoLightbox();return;}if(!$('#photoLightbox').classList.contains('hidden')){if(e.key==='ArrowLeft'){lightboxIndex--;renderPhotoLightbox();}else if(e.key==='ArrowRight'){lightboxIndex++;renderPhotoLightbox();}return;}if(e.key==='Escape'&&!$('#scheduleModal').classList.contains('hidden')){$('#scheduleModal').classList.add('hidden');return;}if(e.key==='Escape'&&!$('#sessionModal').classList.contains('hidden'))$('#sessionModal').classList.add('hidden')});
 
 /* JEI V114 - straightforward serialized autosave; no backup panels or write-lock states. */
 const JEI_V114=(()=>{
