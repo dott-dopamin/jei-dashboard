@@ -983,7 +983,7 @@ function renderSchedules(){
 function openSchedule(data={}){$('#scheduleId').value=data.id||'';$('#scheduleRound').value=data.round||`${(state.schedules?.length||0)+1}회차`;$('#scheduleDate').value=data.date||'';$('#scheduleNote').value=data.note||'';$('#scheduleModalTitle').textContent=data.id?'레거시 일정 수정':'레거시 일정 추가';$('#scheduleModal').classList.remove('hidden');setTimeout(()=>$('#scheduleRound').focus(),50);}
 window.editSchedule=id=>{const s=(state.schedules||[]).find(x=>x.id===id);if(s)openSchedule(s);};
 window.deleteSchedule=async id=>{if(!canEdit||!confirm('이 레거시 일정을 삭제할까요?'))return;state.schedules=(state.schedules||[]).filter(x=>x.id!==id);await saveState();renderSchedules();};
-async function saveSchedule(){if(JEI_SAFE.isBlocked())return JEI_SAFE.reportFailure('저장 잠금 상태라 일정을 변경하지 않았어요. 보호 패널의 이전 자동 백업을 확인해 주세요.');if(!canEdit)return;const id=$('#scheduleId').value||crypto.randomUUID();const row={id,round:$('#scheduleRound').value.trim()||'일정',date:$('#scheduleDate').value,note:$('#scheduleNote').value.trim()};const arr=state.schedules||(state.schedules=[]);const idx=arr.findIndex(x=>x.id===id);if(idx>=0)arr[idx]=row;else arr.push(row);if(!await saveState()){JEI_SAFE.reportFailure('일정 저장에 실패했어요. 기존 입력 내용은 남아 있습니다. 백업을 다운로드해 주세요.');return;}$('#scheduleModal').classList.add('hidden');renderSchedules();}
+async function saveSchedule(){if(JEI_SAFE.isBlocked())return JEI_SAFE.reportFailure('저장 잠금 상태라 일정을 변경하지 않았어요. 상단 저장 상태의 이전 자동 백업을 확인해 주세요.');if(!canEdit)return;const id=$('#scheduleId').value||crypto.randomUUID();const row={id,round:$('#scheduleRound').value.trim()||'일정',date:$('#scheduleDate').value,note:$('#scheduleNote').value.trim()};const arr=state.schedules||(state.schedules=[]);const idx=arr.findIndex(x=>x.id===id);if(idx>=0)arr[idx]=row;else arr.push(row);if(!await saveState()){JEI_SAFE.reportFailure('일정 저장에 실패했어요. 기존 입력 내용은 남아 있습니다. 백업을 다운로드해 주세요.');return;}$('#scheduleModal').classList.add('hidden');renderSchedules();}
 function renderSessions(){const list=$('#sessionList');const sessions=[...state.sessions].sort((a,b)=>(b.date||'').localeCompare(a.date||'')||String(b.created_at||'').localeCompare(String(a.created_at||'')));if(!sessions.length){list.innerHTML='<div class="empty">아직 기록된 회차가 없어요.</div>';return;}list.innerHTML=sessions.map((s,i)=>`<article class="session-card"><div class="session-summary" onclick="toggleSession('${s.id}',this)"><div class="session-index">${esc(s.month||'?')}</div><div><div class="session-title">${esc(s.month||'')} · ${esc(s.attempt||1)}차 ${s.result?`<span class="${s.result==='WIN'?'result-win':'result-lose'}">${esc(s.result)}</span>`:''}</div><div class="session-sub">${esc(s.date||'날짜 미정')}${s.funding!==''&&s.funding!=null?` · 자금 지원 카드 ${esc(s.funding)}장`:''}</div></div><div class="session-open">⌄</div></div><div class="session-body hidden"><div class="record-grid">${record('참여 캐릭터',s.characters)}${record('이번 회차 목표 결과',s.objectives)}${record('주요 내용',s.highlights,true)}${s.rules?record('추가 규칙 · 예외',s.rules,true):''}${record('영구 변경사항',s.permanent,true)}${record('게임 종료 업그레이드',s.upgrades,true)}${record('다음 게임에서 기억할 것',s.next,true)}<div class="session-photo-block"><b>회차 사진</b><div id="sessionPhotos-${s.id}" class="session-photo-grid"><div class="photo-loading">펼치면 사진을 불러옵니다.</div></div></div></div>${canEdit?`<div class="session-actions"><button class="ghost" onclick="event.stopPropagation();editSession('${s.id}')">수정</button><button class="ghost danger" onclick="event.stopPropagation();deleteSession('${s.id}')">삭제</button></div>`:''}</div></article>`).join('');}
 window.toggleSession=async(id,summary)=>{const body=summary.nextElementSibling;const opening=body.classList.contains('hidden');body.classList.toggle('hidden');if(opening)await renderSessionPhotos(id);};
 function record(label,value,wide=false){return `<div class="record ${wide?'wide':''}"><b>${label}</b><div>${esc(value||'-')}</div></div>`;}
@@ -1094,7 +1094,7 @@ function clearCurrentWorkspace({keepObjectives=false}={}){
 }
 let jeiPendingSessionCompleteS1=null;
 async function saveCurrentSession(){
-  if(JEI_SAFE.isBlocked())return JEI_SAFE.reportFailure('저장 잠금 상태라 회차 기록을 변경하지 않았어요. 오른쪽 아래 [이전 자동 백업]을 먼저 확인해 주세요.');
+  if(JEI_SAFE.isBlocked())return JEI_SAFE.reportFailure('저장 잠금 상태라 회차 기록을 변경하지 않았어요. 상단 저장 상태의 [이전 자동 백업]을 먼저 확인해 주세요.');
   if(jeiPendingSessionCompleteS1){
     if(!await JEI_SAFE.ensureSaved())return JEI_SAFE.reportFailure('이전 회차 저장이 아직 미완료예요. 백업을 다운로드한 뒤 다시 시도해 주세요.');
     const pendingId=jeiPendingSessionCompleteS1;jeiPendingSessionCompleteS1=null;
@@ -1144,7 +1144,7 @@ async function openSession(data={}){$('#sessionId').value=data.id||'';$('#sDate'
 window.editSession=id=>{const s=state.sessions.find(x=>x.id===id);if(s)openSession(s)};
 window.deleteSession=async id=>{if(!confirm('이 회차 기록과 첨부 사진을 삭제할까요?'))return;const previous=state.sessions;state.sessions=state.sessions.filter(x=>x.id!==id);if(!await saveState()){state.sessions=previous;JEI_SAFE.reportFailure('회차 삭제 변경사항이 서버에 저장되지 않았어요. 서버 기록은 삭제하지 않았습니다.');return;}renderSessions();const {error:photoError}=await db.rpc('delete_pandemic_legacy_s1_session_photos',{p_code:accessCode,p_session_id:id});if(photoError){console.error(photoError);alert('기록은 삭제됐지만 사진 정리에 실패했습니다.');return;}sessionPhotoCache.delete(id);};
 async function saveSession(){
-  if(JEI_SAFE.isBlocked())return JEI_SAFE.reportFailure('저장 잠금 상태라 회차 기록을 변경하지 않았어요. 오른쪽 아래 [이전 자동 백업]을 먼저 확인해 주세요.');
+  if(JEI_SAFE.isBlocked())return JEI_SAFE.reportFailure('저장 잠금 상태라 회차 기록을 변경하지 않았어요. 상단 저장 상태의 [이전 자동 백업]을 먼저 확인해 주세요.');
   const id=$('#sessionId').value||crypto.randomUUID();
   const visibleExisting=modalExistingPhotos.filter(p=>!modalDeletedPhotoIds.includes(p.id)).length;
   if(visibleExisting+modalPendingPhotos.length>3)return alert('회차 사진은 최대 3장까지 첨부할 수 있어요.');
@@ -1169,7 +1169,7 @@ const rememberedCode=sessionStorage.getItem('pandemicLegacyS1Code');if(remembere
 $('#sPhotos').onchange=e=>handlePhotoFiles(e.target.files);
 $('#openPanicTracker').onclick=openPanicTracker;$('#closePanicTracker').onclick=closePanicTracker;$('#panicSearch').oninput=renderPanicTracker;$('#panicOnlyActive').onchange=renderPanicTracker;$('#openInfectionTracker').onclick=openInfectionTracker;$('#closeInfectionTracker').onclick=closeInfectionTracker;$('#infectionEpidemic').onclick=infectionEpidemic;$('#infectionReset').onclick=resetInfectionTracker;$('#infectionUndo').onclick=undoInfectionTracker;$('#infectionClearRound').onclick=clearCurrentInfectionRound;$('#infectionShowCardCounts').onchange=e=>{infectionShowCardCounts=e.target.checked;renderInfectionTracker();};
 $('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#addScheduleBtn').onclick=()=>openSchedule();$('#cancelSchedule').onclick=()=>$('#scheduleModal').classList.add('hidden');$('#saveSchedule').onclick=saveSchedule;$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#panicModal').classList.contains('hidden')){closePanicTracker();return;}if(e.key==='Escape'&&!$('#infectionModal').classList.contains('hidden')){closeInfectionTracker();return;}if(e.key==='Escape'&&!$('#photoLightbox').classList.contains('hidden')){closePhotoLightbox();return;}if(!$('#photoLightbox').classList.contains('hidden')){if(e.key==='ArrowLeft'){lightboxIndex--;renderPhotoLightbox();}else if(e.key==='ArrowRight'){lightboxIndex++;renderPhotoLightbox();}return;}if(e.key==='Escape'&&!$('#scheduleModal').classList.contains('hidden')){$('#scheduleModal').classList.add('hidden');return;}if(e.key==='Escape'&&!$('#sessionModal').classList.contains('hidden'))$('#sessionModal').classList.add('hidden')});
-/* JEI-PANDEMIC-SAFE-SAVE-V111: serialized verified autosaves, navigation flush, protected drafts and backups. */
+/* JEI-PANDEMIC-SAFE-SAVE-V112: serialized verified autosaves, navigation flush, protected drafts and backups. */
 const JEI_SAFE = (() => {
   const season = 's1';
   const table = season === 's1' ? 'pandemic_legacy_s1_state' : 'pandemic_legacy_s2_state';
@@ -1196,19 +1196,22 @@ const JEI_SAFE = (() => {
   }
   function notice(message) {
     banner=message;
-    const el=document.getElementById('jei-safe-warning');
-    if(el){el.textContent=message;el.hidden=!message;}
-    if(message){
-      const detail=document.getElementById('jei-safe-detail');
-      if(detail)detail.hidden=false;
-      const fold=document.getElementById('jei-safe-fold');
-      if(fold)fold.textContent='접기';
+    const inline=document.getElementById('jei-safe-inline');
+    const warning=document.getElementById('jei-safe-warning');
+    if(warning){
+      // Compact, normal-flow information: never create an overlay or modal.
+      warning.textContent=blocked
+        ? '⚠ 이전 입력과 서버 기록이 달라 자동 저장을 잠시 멈췄어요. 백업을 확인해 주세요.'
+        : '⚠ 서버 저장을 확인하지 못했어요. 입력 기록을 백업해 주세요.';
+      warning.title=message||'';
     }
+    if(inline)inline.hidden=!message;
+    if(!message){const history=document.getElementById('jei-safe-history-list');if(history)history.hidden=true;}
   }
   function reportFailure(message) {
     const prefixText=blocked?'저장 보호가 잠긴 상태입니다. 기존 백업을 확인한 뒤 복원하거나 새로 저장해 주세요. ':'';
     notice('⚠ '+prefixText+message);
-    display('⚠ 저장 미완료 · 기록 보호 패널 확인','error');
+    display('⚠ 저장 미완료 · 상단 저장 상태 확인','error');
     return false;
   }
   function isBlocked(){return blocked;}
@@ -1442,11 +1445,38 @@ const JEI_SAFE = (() => {
   }
   async function showBackupList(){
     const items=await latestBackups();
-    if(!items.length){reportFailure('이 브라우저에 이전 자동 백업은 없어요. [내 기록 백업 다운로드]로 현재 입력을 보관할 수 있어요.');return;}
-    const lines=items.slice(0,15).map((e,i)=>`${i+1}. ${new Date(e.at).toLocaleString('ko-KR')} · ${e.kind} · 회차 ${(e.state?.sessions||[]).length}개`).join('\n');
-    const n=prompt('복사할 자동 백업 번호를 입력하세요. 서버 기록을 수정하지 않고 JSON 파일로 다운로드합니다.\n\n'+lines,'1');
-    if(n===null)return;const item=items[Number(n)-1];if(!item)return reportFailure('선택한 백업 번호를 찾지 못했어요.');
-    downloadJSON({format:'JEI-PANDEMIC-BACKUP-V109',season,saved_at:item.at,state:item.state},'팬데믹-'+season+'-자동백업-'+item.at.replace(/[:.]/g,'-')+'.json');
+    const host=document.getElementById('jei-safe-history-list');
+    if(!host)return;
+    if(!host.hidden){host.hidden=true;return;}
+    host.innerHTML='';
+    if(!items.length){host.textContent='이 브라우저에 이전 백업이 없습니다.';host.hidden=false;return;}
+    items.slice(0,15).forEach((entry,i)=>{
+      const button=document.createElement('button');button.type='button';
+      button.textContent=`${i+1}. ${new Date(entry.at).toLocaleString('ko-KR')} · ${entry.kind} · 회차 ${(entry.state?.sessions||[]).length}개 내려받기`;
+      button.addEventListener('click',()=>downloadJSON(
+        {format:'JEI-PANDEMIC-BACKUP-V109',season,saved_at:entry.at,state:entry.state},
+        '팬데믹-'+season+'-자동백업-'+entry.at.replace(/[:.]/g,'-')+'.json'
+      ));
+      host.appendChild(button);
+    });
+    host.hidden=false;
+  }
+  async function useServerRecord(){
+    if(!blocked)return;
+    const oldDraft=getLocal(STATE_DRAFT);
+    // Immediately export unsaved evidence before allowing a fresh server read.
+    if(oldDraft?.state){downloadJSON(
+      {format:'JEI-PANDEMIC-BACKUP-V109',season,saved_at:oldDraft.at,state:oldDraft.state},
+      '팬데믹-'+season+'-미저장기록-보관.json'
+    );}
+    if(!confirm('이전에 저장되지 않은 브라우저 입력을 JSON으로 내려받았습니다. 현재 서버 기록으로 다시 시작할까요? 내려받은 백업은 별도로 보관해 주세요.'))return;
+    try{
+      const latest=await readRemote();
+      await putSnapshot('before-reload-server',latest);
+      state=mergeState(latest);baseFingerprint=fp(latest);
+      clearLocal(STATE_DRAFT);blocked=false;revision=0;persisted=0;failures=0;
+      notice('');render();display('현재 서버 기록을 불러왔어요','ok');
+    }catch(e){console.error(e);reportFailure('서버 기록 확인 실패: '+(e.message||e));}
   }
   async function restoreFromFile(file){
     if(!file)return;
@@ -1468,28 +1498,44 @@ const JEI_SAFE = (() => {
     }catch(e){console.error(e);reportFailure('복원 전 기존 기록 백업에 실패하여 중단했습니다: '+(e.message||e));}
   }
   function attachUI(){
-    if(document.getElementById('jei-safe-panel'))return;
+    if(document.getElementById('jei-safe-inline'))return;
+    // The old bottom-right floating safety panel has been removed completely.
+    // Recovery controls appear inside the player section ONLY when saving fails.
+    const status=$status();
+    const section=status?.closest('.section');
+    if(!section)return;
     const style=document.createElement('style');style.textContent=`
-#jei-safe-panel{position:fixed;z-index:2147482000;bottom:12px;right:12px;width:min(360px,calc(100vw - 24px));background:#f9fbfb;color:#263944;border:1px solid #8dabb1;border-radius:14px;box-shadow:0 12px 40px #07161e55;padding:11px;font:12px/1.45 system-ui,sans-serif}
-#jei-safe-panel:has(#jei-safe-detail[hidden]){width:min(240px,calc(100vw - 24px))}
-#jei-safe-panel header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:7px}#jei-safe-panel strong{font-size:13px}#jei-safe-panel button{font:inherit;cursor:pointer;padding:7px 8px;border-radius:7px;border:1px solid #b4c9cd;background:#fff;color:#244e58;font-weight:700}
-#jei-safe-panel .jei-actions{display:flex;flex-wrap:wrap;gap:5px}#jei-safe-panel #jei-safe-warning{background:#fff0e9;border:1px solid #e2a7a0;color:#b33536;border-radius:7px;padding:9px;margin:8px 0;white-space:pre-line;line-height:1.5;font-weight:700}#jei-safe-panel #jei-safe-status{font-size:11px;color:#465f69}
-#jei-safe-panel .jei-info{font-size:10px;color:#647b82;margin-top:7px}#jei-safe-panel [hidden]{display:none!important}`;
+#jei-safe-inline{position:static;z-index:auto;width:100%;max-width:100%;margin:0 0 12px;padding:8px 0;border-top:1px solid #8b999955;font:11px/1.6 system-ui,sans-serif;color:inherit;background:transparent;box-shadow:none}
+#jei-safe-inline[hidden],#jei-safe-history-list[hidden]{display:none!important}
+#jei-safe-warning{color:#df857f;font-weight:750;line-height:1.55;margin-bottom:5px}
+.season2-theme #jei-safe-warning{color:#a04e43}
+#jei-safe-inline .jei-inline-actions{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+#jei-safe-inline button{font:inherit;cursor:pointer;padding:3px 7px;border-radius:6px;border:1px solid #8b9f9e88;background:transparent;color:inherit}
+#jei-safe-inline details{display:inline-block}#jei-safe-inline summary{cursor:pointer;color:inherit;padding:3px 5px}
+#jei-safe-history-list{display:grid;grid-template-columns:1fr;gap:5px;margin:6px 0 0;max-height:180px;overflow:auto}
+#jei-safe-history-list button{text-align:left}#jei-safe-inline button:hover{filter:brightness(1.12)}`;
     document.head.appendChild(style);
-    const el=document.createElement('aside');el.id='jei-safe-panel';
-    el.innerHTML=`<header><strong>🛡️ 팬데믹 ${season==='s1'?'시즌1':'시즌2'} 기록 보호</strong><button id="jei-safe-fold" type="button" aria-label="패널 접기">접기</button></header>
-    <div id="jei-safe-detail"><div id="jei-safe-status">자동 백업 준비됨</div><div id="jei-safe-warning" hidden></div>
-    <div class="jei-actions"><button type="button" id="jei-safe-export">내 기록 백업 다운로드</button><button type="button" id="jei-safe-history">이전 자동 백업</button><button type="button" id="jei-safe-import">백업 파일 복원</button><button type="button" id="jei-safe-retry">저장 다시 시도</button></div>
-    <div class="jei-info">시즌 메뉴 이동 전 저장 완료 확인 · 서버 기록 검증 · 브라우저 자동 백업. 중요한 기록은 JSON 파일로 내려받아 보관하세요. 회차 사진 파일은 포함되지 않습니다.</div></div>`;
-    document.body.appendChild(el);
+    const el=document.createElement('div');el.id='jei-safe-inline';el.hidden=true;
+    el.innerHTML=`<div id="jei-safe-warning" role="status" aria-live="polite"></div>
+      <div class="jei-inline-actions">
+        <button type="button" id="jei-safe-export">내 기록 백업</button>
+        <button type="button" id="jei-safe-retry">저장 재시도</button>
+        <details><summary>복구 옵션</summary>
+          <button type="button" id="jei-safe-history">이전 자동 백업</button>
+          <button type="button" id="jei-safe-import">백업 복원</button>
+          <button type="button" id="jei-safe-use-server">서버 기록 사용</button>
+        </details>
+      </div><div id="jei-safe-history-list" hidden></div>`;
+    const before=section.querySelector('#players')||section.querySelector('.grid4');
+    if(before)section.insertBefore(el,before);else section.appendChild(el);
     el.querySelector('#jei-safe-export').onclick=exportCurrent;
     el.querySelector('#jei-safe-history').onclick=showBackupList;
     el.querySelector('#jei-safe-retry').onclick=retrySave;
-    el.querySelector('#jei-safe-import').onclick=()=>{const file=document.createElement('input');file.type='file';file.accept='.json,application/json';file.onchange=()=>restoreFromFile(file.files?.[0]);file.click();};
-    el.querySelector('#jei-safe-fold').onclick=()=>{const d=el.querySelector('#jei-safe-detail');d.hidden=!d.hidden;el.querySelector('#jei-safe-fold').textContent=d.hidden?'펼치기':'접기';};
-    const detail=el.querySelector('#jei-safe-detail');
-    if(detail)detail.hidden=true;
-    el.querySelector('#jei-safe-fold').textContent='펼치기';
+    el.querySelector('#jei-safe-use-server').onclick=useServerRecord;
+    el.querySelector('#jei-safe-import').onclick=()=>{
+      const file=document.createElement('input');file.type='file';file.accept='.json,application/json';
+      file.onchange=()=>restoreFromFile(file.files?.[0]);file.click();
+    };
     if(banner)notice(banner);
   }
   function onOpen(){
