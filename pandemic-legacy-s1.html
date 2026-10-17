@@ -674,7 +674,7 @@ function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s
   return {meta,players:d.players.map((p,i)=>{const saved=stored.find(x=>x?.name===p.name)||stored[i]||{};return {...p,...saved,name:p.name};}),infection_tracker:migrateInfectionTracker(s?.infection_tracker),player_deck_tracker:{...defaultPlayerDeckTracker(),...(s?.player_deck_tracker||{})},panic_levels:normalizePanicLevels(s?.panic_levels),schedules:Array.isArray(s?.schedules)?s.schedules:d.schedules,sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
 async function boot(){const {data:{session}}=await db.auth.getSession();isAdmin=!!session;if(isAdmin){const {data,error}=await db.from('pandemic_legacy_s1_state').select('data').eq('id',1).single();if(!error&&data){state=mergeState(data.data);canEdit=true;openApp();return;}}}
 async function unlock(){const code=$('#codeInput').value.trim();if(!code)return;$('#gateError').textContent='';const {data,error}=await db.rpc('get_pandemic_legacy_s1',{p_code:code});if(error){console.error(error);$('#gateError').textContent=error.code==='P0001'?'비밀번호가 맞지 않아요.':'연결 설정을 확인해주세요.';return;}accessCode=code;state=mergeState(data);canEdit=true;sessionStorage.setItem('pandemicLegacyS1Code',code);openApp();}
-function openApp(){$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');$('#addScheduleBtn').classList.toggle('hidden',!canEdit);render();}
+function openApp(){$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');$('#addScheduleBtn').classList.toggle('hidden',!canEdit);JEI_V114.init();render();}
 function render(){renderPlayers();renderStatus();renderMonths();renderInfectionTracker();renderPlayerDeckTracker();renderSchedules();renderSessions();}
 function renderPlayers(){const wrap=$('#players');wrap.innerHTML=state.players.map((p,i)=>`<div class="player-card"><div class="player-name">${p.name}</div>${canEdit?`<input data-player="${i}" data-key="character" value="${escapeAttr(p.character)}" placeholder="캐릭터명"><input class="role-input" data-player="${i}" data-key="role" value="${escapeAttr(p.role)}" placeholder="역할 / 직업"><textarea class="detail-input" data-player="${i}" data-key="detail" placeholder="상처 · 관계 · 업그레이드 메모">${esc(p.detail||'')}</textarea>`:`<div class="player-character">${esc(p.character||'캐릭터 미정')}</div><div class="player-role">${esc(p.role||'')}</div><div class="player-detail-read">${esc(p.detail||'상태 메모 없음')}</div>`}</div>`).join('');if(canEdit){wrap.querySelectorAll('input,textarea').forEach(el=>el.oninput=()=>{state.players[+el.dataset.player][el.dataset.key]=el.value;queueSave();});}}
 function latestCompletedSession(){
@@ -983,7 +983,7 @@ function renderSchedules(){
 function openSchedule(data={}){$('#scheduleId').value=data.id||'';$('#scheduleRound').value=data.round||`${(state.schedules?.length||0)+1}회차`;$('#scheduleDate').value=data.date||'';$('#scheduleNote').value=data.note||'';$('#scheduleModalTitle').textContent=data.id?'레거시 일정 수정':'레거시 일정 추가';$('#scheduleModal').classList.remove('hidden');setTimeout(()=>$('#scheduleRound').focus(),50);}
 window.editSchedule=id=>{const s=(state.schedules||[]).find(x=>x.id===id);if(s)openSchedule(s);};
 window.deleteSchedule=async id=>{if(!canEdit||!confirm('이 레거시 일정을 삭제할까요?'))return;state.schedules=(state.schedules||[]).filter(x=>x.id!==id);await saveState();renderSchedules();};
-async function saveSchedule(){if(JEI_SAFE.isBlocked())return JEI_SAFE.reportFailure('저장 잠금 상태라 일정을 변경하지 않았어요. 상단 저장 상태의 이전 자동 백업을 확인해 주세요.');if(!canEdit)return;const id=$('#scheduleId').value||crypto.randomUUID();const row={id,round:$('#scheduleRound').value.trim()||'일정',date:$('#scheduleDate').value,note:$('#scheduleNote').value.trim()};const arr=state.schedules||(state.schedules=[]);const idx=arr.findIndex(x=>x.id===id);if(idx>=0)arr[idx]=row;else arr.push(row);if(!await saveState()){JEI_SAFE.reportFailure('일정 저장에 실패했어요. 기존 입력 내용은 남아 있습니다. 백업을 다운로드해 주세요.');return;}$('#scheduleModal').classList.add('hidden');renderSchedules();}
+async function saveSchedule(){if(!canEdit)return;const id=$('#scheduleId').value||crypto.randomUUID();const row={id,round:$('#scheduleRound').value.trim()||'일정',date:$('#scheduleDate').value,note:$('#scheduleNote').value.trim()};const arr=state.schedules||(state.schedules=[]);const idx=arr.findIndex(x=>x.id===id);if(idx>=0)arr[idx]=row;else arr.push(row);await saveState();$('#scheduleModal').classList.add('hidden');renderSchedules();}
 function renderSessions(){const list=$('#sessionList');const sessions=[...state.sessions].sort((a,b)=>(b.date||'').localeCompare(a.date||'')||String(b.created_at||'').localeCompare(String(a.created_at||'')));if(!sessions.length){list.innerHTML='<div class="empty">아직 기록된 회차가 없어요.</div>';return;}list.innerHTML=sessions.map((s,i)=>`<article class="session-card"><div class="session-summary" onclick="toggleSession('${s.id}',this)"><div class="session-index">${esc(s.month||'?')}</div><div><div class="session-title">${esc(s.month||'')} · ${esc(s.attempt||1)}차 ${s.result?`<span class="${s.result==='WIN'?'result-win':'result-lose'}">${esc(s.result)}</span>`:''}</div><div class="session-sub">${esc(s.date||'날짜 미정')}${s.funding!==''&&s.funding!=null?` · 자금 지원 카드 ${esc(s.funding)}장`:''}</div></div><div class="session-open">⌄</div></div><div class="session-body hidden"><div class="record-grid">${record('참여 캐릭터',s.characters)}${record('이번 회차 목표 결과',s.objectives)}${record('주요 내용',s.highlights,true)}${s.rules?record('추가 규칙 · 예외',s.rules,true):''}${record('영구 변경사항',s.permanent,true)}${record('게임 종료 업그레이드',s.upgrades,true)}${record('다음 게임에서 기억할 것',s.next,true)}<div class="session-photo-block"><b>회차 사진</b><div id="sessionPhotos-${s.id}" class="session-photo-grid"><div class="photo-loading">펼치면 사진을 불러옵니다.</div></div></div></div>${canEdit?`<div class="session-actions"><button class="ghost" onclick="event.stopPropagation();editSession('${s.id}')">수정</button><button class="ghost danger" onclick="event.stopPropagation();deleteSession('${s.id}')">삭제</button></div>`:''}</div></article>`).join('');}
 window.toggleSession=async(id,summary)=>{const body=summary.nextElementSibling;const opening=body.classList.contains('hidden');body.classList.toggle('hidden');if(opening)await renderSessionPhotos(id);};
 function record(label,value,wide=false){return `<div class="record ${wide?'wide':''}"><b>${label}</b><div>${esc(value||'-')}</div></div>`;}
@@ -1060,8 +1060,8 @@ async function syncSessionPhotos(sessionId){
   for(const p of modalPendingPhotos){const {error}=await db.rpc('save_pandemic_legacy_s1_photo',{p_code:accessCode,p_session_id:sessionId,p_data_url:p.data_url});if(error)throw error;}
   sessionPhotoCache.delete(sessionId);
 }
-async function saveState(){if(!canEdit)return;$('#saveState').textContent='저장 중...';let error=null;if(isAdmin){({error}=await db.from('pandemic_legacy_s1_state').update({data:state,updated_at:new Date().toISOString()}).eq('id',1));}else{({error}=await db.rpc('save_pandemic_legacy_s1',{p_code:accessCode,p_data:state}));}$('#saveState').textContent=error?'저장 실패':'자동 저장됨';if(error){console.error(error);$('#saveState').textContent='저장 실패';}setTimeout(()=>{if($('#saveState').textContent==='자동 저장됨')$('#saveState').textContent='';},1200);}
-function queueSave(){clearTimeout(saveTimer);$('#saveState').textContent='입력 중...';saveTimer=setTimeout(saveState,650);}
+async function saveState(){return JEI_V114.saveNow();}
+function queueSave(){return JEI_V114.queueSave();}
 
 let currentPendingPhotos=[];
 function renderCurrentPhotoPreview(){
@@ -1092,15 +1092,9 @@ function clearCurrentWorkspace({keepObjectives=false}={}){
   /* 규칙/영구 상태는 다음 게임에도 이어지는 현재 상태라서 유지 */
   currentPendingPhotos=[];
 }
-let jeiPendingSessionCompleteS1=null;
+let jeiSessionCompletionBusy=false;
 async function saveCurrentSession(){
-  if(JEI_SAFE.isBlocked())return JEI_SAFE.reportFailure('저장 잠금 상태라 회차 기록을 변경하지 않았어요. 상단 저장 상태의 [이전 자동 백업]을 먼저 확인해 주세요.');
-  if(jeiPendingSessionCompleteS1){
-    if(!await JEI_SAFE.ensureSaved())return JEI_SAFE.reportFailure('이전 회차 저장이 아직 미완료예요. 백업을 다운로드한 뒤 다시 시도해 주세요.');
-    const pendingId=jeiPendingSessionCompleteS1;jeiPendingSessionCompleteS1=null;
-    try{await uploadCurrentPhotos(pendingId)}catch(e){console.error(e);JEI_SAFE.reportFailure(e.message||'회차 기록은 저장됐지만 사진 저장에 실패했어요.');}
-    render();return;
-  }
+  if(jeiSessionCompletionBusy)return;
   const m=state.meta;
   if(!m.session_result)return alert('이번 회차 결과(WIN/LOSE)를 먼저 선택해주세요.');
   if(!m.play_date)return alert('플레이 날짜를 입력해주세요.');
@@ -1111,6 +1105,7 @@ async function saveCurrentSession(){
     upgrades:String(m.current_upgrades||'').trim(),next:String(m.next_note_draft||'').trim(),
     rules:String(m.current_rules||'').trim(),created_at:new Date().toISOString()
   };
+  jeiSessionCompletionBusy=true;
   state.sessions.push(row);
   state.meta.last_result=row.result;
   state.meta.next_note=row.next;
@@ -1133,18 +1128,37 @@ async function saveCurrentSession(){
       clearCurrentWorkspace({keepObjectives:false});
     }
   }
-  jeiPendingSessionCompleteS1=id;
-  if(!await saveState()){JEI_SAFE.reportFailure('회차 기록이 서버에 저장되지 않았어요. 현재 내용은 브라우저에 보관돼 있습니다. [내 기록 백업 다운로드]로 사본을 먼저 받아 주세요.');return;}
-  jeiPendingSessionCompleteS1=null;
-  try{await uploadCurrentPhotos(id)}catch(e){console.error(e);JEI_SAFE.reportFailure(e.message||'사진 저장 중 오류가 발생했어요. 회차 텍스트 기록은 저장되었습니다.');}
-  render();
+  // The record is kept in memory and browser draft even if the server is temporarily offline.
+  // New inputs cannot create another copy of this same completion while saving.
+  const confirmed=await saveState();
+  if(!confirmed){
+    jeiSessionCompletionBusy=false;
+    render();
+    const note=document.getElementById('saveState');
+    if(note)note.textContent='⚠ 회차 서버 저장 미완료 · 자동 재시도 중';
+    return;
+  }
+  try{await uploadCurrentPhotos(id)}catch(e){console.error(e);const note=document.getElementById('saveState');if(note)note.textContent='⚠ 회차는 저장됨 · 사진 저장 실패';}
+  render();jeiSessionCompletionBusy=false;
 }
 
 async function openSession(data={}){$('#sessionId').value=data.id||'';$('#sDate').value=data.date||new Date().toISOString().slice(0,10);$('#sMonth').innerHTML=months.map(x=>`<option ${x===(data.month||state.meta.current_month)?'selected':''}>${x}</option>`).join('');$('#sAttempt').value=data.attempt||state.meta.attempt||1;$('#sResult').value=data.result||'';$('#sFunding').value=data.funding??state.meta.funding??'';$('#sCharacters').value=data.characters||'';$('#sObjectives').value=data.objectives||'';$('#sHighlights').value=data.highlights||'';$('#sPermanent').value=data.permanent||'';$('#sUpgrades').value=data.upgrades||'';$('#sNext').value=data.next||'';$('#modalTitle').textContent=data.id?'회차 기록 수정':'회차 기록 추가';modalPendingPhotos=[];modalDeletedPhotoIds=[];modalExistingPhotos=[];$('#sPhotos').value='';$('#sessionModal').classList.remove('hidden');renderModalPhotos();if(data.id){$('#photoStatus').textContent='기존 사진 불러오는 중...';modalExistingPhotos=await getSessionPhotos(data.id,true);renderModalPhotos();}}
 window.editSession=id=>{const s=state.sessions.find(x=>x.id===id);if(s)openSession(s)};
-window.deleteSession=async id=>{if(!confirm('이 회차 기록과 첨부 사진을 삭제할까요?'))return;const previous=state.sessions;state.sessions=state.sessions.filter(x=>x.id!==id);if(!await saveState()){state.sessions=previous;JEI_SAFE.reportFailure('회차 삭제 변경사항이 서버에 저장되지 않았어요. 서버 기록은 삭제하지 않았습니다.');return;}renderSessions();const {error:photoError}=await db.rpc('delete_pandemic_legacy_s1_session_photos',{p_code:accessCode,p_session_id:id});if(photoError){console.error(photoError);alert('기록은 삭제됐지만 사진 정리에 실패했습니다.');return;}sessionPhotoCache.delete(id);};
+window.deleteSession=async id=>{
+  if(!canEdit||!confirm('이 회차 기록과 첨부 사진을 삭제할까요?'))return;
+  const before=state.sessions;
+  state.sessions=before.filter(x=>x.id!==id);
+  if(!await saveState()){
+    state.sessions=before;
+    queueSave(); // keep server and current editor consistent on retry
+    return;
+  }
+  renderSessions();
+  const {error}=await db.rpc('delete_pandemic_legacy_s1_session_photos',{p_code:accessCode,p_session_id:id});
+  if(error)console.warn('회차 삭제 후 사진 정리 실패',error);
+  sessionPhotoCache.delete(id);
+};
 async function saveSession(){
-  if(JEI_SAFE.isBlocked())return JEI_SAFE.reportFailure('저장 잠금 상태라 회차 기록을 변경하지 않았어요. 상단 저장 상태의 [이전 자동 백업]을 먼저 확인해 주세요.');
   const id=$('#sessionId').value||crypto.randomUUID();
   const visibleExisting=modalExistingPhotos.filter(p=>!modalDeletedPhotoIds.includes(p.id)).length;
   if(visibleExisting+modalPendingPhotos.length>3)return alert('회차 사진은 최대 3장까지 첨부할 수 있어요.');
@@ -1159,9 +1173,9 @@ async function saveSession(){
   const idx=state.sessions.findIndex(x=>x.id===id);
   if(idx>=0)state.sessions[idx]=row;else state.sessions.push(row);
   $('#photoStatus').textContent='기록 저장 중...';
-  if(!await saveState()){JEI_SAFE.reportFailure('회차 기록 저장을 확인하지 못했어요. 서버에 저장되기 전에는 페이지를 이동하지 마세요. [내 기록 백업 다운로드]를 이용해 주세요.');return;}
+  if(!await saveState()){$('#photoStatus').textContent='서버 저장 실패 · 자동 재시도 중';return;}
   try{$('#photoStatus').textContent='사진 저장 중...';await syncSessionPhotos(id);}
-  catch(err){console.error(err);$('#photoStatus').textContent='사진 저장 실패';return JEI_SAFE.reportFailure(err.message||'사진 저장 중 오류가 발생했어요.');}
+  catch(err){console.error(err);$('#photoStatus').textContent='사진 저장 실패';return alert(err.message||'사진 저장 중 오류가 발생했어요.');}
   $('#sessionModal').classList.add('hidden');renderSessions();
 }
 function esc(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}function escapeAttr(v){return esc(v).replace(/`/g,'&#96;');}
@@ -1169,397 +1183,148 @@ const rememberedCode=sessionStorage.getItem('pandemicLegacyS1Code');if(remembere
 $('#sPhotos').onchange=e=>handlePhotoFiles(e.target.files);
 $('#openPanicTracker').onclick=openPanicTracker;$('#closePanicTracker').onclick=closePanicTracker;$('#panicSearch').oninput=renderPanicTracker;$('#panicOnlyActive').onchange=renderPanicTracker;$('#openInfectionTracker').onclick=openInfectionTracker;$('#closeInfectionTracker').onclick=closeInfectionTracker;$('#infectionEpidemic').onclick=infectionEpidemic;$('#infectionReset').onclick=resetInfectionTracker;$('#infectionUndo').onclick=undoInfectionTracker;$('#infectionClearRound').onclick=clearCurrentInfectionRound;$('#infectionShowCardCounts').onchange=e=>{infectionShowCardCounts=e.target.checked;renderInfectionTracker();};
 $('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#addScheduleBtn').onclick=()=>openSchedule();$('#cancelSchedule').onclick=()=>$('#scheduleModal').classList.add('hidden');$('#saveSchedule').onclick=saveSchedule;$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#panicModal').classList.contains('hidden')){closePanicTracker();return;}if(e.key==='Escape'&&!$('#infectionModal').classList.contains('hidden')){closeInfectionTracker();return;}if(e.key==='Escape'&&!$('#photoLightbox').classList.contains('hidden')){closePhotoLightbox();return;}if(!$('#photoLightbox').classList.contains('hidden')){if(e.key==='ArrowLeft'){lightboxIndex--;renderPhotoLightbox();}else if(e.key==='ArrowRight'){lightboxIndex++;renderPhotoLightbox();}return;}if(e.key==='Escape'&&!$('#scheduleModal').classList.contains('hidden')){$('#scheduleModal').classList.add('hidden');return;}if(e.key==='Escape'&&!$('#sessionModal').classList.contains('hidden'))$('#sessionModal').classList.add('hidden')});
-/* JEI-PANDEMIC-SAFE-SAVE-V112: serialized verified autosaves, navigation flush, protected drafts and backups. */
-const JEI_SAFE = (() => {
-  const season = 's1';
-  const table = season === 's1' ? 'pandemic_legacy_s1_state' : 'pandemic_legacy_s2_state';
-  const getRpc = 'get_pandemic_legacy_' + season;
-  const saveRpc = 'save_pandemic_legacy_' + season;
-  const prefix = 'JEI-PANDEMIC-SAFE-V109-' + season + ':';
-  const STATE_DRAFT = prefix + 'unsaved-draft';
-  const STATE_LAST = prefix + 'last-confirmed';
-  let ready=false, blocked=false, baseFingerprint='', revision=0, persisted=0, running=null, failures=0, navigationBusy=false;
-  let banner='', backupDBPromise=null;
-  const $status = () => document.getElementById('saveState');
-  const deepCopy = x => JSON.parse(JSON.stringify(x));
-  function normalized(x) {
-    const z = deepCopy(mergeState(x));
-    // Old S2 migration uses Date.now() for checklist IDs. Those generated IDs are not user data.
-    if (Array.isArray(z?.meta?.objective_items)) z.meta.objective_items=z.meta.objective_items.map(o=>({text:o.text,done:!!o.done}));
-    return z;
-  }
-  const fp=x=>JSON.stringify(normalized(x));
-  function display(message, type='info') {
-    const el=$status(); if(el) {el.textContent=message;el.style.color=type==='error'?'#f07777':type==='ok'?'#70d1a5':'';}
-    const small=document.getElementById('jei-safe-status');
-    if(small){small.textContent=message;small.style.color=type==='error'?'#c13140':type==='ok'?'#24774e':'#465f69';}
-  }
-  function notice(message) {
-    banner=message;
-    const inline=document.getElementById('jei-safe-inline');
-    const warning=document.getElementById('jei-safe-warning');
-    if(warning){
-      // Compact, normal-flow information: never create an overlay or modal.
-      warning.textContent=blocked
-        ? '⚠ 이전 입력과 서버 기록이 달라 자동 저장을 잠시 멈췄어요. 백업을 확인해 주세요.'
-        : '⚠ 서버 저장을 확인하지 못했어요. 입력 기록을 백업해 주세요.';
-      warning.title=message||'';
-    }
-    if(inline)inline.hidden=!message;
-    if(!message){const history=document.getElementById('jei-safe-history-list');if(history)history.hidden=true;}
-  }
-  function reportFailure(message) {
-    const prefixText=blocked?'저장 보호가 잠긴 상태입니다. 기존 백업을 확인한 뒤 복원하거나 새로 저장해 주세요. ':'';
-    notice('⚠ '+prefixText+message);
-    display('⚠ 저장 미완료 · 상단 저장 상태 확인','error');
-    return false;
-  }
-  function isBlocked(){return blocked;}
 
-  function getLocal(key){try{return JSON.parse(localStorage.getItem(key)||'null')}catch{return null}}
-  function setLocal(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch(e){console.warn('JEI localStorage unavailable',e);return false}}
-  function clearLocal(key){try{localStorage.removeItem(key)}catch{}}
-  function openDB(){
-    if(!('indexedDB' in window))return Promise.reject(Error('IndexedDB not available'));
-    if(!backupDBPromise){backupDBPromise=new Promise((resolve,reject)=>{
-      const req=indexedDB.open('jei-pandemic-safety-snapshots',1);
-      req.onupgradeneeded=()=>{const db=req.result; if(!db.objectStoreNames.contains('snapshots'))db.createObjectStore('snapshots',{keyPath:'id',autoIncrement:true});};
-      req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||Error('IndexedDB open failure'));
-      req.onblocked=()=>reject(Error('IndexedDB locked'));
-    });}
-    return backupDBPromise;
+/* JEI V114 - straightforward serialized autosave; no backup panels or write-lock states. */
+const JEI_V114=(()=>{
+  const season='s1';
+  const draftKey='JEI-PANDEMIC-V114-DRAFT-'+season;
+  const table='pandemic_legacy_'+season+'_state';
+  let changed=0,saved=0,inFlight=null,retryTimer=null,navigating=false,ready=false;
+  let confirmedSnapshot='';
+  const copy=x=>JSON.parse(JSON.stringify(x));
+  const status=message=>{const e=document.getElementById('saveState');if(e)e.textContent=message;};
+  function saveDraft(){
+    if(!ready||!state)return;
+    try{localStorage.setItem(draftKey,JSON.stringify({saved_at:new Date().toISOString(),base:confirmedSnapshot,state:copy(state)}));}
+    catch(e){console.warn('Browser draft storage unavailable:',e);}
   }
-  async function putSnapshot(kind,content){
-    const entry={season,kind,at:new Date().toISOString(),state:deepCopy(content)};
-    let written=false;
-    try{
-      const database=await openDB();
-      await new Promise((resolve,reject)=>{
-        const tx=database.transaction('snapshots','readwrite');
-        tx.objectStore('snapshots').add(entry);
-        tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||Error('Snapshot write failed'));
-      });
-      written=true;
-    }catch(e){console.warn('JEI IndexedDB snapshot warning',e);}
-    // Additional localStorage fallback, and synchronous support for last unsaved draft.
-    const key=kind==='confirmed'?STATE_LAST:kind==='draft'?STATE_DRAFT:prefix+'checkpoint';
-    const localWritten=setLocal(key,{...entry,confirmed:kind==='confirmed'});
-    if(!written&&!localWritten)throw Error('브라우저 자동 백업 저장 공간을 사용할 수 없습니다. 수동으로 기록을 다운로드해 주세요.');
-    if(written)trimSnapshots().catch(console.warn);
+  function markChanged(){
+    if(!canEdit||!ready)return;
+    changed++;
+    saveDraft();
+    status('저장 대기 중...');
+    clearTimeout(saveTimer);clearTimeout(retryTimer);
   }
-  async function trimSnapshots(){
-    const database=await openDB();
-    await new Promise((resolve,reject)=>{
-      const tx=database.transaction('snapshots','readwrite'),store=tx.objectStore('snapshots');
-      const ids=[];const req=store.openCursor(null,'prev');
-      req.onsuccess=()=>{const c=req.result;if(!c)return; if(c.value.season===season){ids.push(c.primaryKey);if(ids.length>35)store.delete(c.primaryKey)}c.continue();};
-      tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);
-    });
-  }
-  function markDraft(){
-    if(!ready||!canEdit)return;
-    const draft={season,kind:'draft',at:new Date().toISOString(),state:deepCopy(state),confirmed:false};
-    if(!setLocal(STATE_DRAFT,draft)) {
-      display('⚠ 브라우저 백업 공간 부족 · 백업 다운로드 필요','error');
+  async function writeRemote(payload){
+    if(isAdmin){
+      const {data,error}=await db.from(table).update({data:payload,updated_at:new Date().toISOString()}).eq('id',1).select('id');
+      if(error)throw error;
+      if(!Array.isArray(data)||data.length!==1)throw Error('저장할 기록을 찾지 못했습니다.');
+    }else{
+      const {error}=await db.rpc('save_pandemic_legacy_'+season,{p_code:accessCode,p_data:payload});
+      if(error)throw error;
     }
   }
   async function readRemote(){
     if(isAdmin){
       const {data,error}=await db.from(table).select('data').eq('id',1).single();
-      if(error)throw error;if(!data||!data.data)throw Error('서버 저장 기록을 찾지 못했습니다');return data.data;
+      if(error)throw error;return data?.data;
     }
-    if(!accessCode)throw Error('로그인 정보가 없습니다');
-    const {data,error}=await db.rpc(getRpc,{p_code:accessCode});
-    if(error)throw error;if(!data||typeof data!=='object')throw Error('서버 데이터 형식 오류');return data;
+    const {data,error}=await db.rpc('get_pandemic_legacy_'+season,{p_code:accessCode});
+    if(error)throw error;return data;
   }
-  async function writeRemote(payload){
-    let response;
-    if(isAdmin)response=await db.from(table).update({data:payload,updated_at:new Date().toISOString()}).eq('id',1).select('id');
-    else response=await db.rpc(saveRpc,{p_code:accessCode,p_data:payload});
-    if(response.error)throw response.error;
-    if(isAdmin && (!response.data||response.data.length!==1))throw Error('저장된 행이 없습니다');
-  }
-  async function pump(){
-    let ok=true;
-    while(ready&&!blocked&&persisted<revision){
-      const target=revision, payload=deepCopy(state);
-      display('백업 및 저장 확인 중...');
-      try {
-        // Durable checkpoint BEFORE any possible cloud overwrite.
-        await putSnapshot('before-save',payload);
-        const before=await readRemote();
-        const serverFingerprint=fp(before), intendedFingerprint=fp(payload);
-        if(serverFingerprint!==baseFingerprint){
-          // A response may have been lost after an earlier successful save.
-          if(serverFingerprint===intendedFingerprint){baseFingerprint=serverFingerprint;persisted=target;await putSnapshot('confirmed',payload);clearLocal(STATE_DRAFT);failures=0;display('저장 확인됨','ok');continue;}
-          blocked=true;
-          notice('⚠ 다른 창·기기에서 저장된 내용이 달라졌거나 서버 기록이 변경됐습니다. 데이터 덮어쓰기를 막기 위해 저장을 중단했어요. 먼저 [내 기록 백업 다운로드]를 눌러 주세요.');
-          display('⚠ 저장 충돌 감지 · 저장 중단','error');
-          ok=false;break;
-        }
+  async function sendPending(){
+    while(saved<changed){
+      const n=changed;
+      const payload=copy(state); // freeze snapshot before the request
+      status('서버 저장 중...');
+      try{
         await writeRemote(payload);
-        const checked=await readRemote();
-        if(fp(checked)!==intendedFingerprint){
-          blocked=true;
-          notice('⚠ 저장 후 서버 기록이 방금 보낸 내용과 다릅니다. 다른 저장과 충돌했을 수 있어요. 현재 입력본은 브라우저에 백업했으며 추가 덮어쓰기를 중단합니다.');
-          display('⚠ 서버 저장 내용 불일치','error');ok=false;break;
+        const returned=await readRemote();
+        // The server must return the same data that was written.
+        if(JSON.stringify(returned)!==JSON.stringify(payload)){
+          // Account for Postgres JSONB object key ordering differences.
+          const stable=o=>JSON.stringify(o,(k,v)=>v&&typeof v==='object'&&!Array.isArray(v)
+            ?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a.localeCompare(b))):v);
+          if(stable(returned)!==stable(payload))throw Error('서버에서 저장된 내용이 다르게 조회되었습니다.');
         }
-        baseFingerprint=fp(checked);persisted=target;failures=0;
-        await putSnapshot('confirmed',payload);
-        // Only clear draft if no changes arrived while this save was in flight.
-        if(persisted===revision)clearLocal(STATE_DRAFT);
-        setLocal(prefix+'saved-in-other-tab',{at:new Date().toISOString(),fingerprint:baseFingerprint});
-        notice('');
-        display('✅ 저장 확인됨','ok');
+        confirmedSnapshot=JSON.stringify(payload);
+        saved=n;
+        if(saved===changed){
+          try{localStorage.removeItem(draftKey);}catch(e){}
+          status('✓ 자동 저장됨');
+        }
       }catch(e){
-        console.error('JEI verified save failed',e);
-        failures++;
-        display('⚠ 저장 실패 · 백업 확인 필요','error');
-        notice('⚠ 인터넷 연결 또는 저장 오류가 발생했어요. 새로고침하지 마세요. [내 기록 백업 다운로드]로 JSON 백업을 먼저 받아 두세요.');
-        ok=false;
-        if(failures<=3&&!blocked){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saveState();},Math.min(20000,3000*failures));}
-        break;
+        console.error('팬데믹 '+season+' 저장 오류:',e);
+        status('⚠ 서버 저장 실패 · 잠시 후 재시도');
+        clearTimeout(retryTimer);
+        retryTimer=setTimeout(()=>{if(ready&&saved<changed)flush().catch(console.error);},4500);
+        return false;
       }
     }
-    return ok&&!blocked;
+    return true;
   }
-  function flushNow(){
+  async function flush(){
     clearTimeout(saveTimer);
-    if(!ready||!canEdit||blocked)return Promise.resolve(false);
-    if(running)return running;
-    const start=()=>navigator.locks?.request
-      ? navigator.locks.request(prefix+'save-lock',{mode:'exclusive'},()=>pump())
-      : pump();
-    running=Promise.resolve().then(start).catch(e=>{
-      console.error('저장 연결 실패',e);
-      display('⚠ 저장 연결 오류','error');
-      notice('저장 요청 중 오류가 발생했어요. 현재 기록은 브라우저 백업에 남겨뒀습니다.');
-      return false;
-    }).finally(()=>{running=null;});
-    return running;
-  }
-  async function ensureSaved(){
-    if(!ready||!canEdit||blocked)return false;
-    clearTimeout(saveTimer);
-    // A completed save may have been followed by a new edit while its Promise settled.
-    // Do not leave the page until the latest revision is verified on the server.
-    for(let i=0;i<12;i++){
-      if(!running&&revision<=persisted)return true;
-      const ok=await flushNow();
-      if(!ok)return false;
-      if(!running&&revision<=persisted)return true;
-    }
-    return false;
-  }
-  async function saveState(){
     if(!canEdit||!ready)return false;
-    // Immediate saves (session completion, tracker changes) must be marked dirty
-    // synchronously, BEFORE any asynchronous network/backup step.
-    revision++;
-    if(blocked){
-      // Keep the original interrupted draft intact. Never overwrite it with an
-      // old cloud version after reopening a page.
-      putSnapshot('blocked-edit',state).catch(console.warn);
-      display('⚠ 저장 잠금 · 이전 기록 백업 필요','error');
-      return false;
+    // One write loop per page; never let stale requests overtake new ones.
+    while(saved<changed){
+      if(!inFlight){
+        const operation=sendPending();inFlight=operation;
+        try{
+          const ok=await operation;
+          if(!ok)return false;
+        }finally{if(inFlight===operation)inFlight=null;}
+      }else{
+        if(!(await inFlight))return false;
+        // Let the existing owner clear inFlight before starting a new run.
+        await Promise.resolve();
+      }
     }
-    markDraft();
-    return await ensureSaved();
+    if(inFlight)return await inFlight;
+    return true;
   }
   function queueSave(){
-    if(!canEdit||!ready)return;
-    revision++;
-    if(blocked){
-      // An interrupted draft is evidence; keep it unchanged for recovery.
-      putSnapshot('blocked-edit',state).catch(console.warn);
-      display('⚠ 저장 잠금 · 이전 기록 백업 필요','error');
-      return;
+    markChanged();
+    if(!ready||!canEdit)return;
+    saveTimer=setTimeout(()=>{flush().catch(console.error);},500);
+  }
+  async function saveNow(){markChanged();return await flush();}
+  function init(){
+    ready=true;changed=0;saved=0;confirmedSnapshot=JSON.stringify(state);
+    // Ignore every older (V109-V113) backup: it may contain a stale test entry.
+    // Recover ONLY this version's interrupted local edit when the server still
+    // matches the exact version originally edited. Otherwise never overwrite it.
+    let draft=null;
+    try{draft=JSON.parse(localStorage.getItem(draftKey)||'null');}catch(e){}
+    if(draft?.state && draft.base===confirmedSnapshot &&
+       JSON.stringify(draft.state)!==confirmedSnapshot){
+      state=mergeState(draft.state);
+      changed=1;
+      status('이전 미완료 입력 저장 중...');
+      setTimeout(()=>{flush().catch(console.error);},0);
+    }else if(draft?.state && JSON.stringify(draft.state)!==confirmedSnapshot){
+      status('⚠ 미저장 입력이 남아 있으나 서버가 달라 자동 덮어쓰지 않았어요');
+    }else if(draft){
+      try{localStorage.removeItem(draftKey);}catch(e){}
     }
-    markDraft();
-    display('입력 중 · 브라우저 임시 백업 완료');
-    clearTimeout(saveTimer);
-    saveTimer=setTimeout(()=>{ensureSaved();},650);
   }
-  async function retrySave(){
-    if(blocked){reportFailure('이전 저장 기록과 충돌해서 자동 저장을 잠갔어요. [이전 자동 백업]에서 먼저 사본을 다운로드해 주세요.');return;}
-    if(revision<=persisted){display('✅ 서버 저장 확인됨','ok');return;}
-    failures=0;
-    const saved=await ensureSaved();
-    if(!saved)reportFailure('저장을 완료하지 못했어요. [내 기록 백업 다운로드]를 눌러 현재 입력 내용을 보관해 주세요.');
-  }
-  async function navigateAfterSave(a){
-    if(navigationBusy)return;
-    navigationBusy=true;
-    display('⏳ 최신 기록 저장 확인 후 이동 중...');
-    try{
-      const ok=await ensureSaved();
-      if(!ok){
-        notice('⚠ 저장을 확인하지 못해 페이지 이동을 중단했습니다. 기록은 브라우저에 보관돼 있습니다. [내 기록 백업 다운로드]를 먼저 이용해 주세요.');
-        reportFailure('서버 저장 확인이 완료되지 않아 페이지 이동을 중단했어요. 현재 기록을 백업하고 다시 시도해 주세요.');
-        return;
-      }
-      // No unsaved revisions remain. Navigate only after server read-back verification.
-      window.location.assign(a.href);
-    } finally {navigationBusy=false;}
-  }
-  function guardNavigation(){
-    if(document.documentElement.dataset.jeiSafeNavV110)return;
-    document.documentElement.dataset.jeiSafeNavV110='1';
-    document.addEventListener('click',event=>{
-      if(!ready||!canEdit||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
-      const a=event.target.closest('a[href]');
+  function protectNavigation(){
+    document.addEventListener('click',async e=>{
+      if(!canEdit||!ready||e.defaultPrevented||e.button!==0||e.ctrlKey||e.metaKey||e.altKey||e.shiftKey)return;
+      const a=e.target.closest('a[href]');
       if(!a||a.target==='_blank'||a.hasAttribute('download'))return;
-      const url=new URL(a.href,location.href);
-      if(!['http:','https:'].includes(url.protocol)||url.href===location.href)return;
-      if(url.hash&&url.origin===location.origin&&url.pathname===location.pathname&&url.search===location.search)return;
-      if(revision<=persisted&&!running&&!blocked)return;
-      event.preventDefault();
-      navigateAfterSave(a).catch(e=>{console.error(e);reportFailure('페이지 이동 전 저장 확인에 실패했어요. [내 기록 백업 다운로드]로 현재 입력 내용을 보관해 주세요.');});
+      const dest=new URL(a.href,location.href);
+      if(!['http:','https:'].includes(dest.protocol)||dest.href===location.href)return;
+      if(dest.pathname===location.pathname&&dest.search===location.search&&dest.hash)return;
+      if(saved>=changed&&!inFlight)return;
+      e.preventDefault();
+      if(navigating)return;
+      navigating=true;
+      try{
+        const ok=await flush();
+        if(ok)location.assign(dest.href);
+        else status('⚠ 서버 저장 실패 · 입력 보존 중, 이동 보류');
+      }finally{navigating=false;}
     },true);
-    window.addEventListener('pagehide',()=>{
-      if(ready&&canEdit&&revision>persisted&&!blocked)markDraft();
+    document.addEventListener('visibilitychange',()=>{
+      if(document.visibilityState==='hidden'&&ready&&changed>saved){saveDraft();flush().catch(console.error);}
     });
+    window.addEventListener('pagehide',()=>{if(changed>saved)saveDraft();});
   }
-  function downloadJSON(contents, filename){
-    const url=URL.createObjectURL(new Blob([JSON.stringify(contents,null,2)],{type:'application/json;charset=utf-8'}));
-    const a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
-  }
-  function exportCurrent(){
-    if(!state)return reportFailure('게임 데이터를 아직 불러오지 못했습니다.');
-    const at=new Date().toISOString().replace(/[:.]/g,'-');
-    downloadJSON({format:'JEI-PANDEMIC-BACKUP-V109',season,saved_at:new Date().toISOString(),state:deepCopy(state)},'팬데믹-'+season+'-내기록-'+at+'.json');
-  }
-  async function latestBackups(){
-    const entries=[];
-    try{
-      const dbx=await openDB();
-      await new Promise((resolve,reject)=>{
-        const tx=dbx.transaction('snapshots','readonly');const q=tx.objectStore('snapshots').openCursor(null,'prev');
-        q.onsuccess=()=>{const c=q.result;if(!c)return;if(c.value.season===season&&entries.length<20)entries.push(c.value);c.continue()};
-        tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);
-      });
-    }catch(e){console.warn(e);}
-    const last=getLocal(STATE_LAST),draft=getLocal(STATE_DRAFT);
-    for(const x of [draft,last])if(x&&!entries.some(y=>y.at===x.at&&y.kind===x.kind))entries.unshift(x);
-    return entries;
-  }
-  async function showBackupList(){
-    const items=await latestBackups();
-    const host=document.getElementById('jei-safe-history-list');
-    if(!host)return;
-    if(!host.hidden){host.hidden=true;return;}
-    host.innerHTML='';
-    if(!items.length){host.textContent='이 브라우저에 이전 백업이 없습니다.';host.hidden=false;return;}
-    items.slice(0,15).forEach((entry,i)=>{
-      const button=document.createElement('button');button.type='button';
-      button.textContent=`${i+1}. ${new Date(entry.at).toLocaleString('ko-KR')} · ${entry.kind} · 회차 ${(entry.state?.sessions||[]).length}개 내려받기`;
-      button.addEventListener('click',()=>downloadJSON(
-        {format:'JEI-PANDEMIC-BACKUP-V109',season,saved_at:entry.at,state:entry.state},
-        '팬데믹-'+season+'-자동백업-'+entry.at.replace(/[:.]/g,'-')+'.json'
-      ));
-      host.appendChild(button);
-    });
-    host.hidden=false;
-  }
-  async function useServerRecord(){
-    if(!blocked)return;
-    const oldDraft=getLocal(STATE_DRAFT);
-    // Immediately export unsaved evidence before allowing a fresh server read.
-    if(oldDraft?.state){downloadJSON(
-      {format:'JEI-PANDEMIC-BACKUP-V109',season,saved_at:oldDraft.at,state:oldDraft.state},
-      '팬데믹-'+season+'-미저장기록-보관.json'
-    );}
-    if(!confirm('이전에 저장되지 않은 브라우저 입력을 JSON으로 내려받았습니다. 현재 서버 기록으로 다시 시작할까요? 내려받은 백업은 별도로 보관해 주세요.'))return;
-    try{
-      const latest=await readRemote();
-      await putSnapshot('before-reload-server',latest);
-      state=mergeState(latest);baseFingerprint=fp(latest);
-      clearLocal(STATE_DRAFT);blocked=false;revision=0;persisted=0;failures=0;
-      notice('');render();display('현재 서버 기록을 불러왔어요','ok');
-    }catch(e){console.error(e);reportFailure('서버 기록 확인 실패: '+(e.message||e));}
-  }
-  async function restoreFromFile(file){
-    if(!file)return;
-    let data;
-    try{data=JSON.parse(await file.text())}catch{return reportFailure('JSON 백업 파일을 읽을 수 없어요.');}
-    if(data?.season&&data.season!==season)return reportFailure('다른 시즌 백업이라 복원할 수 없습니다.');
-    const payload=data?.state||data;
-    if(!payload?.meta||!Array.isArray(payload.players)||!Array.isArray(payload.sessions))return reportFailure('올바른 팬데믹 게임 백업 데이터가 아닙니다.');
-    if(!confirm(`정말 이 백업으로 현재 ${season.toUpperCase()} 게임 기록 전체를 교체할까요?\n현재 데이터도 복사해 보관한 다음 저장합니다.`))return;
-    if(!confirm('마지막 확인: 서버의 현재 데이터가 백업 파일의 내용으로 덮어써집니다. 계속하시겠습니까?'))return;
-    try{
-      const remote=await readRemote();
-      await putSnapshot('before-restore',remote);
-      await putSnapshot('restore-import',payload);
-      baseFingerprint=fp(remote);blocked=false;notice('');failures=0;
-      state=mergeState(payload);
-      render();queueSave();
-      display('백업 복원 저장 중...');
-    }catch(e){console.error(e);reportFailure('복원 전 기존 기록 백업에 실패하여 중단했습니다: '+(e.message||e));}
-  }
-  function attachUI(){
-    if(document.getElementById('jei-safe-inline'))return;
-    // The old bottom-right floating safety panel has been removed completely.
-    // Recovery controls appear inside the player section ONLY when saving fails.
-    const status=$status();
-    const section=status?.closest('.section');
-    if(!section)return;
-    const style=document.createElement('style');style.textContent=`
-#jei-safe-inline{position:static;z-index:auto;width:100%;max-width:100%;margin:0 0 12px;padding:8px 0;border-top:1px solid #8b999955;font:11px/1.6 system-ui,sans-serif;color:inherit;background:transparent;box-shadow:none}
-#jei-safe-inline[hidden],#jei-safe-history-list[hidden]{display:none!important}
-#jei-safe-warning{color:#df857f;font-weight:750;line-height:1.55;margin-bottom:5px}
-.season2-theme #jei-safe-warning{color:#a04e43}
-#jei-safe-inline .jei-inline-actions{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-#jei-safe-inline button{font:inherit;cursor:pointer;padding:3px 7px;border-radius:6px;border:1px solid #8b9f9e88;background:transparent;color:inherit}
-#jei-safe-inline details{display:inline-block}#jei-safe-inline summary{cursor:pointer;color:inherit;padding:3px 5px}
-#jei-safe-history-list{display:grid;grid-template-columns:1fr;gap:5px;margin:6px 0 0;max-height:180px;overflow:auto}
-#jei-safe-history-list button{text-align:left}#jei-safe-inline button:hover{filter:brightness(1.12)}`;
-    document.head.appendChild(style);
-    const el=document.createElement('div');el.id='jei-safe-inline';el.hidden=true;
-    el.innerHTML=`<div id="jei-safe-warning" role="status" aria-live="polite"></div>
-      <div class="jei-inline-actions">
-        <button type="button" id="jei-safe-export">내 기록 백업</button>
-        <button type="button" id="jei-safe-retry">저장 재시도</button>
-        <details><summary>복구 옵션</summary>
-          <button type="button" id="jei-safe-history">이전 자동 백업</button>
-          <button type="button" id="jei-safe-import">백업 복원</button>
-          <button type="button" id="jei-safe-use-server">서버 기록 사용</button>
-        </details>
-      </div><div id="jei-safe-history-list" hidden></div>`;
-    const before=section.querySelector('#players')||section.querySelector('.grid4');
-    if(before)section.insertBefore(el,before);else section.appendChild(el);
-    el.querySelector('#jei-safe-export').onclick=exportCurrent;
-    el.querySelector('#jei-safe-history').onclick=showBackupList;
-    el.querySelector('#jei-safe-retry').onclick=retrySave;
-    el.querySelector('#jei-safe-use-server').onclick=useServerRecord;
-    el.querySelector('#jei-safe-import').onclick=()=>{
-      const file=document.createElement('input');file.type='file';file.accept='.json,application/json';
-      file.onchange=()=>restoreFromFile(file.files?.[0]);file.click();
-    };
-    if(banner)notice(banner);
-  }
-  function onOpen(){
-    if(!state||!canEdit)return;
-    baseFingerprint=fp(state);ready=true;blocked=false;revision=0;persisted=0;failures=0;
-    const draft=getLocal(STATE_DRAFT);
-    if(draft?.state&&draft?.season===season&&fp(draft.state)!==baseFingerprint){
-      blocked=true;
-      notice('⚠ 이전에 저장되지 않은 입력 내용이 이 브라우저에 남아 있습니다. 서버 기록에 바로 덮어쓰지 않도록 저장을 잠갔어요. [이전 자동 백업]으로 데이터를 다운로드한 다음 필요한 내용이 맞는지 확인하세요.');
-    }else if(draft){clearLocal(STATE_DRAFT);}
-    // Store current cloud snapshot even before the user types anything.
-    putSnapshot('server-loaded',deepCopy(state)).catch(e=>{console.warn(e);display('⚠ 자동 백업 오류 · 수동 다운로드 필요','error');});
-    window.addEventListener('beforeunload',e=>{if(ready&&(blocked||revision>persisted||running)){e.preventDefault();e.returnValue='';}});
-    window.addEventListener('storage',e=>{if(e.key===prefix+'saved-in-other-tab'&&ready){display('다른 탭 저장 감지 · 다음 저장 전에 충돌 검사');}});
-    guardNavigation();
-  }
-  function onRendered(){attachUI();if(blocked)display('⚠ 기존 입력 백업 감지 · 저장 보호 중','error');}
-  return {onOpen,onRendered,saveState,queueSave,ensureSaved,reportFailure,isBlocked};
+  protectNavigation();
+  return {init,saveNow,queueSave,flush};
 })();
-const JEI_OLD_OPEN_APP = openApp;
-openApp = function(){JEI_SAFE.onOpen();JEI_OLD_OPEN_APP();JEI_SAFE.onRendered();};
-saveState = function(){return JEI_SAFE.saveState();};
-queueSave = function(){return JEI_SAFE.queueSave();};
-
 
 boot();
 </script>
