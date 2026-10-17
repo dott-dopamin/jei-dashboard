@@ -1016,10 +1016,6 @@ async function deleteSession(id){
   // Do not allow a queued autosave with the old session list to run after deletion.
   clearTimeout(saveTimer);
   try{
-    const {error:photoError}=await db.rpc('delete_pandemic_legacy_s2_session_photos',{
-      p_code:accessCode||null,p_session_id:id
-    });
-    if(photoError)throw photoError;
     const original=state.sessions;
     state.sessions=original.filter(s=>s.id!==id);
     const saved=await saveState();
@@ -1027,6 +1023,10 @@ async function deleteSession(id){
       state.sessions=original;
       throw new Error('회차 기록 저장에 실패했어요. 다시 시도해 주세요.');
     }
+    const {error:photoError}=await db.rpc('delete_pandemic_legacy_s2_session_photos',{
+      p_code:accessCode||null,p_session_id:id
+    });
+    if(photoError)console.warn('회차 삭제 후 사진 정리 실패 (텍스트 기록 삭제는 완료)',photoError);
     photoCache.delete(id);
     renderSessions();
   }catch(err){
@@ -1082,7 +1082,7 @@ async function saveCurrentSession(){
     if((+row.attempt||1)<2){state.meta.current_month=row.month;state.meta.attempt=2;clearCurrentWorkspace({keepGoals:true});}
     else{state.meta.current_month=nextCampaignMonth(row.month);state.meta.attempt=1;clearCurrentWorkspace({keepGoals:false});}
   }
-  await saveState();
+  if(!await saveState()){alert('회차 기록이 서버에 저장되지 않았습니다. 페이지를 이동하지 말고 오른쪽 아래 보호 패널에서 백업을 다운로드해 주세요.');return;}
   try{await uploadCurrentPhotos(id)}catch(e){console.error(e);alert(e.message||'사진 저장 중 오류가 발생했어요. 회차 기록은 저장되었습니다.');}
   render();
 }
@@ -1128,7 +1128,7 @@ async function saveSession(){
     state.meta.connected_cities=row.connected_cities;
   }
 
-  await saveState();
+  if(!await saveState()){alert('회차 기록 저장을 확인하지 못했습니다. 페이지를 이동하지 말고 백업을 다운로드해 주세요.');return;}
   try{await syncPhotos(id)}catch(e){console.error(e);return alert(e.message||'사진 저장 오류')}
   $('#sessionModal').classList.add('hidden');render();
 }
@@ -1432,7 +1432,7 @@ $('#s2xModal').onclick=e=>{if(e.target===$('#s2xModal'))s2xClose();};
 document.addEventListener('keydown',e=>{if(e.key!=='Escape'||$('#s2xModal').classList.contains('hidden'))return;if(!$('#s2xBottomShade').classList.contains('hidden'))$('#s2xBottomShade').classList.add('hidden');else if(!$('#s2xEditShade').classList.contains('hidden'))s2xEditClose();else if(!$('#s2xRepairShade').classList.contains('hidden'))s2xCloseRepair();else s2xClose();});
 s2xWheel();
 
-/* JEI-PANDEMIC-SAFE-SAVE-V109: serialize saves + preflight conflict check + browser backups + manual JSON export/import. */
+/* JEI-PANDEMIC-SAFE-SAVE-V110: serialized verified autosaves, navigation flush, protected drafts and backups. */
 const JEI_SAFE = (() => {
   const season = 's2';
   const table = season === 's1' ? 'pandemic_legacy_s1_state' : 'pandemic_legacy_s2_state';
@@ -1441,7 +1441,7 @@ const JEI_SAFE = (() => {
   const prefix = 'JEI-PANDEMIC-SAFE-V109-' + season + ':';
   const STATE_DRAFT = prefix + 'unsaved-draft';
   const STATE_LAST = prefix + 'last-confirmed';
-  let ready=false, blocked=false, baseFingerprint='', revision=0, persisted=0, running=null, failures=0;
+  let ready=false, blocked=false, baseFingerprint='', revision=0, persisted=0, running=null, failures=0, navigationBusy=false;
   let banner='', backupDBPromise=null;
   const $status = () => document.getElementById('saveState');
   const deepCopy = x => JSON.parse(JSON.stringify(x));
@@ -1554,6 +1554,7 @@ const JEI_SAFE = (() => {
         await putSnapshot('confirmed',payload);
         // Only clear draft if no changes arrived while this save was in flight.
         if(persisted===revision)clearLocal(STATE_DRAFT);
+        setLocal(prefix+'saved-in-other-tab',{at:new Date().toISOString(),fingerprint:baseFingerprint});
         display('✅ 저장 확인됨','ok');
       }catch(e){
         console.error('JEI verified save failed',e);
@@ -1567,27 +1568,102 @@ const JEI_SAFE = (() => {
     }
     return ok&&!blocked;
   }
+  function flushNow(){
+    clearTimeout(saveTimer);
+    if(!ready||!canEdit||blocked)return Promise.resolve(false);
+    if(running)return running;
+    const start=()=>navigator.locks?.request
+      ? navigator.locks.request(prefix+'save-lock',{mode:'exclusive'},()=>pump())
+      : pump();
+    running=Promise.resolve().then(start).catch(e=>{
+      console.error('저장 연결 실패',e);
+      display('⚠ 저장 연결 오류','error');
+      notice('저장 요청 중 오류가 발생했어요. 현재 기록은 브라우저 백업에 남겨뒀습니다.');
+      return false;
+    }).finally(()=>{running=null;});
+    return running;
+  }
+  async function ensureSaved(){
+    if(!ready||!canEdit||blocked)return false;
+    clearTimeout(saveTimer);
+    // A completed save may have been followed by a new edit while its Promise settled.
+    // Do not leave the page until the latest revision is verified on the server.
+    for(let i=0;i<12;i++){
+      if(!running&&revision<=persisted)return true;
+      const ok=await flushNow();
+      if(!ok)return false;
+      if(!running&&revision<=persisted)return true;
+    }
+    return false;
+  }
   async function saveState(){
     if(!canEdit||!ready)return false;
-    clearTimeout(saveTimer);
-    revision++; // direct await saveState() calls also enqueue their latest state.
-    markDraft();
-    if(blocked){display('⚠ 저장 중단 · 기록 백업 필요','error');return false;}
-    if(!running){
-      const operation = navigator.locks?.request
-        ? navigator.locks.request(prefix+'save-lock',{mode:'exclusive'},()=>pump())
-        : pump();
-      running=Promise.resolve(operation).finally(()=>{running=null;});
+    // Immediate saves (session completion, tracker changes) must be marked dirty
+    // synchronously, BEFORE any asynchronous network/backup step.
+    revision++;
+    if(blocked){
+      // Keep the original interrupted draft intact. Never overwrite it with an
+      // old cloud version after reopening a page.
+      putSnapshot('blocked-edit',state).catch(console.warn);
+      display('⚠ 저장 잠금 · 이전 기록 백업 필요','error');
+      return false;
     }
-    return running;
+    markDraft();
+    return await ensureSaved();
   }
   function queueSave(){
     if(!canEdit||!ready)return;
     revision++;
+    if(blocked){
+      // An interrupted draft is evidence; keep it unchanged for recovery.
+      putSnapshot('blocked-edit',state).catch(console.warn);
+      display('⚠ 저장 잠금 · 이전 기록 백업 필요','error');
+      return;
+    }
     markDraft();
-    display(blocked?'⚠ 충돌 보호 중 · 자동 저장 중단':'입력 중 · 브라우저 임시 백업 완료',blocked?'error':'info');
-    if(blocked)return;
-    clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saveState();},900);
+    display('입력 중 · 브라우저 임시 백업 완료');
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(()=>{ensureSaved();},650);
+  }
+  async function retrySave(){
+    if(blocked){alert('다른 기록과 충돌했습니다. 먼저 [이전 자동 백업]을 다운로드해 주세요.');return;}
+    if(revision<=persisted){display('✅ 서버 저장 확인됨','ok');return;}
+    failures=0;
+    const saved=await ensureSaved();
+    if(!saved)alert('저장을 완료하지 못했습니다. [내 기록 백업 다운로드]를 눌러 사본을 보관해 주세요.');
+  }
+  async function navigateAfterSave(a){
+    if(navigationBusy)return;
+    navigationBusy=true;
+    display('⏳ 최신 기록 저장 확인 후 이동 중...');
+    try{
+      const ok=await ensureSaved();
+      if(!ok){
+        notice('⚠ 저장을 확인하지 못해 페이지 이동을 중단했습니다. 기록은 브라우저에 보관돼 있습니다. [내 기록 백업 다운로드]를 먼저 이용해 주세요.');
+        alert('아직 저장이 완료되지 않아 이동하지 않았어요. 화면 오른쪽 아래 기록 보호 패널을 확인해 주세요.');
+        return;
+      }
+      // No unsaved revisions remain. Navigate only after server read-back verification.
+      window.location.assign(a.href);
+    } finally {navigationBusy=false;}
+  }
+  function guardNavigation(){
+    if(document.documentElement.dataset.jeiSafeNavV110)return;
+    document.documentElement.dataset.jeiSafeNavV110='1';
+    document.addEventListener('click',event=>{
+      if(!ready||!canEdit||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+      const a=event.target.closest('a[href]');
+      if(!a||a.target==='_blank'||a.hasAttribute('download'))return;
+      const url=new URL(a.href,location.href);
+      if(!['http:','https:'].includes(url.protocol)||url.href===location.href)return;
+      if(url.hash&&url.origin===location.origin&&url.pathname===location.pathname&&url.search===location.search)return;
+      if(revision<=persisted&&!running&&!blocked)return;
+      event.preventDefault();
+      navigateAfterSave(a).catch(e=>{console.error(e);alert('페이지 이동 전 저장 확인에 실패했습니다. 현재 페이지에서 백업을 받아 주세요.');});
+    },true);
+    window.addEventListener('pagehide',()=>{
+      if(ready&&canEdit&&revision>persisted&&!blocked)markDraft();
+    });
   }
   function downloadJSON(contents, filename){
     const url=URL.createObjectURL(new Blob([JSON.stringify(contents,null,2)],{type:'application/json;charset=utf-8'}));
@@ -1650,11 +1726,12 @@ const JEI_SAFE = (() => {
     const el=document.createElement('aside');el.id='jei-safe-panel';
     el.innerHTML=`<header><strong>🛡️ 팬데믹 ${season==='s1'?'시즌1':'시즌2'} 기록 보호</strong><button id="jei-safe-fold" type="button" aria-label="패널 접기">접기</button></header>
     <div id="jei-safe-detail"><div id="jei-safe-status">자동 백업 준비됨</div><div id="jei-safe-warning" hidden></div>
-    <div class="jei-actions"><button type="button" id="jei-safe-export">내 기록 백업 다운로드</button><button type="button" id="jei-safe-history">이전 자동 백업</button><button type="button" id="jei-safe-import">백업 파일 복원</button></div>
-    <div class="jei-info">저장 전 브라우저에 사본 보관 · 서버 충돌 확인 · 저장 결과 검증. JSON 백업은 주기적으로 다운로드해 별도 보관하세요. 회차 사진 파일은 포함되지 않습니다.</div></div>`;
+    <div class="jei-actions"><button type="button" id="jei-safe-export">내 기록 백업 다운로드</button><button type="button" id="jei-safe-history">이전 자동 백업</button><button type="button" id="jei-safe-import">백업 파일 복원</button><button type="button" id="jei-safe-retry">저장 다시 시도</button></div>
+    <div class="jei-info">시즌 메뉴 이동 전 저장 완료 확인 · 서버 기록 검증 · 브라우저 자동 백업. 중요한 기록은 JSON 파일로 내려받아 보관하세요. 회차 사진 파일은 포함되지 않습니다.</div></div>`;
     document.body.appendChild(el);
     el.querySelector('#jei-safe-export').onclick=exportCurrent;
     el.querySelector('#jei-safe-history').onclick=showBackupList;
+    el.querySelector('#jei-safe-retry').onclick=retrySave;
     el.querySelector('#jei-safe-import').onclick=()=>{const file=document.createElement('input');file.type='file';file.accept='.json,application/json';file.onchange=()=>restoreFromFile(file.files?.[0]);file.click();};
     el.querySelector('#jei-safe-fold').onclick=()=>{const d=el.querySelector('#jei-safe-detail');d.hidden=!d.hidden;el.querySelector('#jei-safe-fold').textContent=d.hidden?'펼치기':'접기';};
     if(banner)notice(banner);
@@ -1671,9 +1748,10 @@ const JEI_SAFE = (() => {
     putSnapshot('server-loaded',deepCopy(state)).catch(e=>{console.warn(e);display('⚠ 자동 백업 오류 · 수동 다운로드 필요','error');});
     window.addEventListener('beforeunload',e=>{if(ready&&(blocked||revision>persisted||running)){e.preventDefault();e.returnValue='';}});
     window.addEventListener('storage',e=>{if(e.key===prefix+'saved-in-other-tab'&&ready){display('다른 탭 저장 감지 · 다음 저장 전에 충돌 검사');}});
+    guardNavigation();
   }
   function onRendered(){attachUI();if(blocked)display('⚠ 기존 입력 백업 감지 · 저장 보호 중','error');}
-  return {onOpen,onRendered,saveState,queueSave};
+  return {onOpen,onRendered,saveState,queueSave,ensureSaved};
 })();
 const JEI_OLD_OPEN_APP = openApp;
 openApp = function(){JEI_SAFE.onOpen();JEI_OLD_OPEN_APP();JEI_SAFE.onRendered();};
