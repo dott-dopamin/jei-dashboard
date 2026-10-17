@@ -1068,7 +1068,15 @@ function clearCurrentWorkspace({keepGoals=false}={}){
   if(keepGoals)m.objective_items=(m.objective_items||[]).map(x=>({...x,done:false}));else m.objective_items=[];
   syncLegacyObjectiveText();currentPendingPhotos=[];
 }
+let jeiPendingSessionCompleteS2=null;
 async function saveCurrentSession(){
+  if(JEI_SAFE.isBlocked())return JEI_SAFE.reportFailure('저장 잠금 상태라 회차 기록을 변경하지 않았어요. 오른쪽 아래 [이전 자동 백업]을 먼저 확인해 주세요.');
+  if(jeiPendingSessionCompleteS2){
+    if(!await JEI_SAFE.ensureSaved())return JEI_SAFE.reportFailure('이전 회차 저장이 아직 미완료예요. 백업을 다운로드한 뒤 다시 시도해 주세요.');
+    const pendingId=jeiPendingSessionCompleteS2;jeiPendingSessionCompleteS2=null;
+    try{await uploadCurrentPhotos(pendingId)}catch(e){console.error(e);JEI_SAFE.reportFailure(e.message||'회차 기록은 저장됐지만 사진 저장에 실패했어요.');}
+    render();return;
+  }
   const m=state.meta;
   if(!m.session_result)return alert('이번 회차 결과(WIN/LOSE)를 먼저 선택해주세요.');
   if(!m.play_date)return alert('플레이 날짜를 입력해주세요.');
@@ -1082,8 +1090,10 @@ async function saveCurrentSession(){
     if((+row.attempt||1)<2){state.meta.current_month=row.month;state.meta.attempt=2;clearCurrentWorkspace({keepGoals:true});}
     else{state.meta.current_month=nextCampaignMonth(row.month);state.meta.attempt=1;clearCurrentWorkspace({keepGoals:false});}
   }
-  if(!await saveState()){alert('회차 기록이 서버에 저장되지 않았습니다. 페이지를 이동하지 말고 오른쪽 아래 보호 패널에서 백업을 다운로드해 주세요.');return;}
-  try{await uploadCurrentPhotos(id)}catch(e){console.error(e);alert(e.message||'사진 저장 중 오류가 발생했어요. 회차 기록은 저장되었습니다.');}
+  jeiPendingSessionCompleteS2=id;
+  if(!await saveState()){JEI_SAFE.reportFailure('회차 기록이 서버에 저장되지 않았어요. 현재 내용은 브라우저에 보관돼 있습니다. [내 기록 백업 다운로드]로 사본을 먼저 받아 주세요.');return;}
+  jeiPendingSessionCompleteS2=null;
+  try{await uploadCurrentPhotos(id)}catch(e){console.error(e);JEI_SAFE.reportFailure(e.message||'사진 저장 중 오류가 발생했어요. 회차 텍스트 기록은 저장되었습니다.');}
   render();
 }
 function nextCampaignMonth(month){
@@ -1096,6 +1106,7 @@ function resetObjectiveChecks(clearText=false){
   syncLegacyObjectiveText();
 }
 async function saveSession(){
+  if(JEI_SAFE.isBlocked())return JEI_SAFE.reportFailure('저장 잠금 상태라 회차 기록을 변경하지 않았어요. 오른쪽 아래 [이전 자동 백업]을 먼저 확인해 주세요.');
   const id=$('#sessionId').value||crypto.randomUUID(),visible=modalExisting.filter(p=>!modalDeleted.includes(p.id)).length;
   if(visible+modalPending.length>3)return alert('사진은 최대 3장까지 가능해요.');
   const old=state.sessions.find(x=>x.id===id);
@@ -1128,8 +1139,8 @@ async function saveSession(){
     state.meta.connected_cities=row.connected_cities;
   }
 
-  if(!await saveState()){alert('회차 기록 저장을 확인하지 못했습니다. 페이지를 이동하지 말고 백업을 다운로드해 주세요.');return;}
-  try{await syncPhotos(id)}catch(e){console.error(e);return alert(e.message||'사진 저장 오류')}
+  if(!await saveState()){JEI_SAFE.reportFailure('회차 기록 저장을 확인하지 못했어요. 서버에 저장되기 전에는 페이지를 이동하지 마세요. [내 기록 백업 다운로드]를 이용해 주세요.');return;}
+  try{await syncPhotos(id)}catch(e){console.error(e);return JEI_SAFE.reportFailure(e.message||'사진 저장 오류')}
   $('#sessionModal').classList.add('hidden');render();
 }
 
@@ -1432,7 +1443,7 @@ $('#s2xModal').onclick=e=>{if(e.target===$('#s2xModal'))s2xClose();};
 document.addEventListener('keydown',e=>{if(e.key!=='Escape'||$('#s2xModal').classList.contains('hidden'))return;if(!$('#s2xBottomShade').classList.contains('hidden'))$('#s2xBottomShade').classList.add('hidden');else if(!$('#s2xEditShade').classList.contains('hidden'))s2xEditClose();else if(!$('#s2xRepairShade').classList.contains('hidden'))s2xCloseRepair();else s2xClose();});
 s2xWheel();
 
-/* JEI-PANDEMIC-SAFE-SAVE-V110: serialized verified autosaves, navigation flush, protected drafts and backups. */
+/* JEI-PANDEMIC-SAFE-SAVE-V111: serialized verified autosaves, navigation flush, protected drafts and backups. */
 const JEI_SAFE = (() => {
   const season = 's2';
   const table = season === 's1' ? 'pandemic_legacy_s1_state' : 'pandemic_legacy_s2_state';
@@ -1461,7 +1472,21 @@ const JEI_SAFE = (() => {
     banner=message;
     const el=document.getElementById('jei-safe-warning');
     if(el){el.textContent=message;el.hidden=!message;}
+    if(message){
+      const detail=document.getElementById('jei-safe-detail');
+      if(detail)detail.hidden=false;
+      const fold=document.getElementById('jei-safe-fold');
+      if(fold)fold.textContent='접기';
+    }
   }
+  function reportFailure(message) {
+    const prefixText=blocked?'저장 보호가 잠긴 상태입니다. 기존 백업을 확인한 뒤 복원하거나 새로 저장해 주세요. ':'';
+    notice('⚠ '+prefixText+message);
+    display('⚠ 저장 미완료 · 기록 보호 패널 확인','error');
+    return false;
+  }
+  function isBlocked(){return blocked;}
+
   function getLocal(key){try{return JSON.parse(localStorage.getItem(key)||'null')}catch{return null}}
   function setLocal(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch(e){console.warn('JEI localStorage unavailable',e);return false}}
   function clearLocal(key){try{localStorage.removeItem(key)}catch{}}
@@ -1555,6 +1580,7 @@ const JEI_SAFE = (() => {
         // Only clear draft if no changes arrived while this save was in flight.
         if(persisted===revision)clearLocal(STATE_DRAFT);
         setLocal(prefix+'saved-in-other-tab',{at:new Date().toISOString(),fingerprint:baseFingerprint});
+        notice('');
         display('✅ 저장 확인됨','ok');
       }catch(e){
         console.error('JEI verified save failed',e);
@@ -1626,11 +1652,11 @@ const JEI_SAFE = (() => {
     saveTimer=setTimeout(()=>{ensureSaved();},650);
   }
   async function retrySave(){
-    if(blocked){alert('다른 기록과 충돌했습니다. 먼저 [이전 자동 백업]을 다운로드해 주세요.');return;}
+    if(blocked){reportFailure('이전 저장 기록과 충돌해서 자동 저장을 잠갔어요. [이전 자동 백업]에서 먼저 사본을 다운로드해 주세요.');return;}
     if(revision<=persisted){display('✅ 서버 저장 확인됨','ok');return;}
     failures=0;
     const saved=await ensureSaved();
-    if(!saved)alert('저장을 완료하지 못했습니다. [내 기록 백업 다운로드]를 눌러 사본을 보관해 주세요.');
+    if(!saved)reportFailure('저장을 완료하지 못했어요. [내 기록 백업 다운로드]를 눌러 현재 입력 내용을 보관해 주세요.');
   }
   async function navigateAfterSave(a){
     if(navigationBusy)return;
@@ -1640,7 +1666,7 @@ const JEI_SAFE = (() => {
       const ok=await ensureSaved();
       if(!ok){
         notice('⚠ 저장을 확인하지 못해 페이지 이동을 중단했습니다. 기록은 브라우저에 보관돼 있습니다. [내 기록 백업 다운로드]를 먼저 이용해 주세요.');
-        alert('아직 저장이 완료되지 않아 이동하지 않았어요. 화면 오른쪽 아래 기록 보호 패널을 확인해 주세요.');
+        reportFailure('서버 저장 확인이 완료되지 않아 페이지 이동을 중단했어요. 현재 기록을 백업하고 다시 시도해 주세요.');
         return;
       }
       // No unsaved revisions remain. Navigate only after server read-back verification.
@@ -1659,7 +1685,7 @@ const JEI_SAFE = (() => {
       if(url.hash&&url.origin===location.origin&&url.pathname===location.pathname&&url.search===location.search)return;
       if(revision<=persisted&&!running&&!blocked)return;
       event.preventDefault();
-      navigateAfterSave(a).catch(e=>{console.error(e);alert('페이지 이동 전 저장 확인에 실패했습니다. 현재 페이지에서 백업을 받아 주세요.');});
+      navigateAfterSave(a).catch(e=>{console.error(e);reportFailure('페이지 이동 전 저장 확인에 실패했어요. [내 기록 백업 다운로드]로 현재 입력 내용을 보관해 주세요.');});
     },true);
     window.addEventListener('pagehide',()=>{
       if(ready&&canEdit&&revision>persisted&&!blocked)markDraft();
@@ -1670,7 +1696,7 @@ const JEI_SAFE = (() => {
     const a=document.createElement('a');a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
   }
   function exportCurrent(){
-    if(!state)return alert('게임 데이터를 아직 불러오지 못했습니다.');
+    if(!state)return reportFailure('게임 데이터를 아직 불러오지 못했습니다.');
     const at=new Date().toISOString().replace(/[:.]/g,'-');
     downloadJSON({format:'JEI-PANDEMIC-BACKUP-V109',season,saved_at:new Date().toISOString(),state:deepCopy(state)},'팬데믹-'+season+'-내기록-'+at+'.json');
   }
@@ -1690,19 +1716,19 @@ const JEI_SAFE = (() => {
   }
   async function showBackupList(){
     const items=await latestBackups();
-    if(!items.length){alert('이 브라우저에 저장된 이전 백업이 없습니다. 지금 기록은 [내 기록 백업 다운로드]로 받을 수 있어요.');return;}
+    if(!items.length){reportFailure('이 브라우저에 이전 자동 백업은 없어요. [내 기록 백업 다운로드]로 현재 입력을 보관할 수 있어요.');return;}
     const lines=items.slice(0,15).map((e,i)=>`${i+1}. ${new Date(e.at).toLocaleString('ko-KR')} · ${e.kind} · 회차 ${(e.state?.sessions||[]).length}개`).join('\n');
     const n=prompt('복사할 자동 백업 번호를 입력하세요. 서버 기록을 수정하지 않고 JSON 파일로 다운로드합니다.\n\n'+lines,'1');
-    if(n===null)return;const item=items[Number(n)-1];if(!item)return alert('올바른 번호를 선택해 주세요.');
+    if(n===null)return;const item=items[Number(n)-1];if(!item)return reportFailure('선택한 백업 번호를 찾지 못했어요.');
     downloadJSON({format:'JEI-PANDEMIC-BACKUP-V109',season,saved_at:item.at,state:item.state},'팬데믹-'+season+'-자동백업-'+item.at.replace(/[:.]/g,'-')+'.json');
   }
   async function restoreFromFile(file){
     if(!file)return;
     let data;
-    try{data=JSON.parse(await file.text())}catch{return alert('JSON 파일을 읽을 수 없어요.');}
-    if(data?.season&&data.season!==season)return alert('다른 시즌 백업이라 복원할 수 없습니다.');
+    try{data=JSON.parse(await file.text())}catch{return reportFailure('JSON 백업 파일을 읽을 수 없어요.');}
+    if(data?.season&&data.season!==season)return reportFailure('다른 시즌 백업이라 복원할 수 없습니다.');
     const payload=data?.state||data;
-    if(!payload?.meta||!Array.isArray(payload.players)||!Array.isArray(payload.sessions))return alert('올바른 팬데믹 게임 백업 데이터가 아닙니다.');
+    if(!payload?.meta||!Array.isArray(payload.players)||!Array.isArray(payload.sessions))return reportFailure('올바른 팬데믹 게임 백업 데이터가 아닙니다.');
     if(!confirm(`정말 이 백업으로 현재 ${season.toUpperCase()} 게임 기록 전체를 교체할까요?\n현재 데이터도 복사해 보관한 다음 저장합니다.`))return;
     if(!confirm('마지막 확인: 서버의 현재 데이터가 백업 파일의 내용으로 덮어써집니다. 계속하시겠습니까?'))return;
     try{
@@ -1713,12 +1739,13 @@ const JEI_SAFE = (() => {
       state=mergeState(payload);
       render();queueSave();
       display('백업 복원 저장 중...');
-    }catch(e){console.error(e);alert('복원 전에 현재 데이터를 백업할 수 없어 중단했습니다: '+(e.message||e));}
+    }catch(e){console.error(e);reportFailure('복원 전 기존 기록 백업에 실패하여 중단했습니다: '+(e.message||e));}
   }
   function attachUI(){
     if(document.getElementById('jei-safe-panel'))return;
     const style=document.createElement('style');style.textContent=`
 #jei-safe-panel{position:fixed;z-index:2147482000;bottom:12px;right:12px;width:min(360px,calc(100vw - 24px));background:#f9fbfb;color:#263944;border:1px solid #8dabb1;border-radius:14px;box-shadow:0 12px 40px #07161e55;padding:11px;font:12px/1.45 system-ui,sans-serif}
+#jei-safe-panel:has(#jei-safe-detail[hidden]){width:min(240px,calc(100vw - 24px))}
 #jei-safe-panel header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:7px}#jei-safe-panel strong{font-size:13px}#jei-safe-panel button{font:inherit;cursor:pointer;padding:7px 8px;border-radius:7px;border:1px solid #b4c9cd;background:#fff;color:#244e58;font-weight:700}
 #jei-safe-panel .jei-actions{display:flex;flex-wrap:wrap;gap:5px}#jei-safe-panel #jei-safe-warning{background:#fff0e9;border:1px solid #e2a7a0;color:#b33536;border-radius:7px;padding:9px;margin:8px 0;white-space:pre-line;line-height:1.5;font-weight:700}#jei-safe-panel #jei-safe-status{font-size:11px;color:#465f69}
 #jei-safe-panel .jei-info{font-size:10px;color:#647b82;margin-top:7px}#jei-safe-panel [hidden]{display:none!important}`;
@@ -1734,6 +1761,9 @@ const JEI_SAFE = (() => {
     el.querySelector('#jei-safe-retry').onclick=retrySave;
     el.querySelector('#jei-safe-import').onclick=()=>{const file=document.createElement('input');file.type='file';file.accept='.json,application/json';file.onchange=()=>restoreFromFile(file.files?.[0]);file.click();};
     el.querySelector('#jei-safe-fold').onclick=()=>{const d=el.querySelector('#jei-safe-detail');d.hidden=!d.hidden;el.querySelector('#jei-safe-fold').textContent=d.hidden?'펼치기':'접기';};
+    const detail=el.querySelector('#jei-safe-detail');
+    if(detail)detail.hidden=true;
+    el.querySelector('#jei-safe-fold').textContent='펼치기';
     if(banner)notice(banner);
   }
   function onOpen(){
@@ -1751,7 +1781,7 @@ const JEI_SAFE = (() => {
     guardNavigation();
   }
   function onRendered(){attachUI();if(blocked)display('⚠ 기존 입력 백업 감지 · 저장 보호 중','error');}
-  return {onOpen,onRendered,saveState,queueSave,ensureSaved};
+  return {onOpen,onRendered,saveState,queueSave,ensureSaved,reportFailure,isBlocked};
 })();
 const JEI_OLD_OPEN_APP = openApp;
 openApp = function(){JEI_SAFE.onOpen();JEI_OLD_OPEN_APP();JEI_SAFE.onRendered();};
