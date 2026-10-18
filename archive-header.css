@@ -1,4 +1,4 @@
-/* V70 — one shared, fixed GAME ARCHIVE header for every archive page. */
+/* V122 — consolidated GAME ARCHIVE header for five archive pages. */
 html{overflow-y:scroll;scrollbar-gutter:stable;}
 .archive-header,.archive-header *{box-sizing:border-box!important;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif!important}
 .archive-header{width:100%!important;height:66px!important;min-height:66px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;margin:0 0 20px!important;padding:0 0 20px!important;border-bottom:1px solid #dde1e6!important}
@@ -19,3 +19,6 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
   .archive-header .archive-link{width:100%!important;height:32px!important;min-height:32px!important;padding:0 6px!important;font-size:11px!important}
   .archive-header .back{font-size:11px!important;margin-top:18px!important}
 }
+
+/* Visible keyboard focus, including the active page. */
+.archive-header .archive-link:focus-visible,.archive-header .back:focus-visible{outline:2px solid currentColor!important;outline-offset:2px!important;}
