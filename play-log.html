@@ -50,6 +50,7 @@ html,body{background:#f7f8f9!important}*{box-sizing:border-box}button,input,sele
     <section class="insight"><div class="insight-head"><h2>아직 플레이 기록 없는 보유게임</h2><small>확장 제외</small></div><div id="unplayed" class="unplayed"></div></section>
   </div>
 
+  <div id="loadState" aria-live="polite" style="font-size:11px;color:#87939a;margin:0 0 6px;min-height:0"></div>
   <div id="summary" class="summary"></div>
   <div id="logList" class="log-list"></div>
 </div>
@@ -86,12 +87,67 @@ const coll=new Intl.Collator('ko-KR',{numeric:true,sensitivity:'base'});let logs
 function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
 function formatDate(v){if(!v)return '-';const [y,m,d]=v.split('-');return `${y}.${m}.${d}`}
 function norm(s){return String(s||'').trim().toLocaleLowerCase('ko-KR')}
+/* V125: instant last-known public preview, then authoritative server refresh. */
+const LOG_PREVIEW_KEY='jei_play_logs_preview_v125';
+function renderLastKnownLogs(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(LOG_PREVIEW_KEY)||'null');
+  if(!saved||saved.version!==1||!Array.isArray(saved.logs)||!Array.isArray(saved.games))return false;
+  // Last-known data is only a preview; permissions are NEVER inferred from cache.
+  logs=saved.logs;games=saved.games;isAdmin=false;
+  buildYears();draw();
+  $('#loadState').textContent='이전 기록 미리보기 · 최신 기록 확인 중…';
+  return true;
+ }catch(e){return false}
+}
+function cachePlayLogs(){
+ try{
+  // Keep a small, read-only preview. Never cache authentication or pending edits.
+  const payload={version:1,logs,games,saved_at:Date.now()};
+  let json=JSON.stringify(payload);
+  // Avoid exceeding browser localStorage quotas; if too large use a recent subset.
+  if(json.length>1200000)json=JSON.stringify({...payload,logs:logs.slice(0,80)});
+  if(json.length<=1800000)localStorage.setItem(LOG_PREVIEW_KEY,json);
+ }catch(e){/* local storage is optional; network remains the source of truth */}
+}
 async function init(){
-  const [{data:{session}},{data:gameData,error:gameErr},{data:logData,error:logErr}]=await Promise.all([db.auth.getSession(),db.from('board_games').select('id,title,is_expansion'),db.from('board_game_play_logs').select('*').order('played_on',{ascending:false}).order('created_at',{ascending:false})]);
-  isAdmin=!!session;$('#addPlay').style.display=isAdmin?'':'none';
-  if(gameErr)return alert(gameErr.message);if(logErr)return alert(logErr.message);
-  games=(gameData||[]).sort((a,b)=>coll.compare(a.title||'',b.title||''));logs=logData||[];
-  $('#gameOptions').innerHTML=games.map(g=>`<option value="${esc(g.title)}"></option>`).join('');buildYears();draw();
+  const hadPreview=renderLastKnownLogs();
+  if(!hadPreview)$('#loadState').textContent='최신 플레이 기록을 불러오는 중…';
+  // Run all requests concurrently, but the first paint does not wait on them.
+  const [authResult,gameResult,logResult]=await Promise.allSettled([
+   db.auth.getSession(),
+   db.from('board_games').select('id,title,is_expansion'),
+   db.from('board_game_play_logs').select('*').order('played_on',{ascending:false}).order('created_at',{ascending:false})
+  ]);
+  if(authResult.status==='fulfilled'){
+   isAdmin=!!authResult.value?.data?.session;
+  }else{
+   isAdmin=false;console.warn('login status unavailable',authResult.reason);
+  }
+  $('#addPlay').style.display=isAdmin?'':'none';
+  const gameResponse=gameResult.status==='fulfilled'?gameResult.value:null;
+  const logResponse=logResult.status==='fulfilled'?logResult.value:null;
+  const error=gameResponse?.error||logResponse?.error||
+    (gameResult.status==='rejected'?gameResult.reason:null)||
+    (logResult.status==='rejected'?logResult.reason:null);
+  if(error){
+   // A stale public preview must not become an editable source on fetch failure.
+   isAdmin=false;$('#addPlay').style.display='none';draw();
+   $('#loadState').textContent='최신 정보 갱신 실패 · 새로고침하여 다시 시도해 주세요.';
+   $('#loadState').style.color='#ba5151';
+   if(!hadPreview)$('#logList').innerHTML='<div class="empty">기록을 불러오지 못했어요. 새로고침해 주세요.</div>';
+   console.error('play log refresh failed',error);
+   return;
+  }
+  games=(gameResponse.data||[]).sort((a,b)=>coll.compare(a.title||'',b.title||''));
+  logs=logResponse.data||[];
+  $('#gameOptions').innerHTML=games.map(g=>`<option value="${esc(g.title)}"></option>`).join('');
+  const year=$('#yearFilter').value;
+  buildYears();
+  if(year&&[...$('#yearFilter').options].some(x=>x.value===year))$('#yearFilter').value=year;
+  draw();cachePlayLogs();
+  $('#loadState').textContent='';
+  $('#loadState').style.color='';
 }
 function buildYears(){const ys=[...new Set(logs.map(x=>(x.played_on||'').slice(0,4)).filter(Boolean))].sort((a,b)=>b.localeCompare(a));$('#yearFilter').innerHTML='<option value="">전체 연도</option>'+ys.map(y=>`<option>${y}</option>`).join('')}
 function filtered(){const q=$('#q').value.trim().toLowerCase(),y=$('#yearFilter').value;return logs.filter(x=>(!y||(x.played_on||'').startsWith(y))&&(!q||[x.game_title,x.players,x.place,x.memo].some(v=>String(v||'').toLowerCase().includes(q))))}
