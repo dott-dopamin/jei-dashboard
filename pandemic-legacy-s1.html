@@ -1181,10 +1181,29 @@ function weekdayKo(dateStr){if(!dateStr)return '';const d=new Date(dateStr+'T00:
 function dateShort(dateStr){if(!dateStr)return '날짜 미정';const [y,m,d]=dateStr.split('-');return `${y.slice(2)}/${m}/${d}`;}
 function timeKo(timeStr){if(!timeStr)return '';const [h,m]=timeStr.split(':').map(Number);if(Number.isNaN(h))return '';let hh=h%12||12;return `${hh}시${m?` ${m}분`:''}~`;}
 function scheduleLine(s){const wd=weekdayKo(s.date);return `${dateShort(s.date)} ${wd?wd+'요일':''}`.trim();}
+// Use the Korean calendar day, never UTC's date (which may differ before 9 AM KST).
+function legacyTodayKST(){
+  const parts=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+  const part=type=>parts.find(item=>item.type===type)?.value||'';
+  return `${part('year')}-${part('month')}-${part('day')}`;
+}
+function upcomingLegacySchedules(all,today=legacyTodayKST()){
+  // Keep dated events on the day they happen. Past dates are hidden only in
+  // the "Next 3" header; the full schedule archive below remains unchanged.
+  const upcoming=all.filter(s=>!s.date||s.date>=today).slice(0,3);
+  // Fill any empty slots with the next REAL round numbers, not positions 1/2/3.
+  const roundNumbers=all.map(s=>parseInt(String(s.round||'').match(/^(\d+)\s*회차/)?.[1],10)).filter(Number.isFinite);
+  let nextRound=Math.max(0,...roundNumbers)+1;
+  while(upcoming.length<3){upcoming.push({round:`${nextRound++}회차`,date:'',note:'',isPlaceholder:true});}
+  return upcoming;
+}
 function renderSchedules(){
   const all=sortedSchedules();
   const hero=$('#heroScheduleList');
-  const next3=all.slice(0,3);while(next3.length<3)next3.push(null);hero.innerHTML=next3.map((s,i)=>s?`<div class="hero-schedule-item"><span class="hero-schedule-round">${esc(s.round||`${i+1}회차`)}</span><span class="hero-schedule-dot">·</span><span class="hero-schedule-date">${esc(scheduleLine(s))}</span>${s.note?`<span class="hero-schedule-dot">·</span><span class="hero-schedule-note">${esc(s.note)}</span>`:''}</div>`:`<div class="hero-schedule-item"><span class="hero-schedule-round">${i+1}회차</span><span class="hero-schedule-dot">·</span><span class="hero-schedule-date" style="color:#7f929a">일정 미정</span></div>`).join('');
+  const next3=upcomingLegacySchedules(all);
+  hero.innerHTML=next3.map(s=>s.isPlaceholder
+    ?`<div class="hero-schedule-item"><span class="hero-schedule-round">${esc(s.round)}</span><span class="hero-schedule-dot">·</span><span class="hero-schedule-date" style="color:#7f929a">일정 미정</span></div>`
+    :`<div class="hero-schedule-item"><span class="hero-schedule-round">${esc(s.round||'일정')}</span><span class="hero-schedule-dot">·</span><span class="hero-schedule-date">${esc(scheduleLine(s))}</span>${s.note?`<span class="hero-schedule-dot">·</span><span class="hero-schedule-note">${esc(s.note)}</span>`:''}</div>`).join('');
   const list=$('#scheduleList');
   if(!list)return;
   list.innerHTML=all.length?all.map(s=>`<article class="schedule-card"><div class="schedule-card-title">${esc(s.round||'레거시 일정')}</div><div class="schedule-card-date">${esc(scheduleLine(s))}</div>${s.note?`<div class="schedule-card-note">${esc(s.note)}</div>`:''}${canEdit?`<div class="schedule-card-actions"><button class="schedule-mini-btn" type="button" onclick="editSchedule('${s.id}')" title="수정">✎</button><button class="schedule-mini-btn" type="button" onclick="deleteSchedule('${s.id}')" title="삭제">×</button></div>`:''}</article>`).join(''):'<div class="schedule-empty">아직 등록된 레거시 일정이 없어요.</div>';
