@@ -429,7 +429,11 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
 .character-role-body>label:not(.character-role-lost){display:grid;gap:7px;font-size:12px;font-weight:850;color:#c5d5d9}
 .character-role-body input[type=text],.character-role-body textarea{width:100%;border:1px solid #54707a;background:#15252b;border-radius:9px;padding:11px 12px;color:#f3f6f6;outline:none;font-size:14px}
 .character-role-body input:focus,.character-role-body textarea:focus{border-color:#8fc4cf;box-shadow:0 0 0 2px rgba(143,196,207,.12)}
-.character-role-body textarea{min-height:220px;resize:vertical;line-height:1.7}
+.character-role-body textarea{min-height:110px;resize:vertical;line-height:1.7}
+.character-role-body .character-role-legacy textarea{min-height:110px}
+.character-role-legacy{border:1px dashed #61737a;border-radius:10px;background:rgba(255,255,255,.035);padding:13px}
+.character-role-legacy label{display:grid;gap:7px;font-size:12px;font-weight:850;color:#d5c59f}
+.character-role-legacy small{display:block;margin-top:8px;color:#9daeb3;font-size:11px;line-height:1.5}
 .character-role-lost{display:flex;align-items:flex-start;gap:11px;border:1px solid #765b5c;border-radius:10px;background:#3b2d30;padding:12px 13px;cursor:pointer}
 .character-role-lost input{width:19px;height:19px;margin:2px 0 0;accent-color:#c57373}
 .character-role-lost span{display:grid;gap:3px}.character-role-lost b{font-size:13px;color:#ffdada}.character-role-lost small{font-size:11px;color:#d0b5b5;line-height:1.5}
@@ -483,7 +487,7 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
   <div class="dashboard-grid">
     <div class="dashboard-col dashboard-col-left">
       <section class="section players-section">
-        <div class="section-head"><div><h2>캐릭터 · 직업 명부</h2><div class="section-desc">직업을 누르면 이름과 상처·관계·업그레이드를 기록할 수 있어요.</div></div><div class="role-head-actions"><span id="saveState" class="save-state"></span><button id="addCharacterRole" type="button" class="role-add-btn">+ 직업 추가</button></div></div>
+        <div class="section-head"><div><h2>캐릭터 · 직업 명부</h2><div class="section-desc">직업을 누르면 이름과 상처·업그레이드·관계를 각각 기록할 수 있어요.</div></div><div class="role-head-actions"><span id="saveState" class="save-state"></span><button id="addCharacterRole" type="button" class="role-add-btn">+ 직업 추가</button></div></div>
         <div id="players" class="role-list"></div>
       </section>
 
@@ -578,7 +582,13 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
     <div class="character-role-body">
       <label>직업명<input id="characterRoleJob" type="text" maxlength="70" placeholder="예: 위생병"></label>
       <label>캐릭터 이름<input id="characterRoleName" type="text" maxlength="100" placeholder="플레이어가 지은 캐릭터 이름"></label>
-      <label>상처 · 관계 · 업그레이드 및 기타 메모<textarea id="characterRoleNotes" placeholder="게임 중 생긴 상처, 관계, 업그레이드, 중요한 사건 등을 자유롭게 기록하세요."></textarea></label>
+      <label>상처<textarea id="characterRoleWounds" placeholder="상처 및 흉터, 관련 효과 등을 기록하세요."></textarea></label>
+      <label>업그레이드<textarea id="characterRoleUpgrades" placeholder="캐릭터가 획득한 업그레이드 및 능력을 기록하세요."></textarea></label>
+      <label>관계<textarea id="characterRoleRelationships" placeholder="다른 캐릭터와의 관계 및 관련 효과를 기록하세요."></textarea></label>
+      <div id="characterRoleLegacySection" class="character-role-legacy hidden">
+        <label>기존 통합 메모 (이전 기록 보존)<textarea id="characterRoleNotes" placeholder="이전에 한 칸에 작성했던 내용입니다. 필요한 내용을 위 칸으로 옮긴 후 정리할 수 있어요."></textarea></label>
+        <small>이전에 작성한 메모를 잃지 않도록 남겨 두었어요. 상처·업그레이드·관계 칸으로 직접 옮길 수 있습니다.</small>
+      </div>
       <label class="character-role-lost"><input id="characterRoleMissing" type="checkbox"><span><b>실종된 캐릭터</b><small>명부에서 흐리게 표시되며, 새 회차 참여 캐릭터로 선택할 수 없어요.</small></span></label>
       <div id="characterRoleHint" class="character-role-hint">입력하면 자동 저장됩니다.</div>
     </div>
@@ -654,7 +664,8 @@ function normalizeCharacterRoster(raw,legacyPlayers){
   // Preserve every saved occupation, name, note and missing flag. Never delete the legacy players key.
   if(Array.isArray(raw))return raw.map((r,i)=>({
     ...r,id:String(r?.id||`role-existing-${i}`),role:String(r?.role||''),
-    character:String(r?.character||''),detail:String(r?.detail||''),missing:!!r?.missing
+    character:String(r?.character||''),detail:String(r?.detail||''),missing:!!r?.missing,
+    wounds:String(r?.wounds||''),upgrades:String(r?.upgrades||''),relationships:String(r?.relationships||'')
   }));
   const roster=S1_DEFAULT_ROLES.map((role,i)=>({id:`role-preset-${i}`,role,character:'',detail:'',missing:false}));
   const players=Array.isArray(legacyPlayers)?legacyPlayers:[];
@@ -704,11 +715,15 @@ function openCharacterRole(id=null){
   $('#characterRoleTitle').textContent=id?'캐릭터 정보 · '+(r.role||'직업 미정'):'새 직업 추가';
   $('#characterRoleJob').value=r?.role||'';
   $('#characterRoleName').value=r?.character||'';
+  $('#characterRoleWounds').value=r?.wounds||'';
+  $('#characterRoleUpgrades').value=r?.upgrades||'';
+  $('#characterRoleRelationships').value=r?.relationships||'';
   $('#characterRoleNotes').value=r?.detail||'';
+  $('#characterRoleLegacySection').classList.toggle('hidden',!String(r?.detail||'').trim());
   $('#characterRoleMissing').checked=!!r?.missing;
   $('#characterRoleHint').textContent=id?'입력 내용은 자동 저장돼요.':'직업명을 입력하고 완료를 눌러 추가해 주세요.';
   $('#characterRoleModal').classList.remove('hidden');
-  setTimeout(()=>{(id?$('#characterRoleNotes'):$('#characterRoleJob')).focus();},40);
+  setTimeout(()=>{(id?$('#characterRoleWounds'):$('#characterRoleJob')).focus();},40);
 }
 function characterRoleInput(){
   if(!activeCharacterRoleId)return; // A new role is only created after the user confirms.
@@ -716,6 +731,9 @@ function characterRoleInput(){
   r.role=$('#characterRoleJob').value;
   r.character=$('#characterRoleName').value;
   r.detail=$('#characterRoleNotes').value;
+  r.wounds=$('#characterRoleWounds').value;
+  r.upgrades=$('#characterRoleUpgrades').value;
+  r.relationships=$('#characterRoleRelationships').value;
   r.missing=$('#characterRoleMissing').checked;
   queueSave();
   $('#characterRoleHint').textContent='자동 저장 중...';
@@ -725,9 +743,10 @@ function closeCharacterRole(){
   if(!activeCharacterRoleId){
     const role=$('#characterRoleJob').value.trim();
     const char=$('#characterRoleName').value.trim(),detail=$('#characterRoleNotes').value;
-    if(!role&&(char||detail)){ $('#characterRoleHint').textContent='직업명을 입력해 주세요.';$('#characterRoleJob').focus();return; }
+    const wounds=$('#characterRoleWounds').value,upgrades=$('#characterRoleUpgrades').value,relationships=$('#characterRoleRelationships').value;
+    if(!role&&(char||detail||wounds||upgrades||relationships)){ $('#characterRoleHint').textContent='직업명을 입력해 주세요.';$('#characterRoleJob').focus();return; }
     if(role){
-      state.character_roles.push({id:crypto.randomUUID(),role,character:char,detail,missing:$('#characterRoleMissing').checked});
+      state.character_roles.push({id:crypto.randomUUID(),role,character:char,detail,wounds,upgrades,relationships,missing:$('#characterRoleMissing').checked});
       queueSave();
     }
   }else{
@@ -1212,8 +1231,7 @@ $('#sPhotos').onchange=e=>handlePhotoFiles(e.target.files);
 $('#openInfectionTracker').onclick=openInfectionTracker;$('#closeInfectionTracker').onclick=closeInfectionTracker;$('#infectionEpidemic').onclick=infectionEpidemic;$('#infectionReset').onclick=resetInfectionTracker;$('#infectionUndo').onclick=undoInfectionTracker;$('#infectionClearRound').onclick=clearCurrentInfectionRound;$('#infectionShowCardCounts').onchange=e=>{infectionShowCardCounts=e.target.checked;renderInfectionTracker();};
 $('#characterRoleDone').onclick=closeCharacterRole;
 $('#characterRoleClose').onclick=closeCharacterRole;
-$('#characterRoleModal').onclick=e=>{if(e.target===$('#characterRoleModal'))closeCharacterRole();};
-['characterRoleJob','characterRoleName','characterRoleNotes'].forEach(id=>$('#'+id).oninput=characterRoleInput);
+['characterRoleJob','characterRoleName','characterRoleWounds','characterRoleUpgrades','characterRoleRelationships','characterRoleNotes'].forEach(id=>$('#'+id).oninput=characterRoleInput);
 $('#characterRoleMissing').onchange=characterRoleInput;
 $('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#addScheduleBtn').onclick=()=>openSchedule();$('#cancelSchedule').onclick=()=>$('#scheduleModal').classList.add('hidden');$('#saveSchedule').onclick=saveSchedule;$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#characterRoleModal').classList.contains('hidden')){closeCharacterRole();return;}if(e.key==='Escape'&&!$('#infectionModal').classList.contains('hidden')){closeInfectionTracker();return;}if(e.key==='Escape'&&!$('#photoLightbox').classList.contains('hidden')){closePhotoLightbox();return;}if(!$('#photoLightbox').classList.contains('hidden')){if(e.key==='ArrowLeft'){lightboxIndex--;renderPhotoLightbox();}else if(e.key==='ArrowRight'){lightboxIndex++;renderPhotoLightbox();}return;}if(e.key==='Escape'&&!$('#scheduleModal').classList.contains('hidden')){$('#scheduleModal').classList.add('hidden');return;}if(e.key==='Escape'&&!$('#sessionModal').classList.contains('hidden'))$('#sessionModal').classList.add('hidden')});
 
