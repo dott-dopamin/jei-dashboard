@@ -450,6 +450,60 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
 @media(max-width:650px){.role-list{grid-template-columns:1fr}.role-head-actions{justify-content:stretch}.character-role-body{padding:14px 15px 5px}.character-role-header{padding:14px 15px}.current-character-grid{grid-template-columns:1fr}}
 
 </style>
+<!-- JEI-S1-V117-RISK-CITY-COLORS-START -->
+<style>
+/* V117: 재등장 후보 도시 목록에 감염 트래커의 도시별 색상을 적용 (표시만 변경). */
+#infectionRiskList .macro-risk-item {
+  min-width:0;
+  margin:5px 2px;
+  padding:9px 10px;
+  border:1px solid transparent;
+  border-left-width:5px;
+  border-radius:9px;
+  grid-template-columns:24px minmax(0,1fr);
+  gap:9px;
+}
+#infectionRiskList .macro-risk-item b {
+  min-width:0;
+  font-size:12px;
+  font-weight:900;
+  color:#1d3038;
+  overflow-wrap:anywhere;
+}
+#infectionRiskList .macro-risk-item span {
+  width:24px;
+  height:24px;
+  font-size:11px;
+  font-weight:900;
+  background:#304651;
+  color:#fff;
+}
+#infectionRiskList .macro-risk-item.disease-blue   {background:#b9cee7;border-color:#699dc9;}
+#infectionRiskList .macro-risk-item.disease-yellow {background:#f3e0a4;border-color:#c6a340;}
+#infectionRiskList .macro-risk-item.disease-black  {background:#c5c8ca;border-color:#626b72;}
+#infectionRiskList .macro-risk-item.disease-red    {background:#f2c5b2;border-color:#ca796c;}
+#infectionRiskList .macro-risk-item.disease-blue span   {background:#285c8c;}
+#infectionRiskList .macro-risk-item.disease-yellow span {background:#836006;}
+#infectionRiskList .macro-risk-item.disease-black span  {background:#343d45;}
+#infectionRiskList .macro-risk-item.disease-red span    {background:#9c4b40;}
+</style>
+<!-- JEI-S1-V117-RISK-CITY-COLORS-END -->
+<!-- JEI-S1-V118-SESSION-WIDE-START -->
+<style>
+/* V118 · 회차 기록 카드 한 줄에 하나씩, 왼쪽 영역의 전체 가로폭 사용.
+   V117 도시 색상 및 자동저장/회차 기록 자바스크립트는 변경하지 않음. */
+.dashboard-col-left .sessions-section .session-list {
+  grid-template-columns: minmax(0, 1fr);
+}
+.dashboard-col-left .sessions-section .session-card {
+  width: 100%;
+  min-width: 0;
+}
+.dashboard-col-left .sessions-section .record div {
+  overflow-wrap: anywhere;
+}
+</style>
+<!-- JEI-S1-V118-SESSION-WIDE-END -->
 </head>
 <body>
 <div id="gate" class="gate">
@@ -948,7 +1002,7 @@ function renderInfectionTracker(){
   const head=$('#infectionTableHead');if(head)head.innerHTML=`<tr><th class="macro-city-col">도시명</th>${infectionShowCardCounts?'<th class="macro-card-count-col">보유 장수</th>':''}${Array.from({length:10},(_,i)=>`<th class="macro-round-head ${i===r?'active':''}">${i}차</th>`).join('')}<th class="macro-remaining-col">현재 남음</th><th class="macro-status-col">차수 상태</th><th class="macro-risk-remaining-col">재등장 후보 장수</th></tr>`;
   const showCountsInput=$('#infectionShowCardCounts');if(showCountsInput)showCountsInput.checked=infectionShowCardCounts;
   const body=$('#infectionTableBody');if(body)body.innerHTML=infectionDisplayCities().map(city=>{const color=infectionColorByCity[city],st=infectionStatus(city),total=infectionCityCardCount(city),remaining=infectionCurrentRemaining(city),riskRemaining=infectionRiskRemaining(city);return `<tr class="macro-row status-${st} ${total===0?'removed':''}"><td class="macro-city disease-${color}-cell">${city}</td>${infectionShowCardCounts?`<td><input class="macro-city-count-input" type="number" min="0" value="${total}" onchange="setInfectionCityCardCount('${city}',this.value)" aria-label="${city} 보유 장수"></td>`:''}${Array.from({length:10},(_,i)=>{const count=infectionCount(city,i);return `<td class="macro-round-cell ${i===r?'active':''}"><button type="button" class="macro-count-btn ${count?'on':''}" ${total===0?'disabled':''} onclick="cycleInfectionRoundCell('${city}',${i})" oncontextmenu="event.preventDefault();decrementInfectionRoundCell('${city}',${i})" aria-label="${city} ${i}차 ${count}장">${count||''}</button></td>`}).join('')}<td class="macro-remaining ${remaining===0?'zero':remaining===1?'low':''}">${remaining}장</td><td class="macro-status status-${st}">${infectionStatusLabel(city,st)}</td><td class="macro-risk-remaining ${riskRemaining>0?'hot':''}">${riskRemaining>0?`🚨 ×${riskRemaining}`:'-'}</td></tr>`}).join('');
-  const riskList=$('#infectionRiskList');if(riskList)riskList.innerHTML=risk.length?risk.map(c=>`<div class="macro-risk-item"><span>${infectionRiskRemaining(c)}</span><b>${c}</b></div>`).join(''):'<div class="macro-risk-empty">현재 재등장 후보 카드가 없어요.</div>';
+  const riskList=$('#infectionRiskList');if(riskList)riskList.innerHTML=risk.length?risk.map(c=>`<div class="macro-risk-item disease-${infectionColorByCity[c]||'black'}"><span>${infectionRiskRemaining(c)}</span><b>${c}</b></div>`).join(''):'<div class="macro-risk-empty">현재 재등장 후보 카드가 없어요.</div>';
   const undo=$('#infectionUndo');if(undo)undo.disabled=!infectionUndoStack.length;
   const adv=$('#infectionEpidemic');if(adv){adv.disabled=!canEdit||r>=9;adv.textContent=r>=9?'9차까지 기록됨':'전염 발생 → 다음 차수';}
   const clear=$('#infectionClearRound');if(clear)clear.disabled=!canEdit;
