@@ -444,6 +444,7 @@ body{min-width:0;}
 @media(max-width:580px){.disease-overview{padding:13px}.disease-grid{gap:7px}.disease-card{padding:9px}.disease-fields input{font-size:11px;padding:8px}.disease-card-top span{display:none}}
 </style>
 <!-- JEI-S1-V120-DISEASES-END -->
+<meta name="archive-menu-release" content="v129">
 </head>
 <body>
 <div id="gate" class="gate">
@@ -1206,8 +1207,8 @@ async function handleCurrentPhotos(e){
   for(const f of files)try{currentPendingPhotos.push(await compressPhoto(f))}catch(err){console.error(err);alert(err.message||'사진 처리 중 오류가 발생했어요.')}
   e.target.value='';renderCurrentPhotoPreview();
 }
-async function uploadCurrentPhotos(sessionId){
-  for(const p of currentPendingPhotos){const {error}=await db.rpc('save_pandemic_legacy_s1_photo',{p_code:accessCode,p_session_id:sessionId,p_data_url:p.data_url});if(error)throw error}
+async function uploadCurrentPhotos(sessionId,photos=currentPendingPhotos){
+  for(const p of photos){const {error}=await db.rpc('save_pandemic_legacy_s1_photo',{p_code:accessCode,p_session_id:sessionId,p_data_url:p.data_url});if(error)throw error}
   sessionPhotoCache.delete(sessionId);
 }
 function nextCampaignMonth(month){
@@ -1237,6 +1238,8 @@ async function saveCurrentSession(){
     upgrades:String(m.current_upgrades||'').trim(),next:String(m.next_note_draft||'').trim(),
     rules:String(m.current_rules||'').trim(),created_at:new Date().toISOString()
   };
+  // V131: Keep a snapshot before clearCurrentWorkspace() resets the photo picker.
+  const photosForCompletedSession=currentPendingPhotos.slice();
   jeiSessionCompletionBusy=true;
   state.sessions.push(row);
   state.meta.last_result=row.result;
@@ -1270,8 +1273,16 @@ async function saveCurrentSession(){
     if(note)note.textContent='⚠ 회차 서버 저장 미완료 · 자동 재시도 중';
     return;
   }
-  try{await uploadCurrentPhotos(id)}catch(e){console.error(e);const note=document.getElementById('saveState');if(note)note.textContent='⚠ 회차는 저장됨 · 사진 저장 실패';}
+  let photoSaveError=null;
+  try{if(photosForCompletedSession.length)await uploadCurrentPhotos(id,photosForCompletedSession);}
+  catch(e){console.error('회차 사진 업로드 실패',e);photoSaveError=e;}
   render();jeiSessionCompletionBusy=false;
+  if(photoSaveError){
+    const message=String(photoSaveError.message||'서버의 사진 저장 기능을 확인해주세요.');
+    const note=document.getElementById('saveState');
+    if(note)note.textContent='⚠ 회차 기록은 저장됨 · 사진 업로드 실패';
+    alert('회차 기록은 저장되었지만 사진 업로드에 실패했어요.\n'+message+'\n아래 회차 기록의 [수정]에서 사진을 다시 추가해주세요. 회차 완료를 다시 누르지는 마세요.');
+  }
 }
 
 async function openSession(data={}){$('#sessionId').value=data.id||'';$('#sDate').value=data.date||new Date().toISOString().slice(0,10);$('#sMonth').innerHTML=months.map(x=>`<option ${x===(data.month||state.meta.current_month)?'selected':''}>${x}</option>`).join('');$('#sAttempt').value=data.attempt||state.meta.attempt||1;$('#sResult').value=data.result||'';$('#sFunding').value=data.funding??state.meta.funding??'';$('#sCharacters').value=data.characters||'';$('#sObjectives').value=data.objectives||'';$('#sHighlights').value=data.highlights||'';$('#sPermanent').value=data.permanent||'';$('#sUpgrades').value=data.upgrades||'';$('#sNext').value=data.next||'';$('#modalTitle').textContent=data.id?'회차 기록 수정':'회차 기록 추가';modalPendingPhotos=[];modalDeletedPhotoIds=[];modalExistingPhotos=[];$('#sPhotos').value='';$('#sessionModal').classList.remove('hidden');renderModalPhotos();if(data.id){$('#photoStatus').textContent='기존 사진 불러오는 중...';modalExistingPhotos=await getSessionPhotos(data.id,true);renderModalPhotos();}}
