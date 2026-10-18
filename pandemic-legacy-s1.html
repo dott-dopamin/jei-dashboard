@@ -438,7 +438,16 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
 .character-role-lost input{width:19px;height:19px;margin:2px 0 0;accent-color:#c57373}
 .character-role-lost span{display:grid;gap:3px}.character-role-lost b{font-size:13px;color:#ffdada}.character-role-lost small{font-size:11px;color:#d0b5b5;line-height:1.5}
 .character-role-hint{min-height:18px;color:#a6bdc2;font-size:11px}
-.character-role-footer{display:flex;justify-content:flex-end;padding:12px 20px 19px}
+.character-role-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 20px 19px}
+.character-role-delete{border:1px solid #9e5c61;border-radius:9px;background:#483239;color:#ffcaca;padding:10px 13px;font-size:12px;font-weight:850;cursor:pointer}
+.character-role-delete:hover{background:#67373e;color:#fff}
+.character-role-delete-confirm{margin:13px 20px 0;padding:13px 14px;border:1px solid #a96468;border-radius:10px;background:#432d33;color:#fbe2e2}
+.character-role-delete-confirm b{font-size:13px}
+.character-role-delete-confirm p{font-size:11px;line-height:1.55;margin:5px 0 0;color:#e7c6c9}
+.character-role-delete-actions{display:flex;justify-content:flex-end;gap:7px;margin-top:11px}
+.character-role-delete-cancel,.character-role-delete-yes{border-radius:8px;padding:8px 12px;font-weight:850;font-size:11px;cursor:pointer}
+.character-role-delete-cancel{border:1px solid #8c7074;background:#4b4147;color:#fff}
+.character-role-delete-yes{border:1px solid #ca7279;background:#a8434a;color:#fff}
 .character-role-done{border:0;border-radius:9px;background:#4b8591;color:white;padding:11px 22px;font-size:13px;font-weight:900;cursor:pointer}
 .current-character-select{margin-top:11px;border:1px solid #46616b;border-radius:10px;background:#1a2a30;padding:12px}
 .current-character-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:9px}
@@ -646,7 +655,11 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
       <label class="character-role-lost"><input id="characterRoleMissing" type="checkbox"><span><b>실종된 캐릭터</b><small>명부에서 흐리게 표시되며, 새 회차 참여 캐릭터로 선택할 수 없어요.</small></span></label>
       <div id="characterRoleHint" class="character-role-hint">입력하면 자동 저장됩니다.</div>
     </div>
-    <div class="character-role-footer"><button id="characterRoleDone" type="button" class="character-role-done">완료</button></div>
+    <div id="characterRoleDeleteConfirm" class="character-role-delete-confirm hidden" role="group" aria-label="캐릭터 삭제 확인">
+      <div><b>정말 삭제할까요?</b><p>선택한 직업과 캐릭터 정보를 명부에서 삭제합니다. 이미 저장된 회차 기록은 그대로 유지돼요.</p></div>
+      <div class="character-role-delete-actions"><button id="characterRoleDeleteCancel" type="button" class="character-role-delete-cancel">취소</button><button id="characterRoleDeleteYes" type="button" class="character-role-delete-yes">삭제 확정</button></div>
+    </div>
+    <div class="character-role-footer"><button id="characterRoleDelete" type="button" class="character-role-delete hidden">캐릭터 삭제</button><button id="characterRoleDone" type="button" class="character-role-done">완료</button></div>
   </div>
 </div>
 
@@ -764,6 +777,8 @@ let activeCharacterRoleId=null;
 function openCharacterRole(id=null){
   if(!canEdit)return;
   activeCharacterRoleId=id;
+  $('#characterRoleDeleteConfirm').classList.add('hidden');
+  $('#characterRoleDelete').classList.toggle('hidden',!id);
   const r=id?state.character_roles.find(x=>x.id===id):null;
   if(id&&!r)return;
   $('#characterRoleTitle').textContent=id?'캐릭터 정보 · '+(r.role||'직업 미정'):'새 직업 추가';
@@ -791,6 +806,29 @@ function characterRoleInput(){
   r.missing=$('#characterRoleMissing').checked;
   queueSave();
   $('#characterRoleHint').textContent='자동 저장 중...';
+}
+function requestDeleteCharacterRole(){
+  if(!canEdit||!activeCharacterRoleId)return;
+  $('#characterRoleDeleteConfirm').classList.remove('hidden');
+}
+function cancelDeleteCharacterRole(){
+  $('#characterRoleDeleteConfirm').classList.add('hidden');
+}
+function confirmDeleteCharacterRole(){
+  if(!canEdit||!activeCharacterRoleId)return;
+  const id=activeCharacterRoleId;
+  if(!state.character_roles.some(r=>r.id===id))return;
+  // Only remove the selected roster entry and its live selection. Completed session text is immutable.
+  state.character_roles=state.character_roles.filter(r=>r.id!==id);
+  if(Array.isArray(state.meta.current_character_ids)){
+    state.meta.current_character_ids=state.meta.current_character_ids.map(selected=>selected===id?'':selected);
+  }
+  activeCharacterRoleId=null;
+  $('#characterRoleDeleteConfirm').classList.add('hidden');
+  $('#characterRoleModal').classList.add('hidden');
+  queueSave();
+  renderPlayers();
+  renderCharacterChoices();
 }
 function closeCharacterRole(){
   if($('#characterRoleModal').classList.contains('hidden'))return;
@@ -1285,6 +1323,9 @@ $('#sPhotos').onchange=e=>handlePhotoFiles(e.target.files);
 $('#openInfectionTracker').onclick=openInfectionTracker;$('#closeInfectionTracker').onclick=closeInfectionTracker;$('#infectionEpidemic').onclick=infectionEpidemic;$('#infectionReset').onclick=resetInfectionTracker;$('#infectionUndo').onclick=undoInfectionTracker;$('#infectionClearRound').onclick=clearCurrentInfectionRound;$('#infectionShowCardCounts').onchange=e=>{infectionShowCardCounts=e.target.checked;renderInfectionTracker();};
 $('#characterRoleDone').onclick=closeCharacterRole;
 $('#characterRoleClose').onclick=closeCharacterRole;
+$('#characterRoleDelete').onclick=requestDeleteCharacterRole;
+$('#characterRoleDeleteCancel').onclick=cancelDeleteCharacterRole;
+$('#characterRoleDeleteYes').onclick=confirmDeleteCharacterRole;
 ['characterRoleJob','characterRoleName','characterRoleWounds','characterRoleUpgrades','characterRoleRelationships','characterRoleNotes'].forEach(id=>$('#'+id).oninput=characterRoleInput);
 $('#characterRoleMissing').onchange=characterRoleInput;
 $('#unlockBtn').onclick=unlock;$('#codeInput').onkeydown=e=>{if(e.key==='Enter')unlock()};$('#addScheduleBtn').onclick=()=>openSchedule();$('#cancelSchedule').onclick=()=>$('#scheduleModal').classList.add('hidden');$('#saveSchedule').onclick=saveSchedule;$('#cancelSession').onclick=()=>$('#sessionModal').classList.add('hidden');$('#saveSession').onclick=saveSession;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#characterRoleModal').classList.contains('hidden')){closeCharacterRole();return;}if(e.key==='Escape'&&!$('#infectionModal').classList.contains('hidden')){closeInfectionTracker();return;}if(e.key==='Escape'&&!$('#photoLightbox').classList.contains('hidden')){closePhotoLightbox();return;}if(!$('#photoLightbox').classList.contains('hidden')){if(e.key==='ArrowLeft'){lightboxIndex--;renderPhotoLightbox();}else if(e.key==='ArrowRight'){lightboxIndex++;renderPhotoLightbox();}return;}if(e.key==='Escape'&&!$('#scheduleModal').classList.contains('hidden')){$('#scheduleModal').classList.add('hidden');return;}if(e.key==='Escape'&&!$('#sessionModal').classList.contains('hidden'))$('#sessionModal').classList.add('hidden')});
