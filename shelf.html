@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>DOTT | 개인 보드게임 책장</title>
+<link rel="preconnect" href="https://yqvjgalmjrydfygtozgo.supabase.co">
+<style>
+:root{--ink:#253d45;--muted:#72858d;--line:#d6e0e2;--accent:#335f6a;--bg:#f4f7f7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif}button,input,select{font:inherit}
+.wrapper{max-width:1360px;margin:0 auto;padding:38px 22px 70px}
+.hero{border:1px solid #c2d6da;border-radius:22px;padding:24px 27px;background:linear-gradient(120deg,#fff,#ecf4f3);margin-bottom:20px}
+.eyebrow{letter-spacing:.18em;color:#709098;font-size:10px;font-weight:850}.hero h1{margin:7px 0 8px;font-size:32px;letter-spacing:-.04em;overflow-wrap:anywhere}.hero p{font-size:13px;line-height:1.6;color:#68828a;margin:0}
+.tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px}.tools input,.tools select{border:1px solid #d3dfe1;border-radius:10px;background:#fff;color:var(--ink);padding:11px 12px;outline:none;font-size:13px}.tools input[type=search]{flex:1 1 250px;min-width:160px}.tools select{min-width:140px}.tools label{font-size:12px;display:flex;align-items:center;gap:5px;color:#617b82;font-weight:750;white-space:nowrap}.tools label input{accent-color:#366672}.count{margin:0 0 13px;font-size:12px;color:var(--muted)}
+.game-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}.game-card{background:#fff;border:1px solid var(--line);border-radius:13px;overflow:hidden;min-width:0}.cover{aspect-ratio:1/1;background:#e8eff0;display:grid;place-items:center;overflow:hidden}.cover img{width:100%;height:100%;object-fit:cover}.no-image{color:#a5b6bc;font-size:10px;font-weight:800;letter-spacing:.12em}.details{padding:12px}.genre{font-size:10px;color:#8a9ba0;font-weight:800}.title{font-size:14px;line-height:1.4;font-weight:900;overflow-wrap:anywhere;min-height:40px;margin:6px 0}.meta{font-size:11px;line-height:1.6;color:#758790}.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}.tag{border-radius:5px;padding:4px 6px;background:#e8f2f1;color:#456d69;font-size:9px;font-weight:850}.tag.expansion{background:#fde7e6;color:#b45151}
+.empty{grid-column:1/-1;text-align:center;padding:60px 15px;background:white;border:1px dashed #c8d4d8;border-radius:14px;color:#879ba1;font-size:13px;line-height:1.7}.footer{text-align:center;margin-top:28px;color:#95a7aa;font-size:10px}
+@media(max-width:1200px){.game-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:900px){.game-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){.wrapper{padding:20px 10px 45px}.hero{padding:18px;border-radius:16px}.hero h1{font-size:25px}.game-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.details{padding:9px}.title{font-size:12px;min-height:34px}.meta{font-size:10px}.tools{gap:6px}.tools select{min-width:125px}.tools input[type=search]{flex-basis:100%}}
+</style>
+</head>
+<body>
+<main class="wrapper">
+ <header class="hero"><div class="eyebrow">DOTT / BOARDGAME COLLECTION</div><h1 id="shelfTitle">보드게임 책장</h1><p id="subtitle">이 책장은 누구나 구경할 수 있어요. 수정은 책장 주인만 할 수 있습니다.</p></header>
+ <section aria-label="보드게임 목록">
+  <div class="tools"><input id="search" type="search" placeholder="게임명 검색" aria-label="게임명 검색"><select id="genre" aria-label="장르 필터"><option value="">전체 장르</option><option>전략</option><option>파티/패밀리</option><option>추리</option><option>마피아/디덕션</option><option>협력</option><option>기타</option></select><label><input id="includeExpansions" type="checkbox" checked> 확장 포함</label></div>
+  <div class="count" id="count"></div><div id="gameGrid" class="game-grid"><div class="empty">책장을 불러오는 중...</div></div>
+ </section>
+ <footer class="footer">개인 보드게임 책장 · 공개 열람 전용</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+'use strict';
+const $=q=>document.querySelector(q);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeImage=src=>{src=String(src||'');return /^https:\/\/[^\s"<>]+$/.test(src)||/^data:image\/(?:jpeg|webp|png);base64,[A-Za-z0-9+/=]+$/.test(src)?src:''};
+const params=new URLSearchParams(location.search);
+const id=params.get('shelf');
+let games=[];
+function errorView(message){$('#shelfTitle').textContent='책장을 표시할 수 없어요';$('#subtitle').textContent=message;$('#gameGrid').innerHTML='<div class="empty">'+esc(message)+'</div>';$('#count').textContent='';}
+function draw(){const q=$('#search').value.trim().toLocaleLowerCase('ko-KR'),genre=$('#genre').value,expanded=$('#includeExpansions').checked;const list=games.filter(g=>(!q||String(g.title||'').toLocaleLowerCase('ko-KR').includes(q))&&(!genre||g.genre===genre)&&(expanded||!g.is_expansion));$('#count').textContent=`보유게임 ${list.length}개`;
+$('#gameGrid').innerHTML=list.length?list.map(g=>{const src=safeImage(g.image_url);return `<article class="game-card"><div class="cover">${src?`<img loading="lazy" src="${esc(src)}" alt="${esc(g.title)}">`:'<span class="no-image">NO IMAGE</span>'}</div><div class="details"><div class="genre">${esc(g.genre||'보드게임')}</div><div class="title">${esc(g.title)}</div><div class="meta">👥 ${esc(g.player_count||'-')}<br>⏱ ${esc(g.play_time||'-')}</div><div class="tags">${g.is_expansion?'<span class="tag expansion">확장</span>':''}${g.is_funding?'<span class="tag">펀딩</span>':''}</div></div></article>`}).join(''):'<div class="empty">해당 조건의 게임이 없어요.</div>';
+}
+async function load(){if(!id||!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)){errorView('유효한 개인 책장 공개 주소가 아니에요.');return;}
+try{const db=supabase.createClient('https://yqvjgalmjrydfygtozgo.supabase.co','sb_publishable_8K_sITH95Nkikw8-tdyDwQ_-JFzo94Z');
+const [{data:directory,error:dirErr},{data:loaded,error:gameErr}]=await Promise.all([db.rpc('dott_shelf_directory'),db.rpc('dott_shelf_view',{p_shelf_id:id})]);
+if(dirErr)throw dirErr;if(gameErr)throw gameErr;
+const shelf=(directory||[]).find(s=>String(s.shelf_id).toLowerCase()===id.toLowerCase());if(!shelf){errorView('존재하지 않거나 공개되지 않은 책장이에요.');return;}
+games=loaded||[];$('#shelfTitle').textContent=shelf.shelf_name;document.title=shelf.shelf_name+' | DOTT 책장';draw();}
+catch(e){console.warn('공개 책장 불러오기 실패',e);errorView('일시적으로 책장을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.');}}
+$('#search').addEventListener('input',draw);$('#genre').addEventListener('change',draw);$('#includeExpansions').addEventListener('change',draw);load();
+})();
+</script>
+</body>
+</html>
