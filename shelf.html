@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="index,follow">
-<title>DOTT | 개인 보드게임 책장</title>
+<title>BOARDGAME ARCHIVE | 개인 보드게임 책장</title>
 <link rel="preconnect" href="https://yqvjgalmjrydfygtozgo.supabase.co">
 <style>
 :root{--ink:#253d45;--muted:#72858d;--line:#d6e0e2;--accent:#335f6a;--bg:#f4f7f7}
@@ -47,7 +47,7 @@ html,body{background:#f7f8f9!important}
  .wrapper{padding:28px 10px 50px}
  .hero h1{font-size:21px}
  .game-toolbar{grid-template-columns:minmax(0,1fr) 110px;margin:14px 0 12px}
- .game-toolbar .expansion-toggle{grid-column:1/-1;justify-content:flex-start}
+ .game-toolbar .expansion-toggle{grid-column:1/-1;justify-self:start;width:max-content;max-width:100%;height:34px;min-height:34px;justify-content:flex-start;padding:0 12px;font-size:12px}
  .gamegrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
  .game-card{border-radius:10px}
  .game-image{aspect-ratio:1/.82}
@@ -64,7 +64,7 @@ html,body{background:#f7f8f9!important}
 </head>
 <body>
 <main class="wrapper">
- <header class="hero"><div class="eyebrow">DOTT / BOARDGAME COLLECTION</div><h1 id="shelfTitle">보드게임 책장</h1><p id="subtitle">이 책장은 누구나 구경할 수 있어요. 수정은 책장 주인만 할 수 있습니다.</p></header>
+ <header class="hero"><div class="eyebrow">BOARDGAME ARCHIVE</div><h1 id="shelfTitle">보드게임 책장</h1><p id="subtitle">이 책장은 누구나 구경할 수 있어요. 수정은 책장 주인만 할 수 있습니다.</p></header>
  <section aria-label="보드게임 목록">
   <div class="game-toolbar"><input id="search" type="search" placeholder="게임명 검색" aria-label="게임명 검색"><select id="genre" aria-label="장르 필터"><option value="">장르 전체</option><option>전략</option><option>파티/패밀리</option><option>추리</option><option>마피아/디덕션</option><option>협력</option><option>기타</option></select><label class="expansion-toggle"><input id="includeExpansions" type="checkbox" checked> 확장 포함</label></div>
   <div class="count" id="count"></div><div id="gameGrid" class="gamegrid"><div class="empty">책장을 불러오는 중...</div></div>
