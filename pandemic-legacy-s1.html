@@ -513,6 +513,34 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
 }
 </style>
 <!-- JEI-S1-V118-SESSION-WIDE-END -->
+<!-- JEI-S1-V120-DISEASES-START -->
+<style>
+/* V120 · 시즌1 질병 정보 4색 카드. 기존 레이아웃/저장 동작은 변경하지 않음. */
+.disease-overview{margin-top:14px;padding:15px 17px 16px}
+.disease-overview .disease-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.disease-overview .disease-panel-head h2{margin:0;font-size:18px}
+.disease-overview .disease-panel-head .section-desc{margin:4px 0 0}
+.disease-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.disease-card{min-width:0;border:1px solid #45616a;border-radius:11px;background:#182a31;padding:11px 12px 12px;display:grid;gap:8px;border-top:3px solid var(--disease-color)}
+.disease-card--blue{--disease-color:#75b8ed;--disease-pill:#244d68}
+.disease-card--yellow{--disease-color:#edc859;--disease-pill:#665622}
+.disease-card--black{--disease-color:#b6c0c6;--disease-pill:#35414a}
+.disease-card--red{--disease-color:#ef8a86;--disease-pill:#663637}
+.disease-card-top{display:flex;align-items:center;gap:7px;min-width:0}
+.disease-dot{height:13px;width:13px;border:2px solid rgba(255,255,255,.35);border-radius:4px;background:var(--disease-color);flex:0 0 13px}
+.disease-card-top b{font-size:12px;color:#e6f0f2;font-weight:900}
+.disease-card-top span{font-size:9px;color:#93aeb7;margin-left:auto}
+.disease-fields{display:grid;gap:7px;min-width:0}
+.disease-fields label{display:block;min-width:0}
+.disease-fields label > span{display:block;font-size:9px;font-weight:900;color:#a0b7c0;margin-bottom:4px}
+.disease-fields input{display:block;width:100%;min-width:0;border:1px solid #49616b;background:#101f25;border-radius:7px;color:#f0f5f6;padding:8px 10px;font-size:12px;font-weight:760;outline:none;line-height:1.3}
+.disease-fields input:focus{border-color:var(--disease-color);box-shadow:0 0 0 2px rgba(123,175,190,.12)}
+.disease-fields input::placeholder{color:#819ba3;font-weight:500}
+.disease-fields input:disabled{opacity:.75}
+@media(max-width:1020px){.disease-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:580px){.disease-overview{padding:13px}.disease-grid{gap:7px}.disease-card{padding:9px}.disease-fields input{font-size:11px;padding:8px}.disease-card-top span{display:none}}
+</style>
+<!-- JEI-S1-V120-DISEASES-END -->
 </head>
 <body>
 <div id="gate" class="gate">
@@ -544,6 +572,17 @@ html{overflow-y:scroll;scrollbar-gutter:stable;}
         <div class="hero-month-head"><b>월별 진행</b><span>CAMPAIGN TIMELINE</span></div>
         <div id="monthStrip" class="months"></div>
       </aside>
+    </div>
+  </section>
+
+  <!-- V120: 다음 레거시 일정/월별 진행 아래, 캐릭터 명부/플레이 월 위 질병 정보 -->
+  <section class="section disease-overview" aria-label="질병 현황">
+    <div class="disease-panel-head"><div><h2>질병 현황</h2><div class="section-desc">질병 이름과 특이사항을 기록하면 자동 저장돼요.</div></div></div>
+    <div class="disease-grid">
+      <div class="disease-card disease-card--blue" data-disease="blue"><div class="disease-card-top"><i class="disease-dot" aria-hidden="true"></i><b>파란색 질병</b><span>BLUE</span></div><div class="disease-fields"><label><span>질병 이름</span><input data-disease-field="name" type="text" placeholder="질병 이름 입력" autocomplete="off"></label><label><span>특이사항</span><input data-disease-field="notes" type="text" placeholder="예: CoDA-403b" autocomplete="off"></label></div></div>
+      <div class="disease-card disease-card--yellow" data-disease="yellow"><div class="disease-card-top"><i class="disease-dot" aria-hidden="true"></i><b>노란색 질병</b><span>YELLOW</span></div><div class="disease-fields"><label><span>질병 이름</span><input data-disease-field="name" type="text" placeholder="질병 이름 입력" autocomplete="off"></label><label><span>특이사항</span><input data-disease-field="notes" type="text" placeholder="예: 추가 규칙 · 변이" autocomplete="off"></label></div></div>
+      <div class="disease-card disease-card--black" data-disease="black"><div class="disease-card-top"><i class="disease-dot" aria-hidden="true"></i><b>검정색 질병</b><span>BLACK</span></div><div class="disease-fields"><label><span>질병 이름</span><input data-disease-field="name" type="text" placeholder="질병 이름 입력" autocomplete="off"></label><label><span>특이사항</span><input data-disease-field="notes" type="text" placeholder="예: 추가 규칙 · 변이" autocomplete="off"></label></div></div>
+      <div class="disease-card disease-card--red" data-disease="red"><div class="disease-card-top"><i class="disease-dot" aria-hidden="true"></i><b>빨간색 질병</b><span>RED</span></div><div class="disease-fields"><label><span>질병 이름</span><input data-disease-field="name" type="text" placeholder="질병 이름 입력" autocomplete="off"></label><label><span>특이사항</span><input data-disease-field="notes" type="text" placeholder="예: CoDA-403b" autocomplete="off"></label></div></div>
     </div>
   </section>
 
@@ -702,7 +741,19 @@ let sessionPhotoCache=new Map(),modalExistingPhotos=[],modalPendingPhotos=[],mod
 
 function defaultInfectionTracker(){return {current_round:0,round_counts:{},city_card_counts:{},epidemics:0,configured_total:48};}
 function defaultPlayerDeckTracker(){return {drawn:0};}
-function defaultState(){return {meta:{current_month:'1월',attempt:1,funding:'',last_result:'',next_note:'',next_note_draft:'',play_date:'',session_result:'',play_log:'',current_objectives:'',objective_items:[],current_rules:'',permanent_summary:'',current_upgrades:'',current_character_ids:[]},players:[{name:'제이',character:'',role:'',detail:''},{name:'우리',character:'',role:'',detail:''},{name:'승연',character:'',role:'',detail:''},{name:'종우',character:'',role:'',detail:''}],infection_tracker:defaultInfectionTracker(),player_deck_tracker:defaultPlayerDeckTracker(),panic_levels:{},schedules:[{id:'legacy-1',round:'1회차',date:'2026-10-17',note:'1시~'}],sessions:[]};}
+const S1_DISEASE_COLORS=['blue','yellow','black','red'];
+function defaultDiseaseRecords(){return Object.fromEntries(S1_DISEASE_COLORS.map(color=>[color,{name:'',notes:''}]));}
+function normalizeDiseaseRecords(raw){
+  const d=defaultDiseaseRecords();
+  for(const color of S1_DISEASE_COLORS){
+    const record=raw?.[color];
+    if(record&&typeof record==='object'){
+      d[color]={name:String(record.name??''),notes:String(record.notes??'')};
+    }
+  }
+  return d;
+}
+function defaultState(){return {diseases:defaultDiseaseRecords(),meta:{current_month:'1월',attempt:1,funding:'',last_result:'',next_note:'',next_note_draft:'',play_date:'',session_result:'',play_log:'',current_objectives:'',objective_items:[],current_rules:'',permanent_summary:'',current_upgrades:'',current_character_ids:[]},players:[{name:'제이',character:'',role:'',detail:''},{name:'우리',character:'',role:'',detail:''},{name:'승연',character:'',role:'',detail:''},{name:'종우',character:'',role:'',detail:''}],infection_tracker:defaultInfectionTracker(),player_deck_tracker:defaultPlayerDeckTracker(),panic_levels:{},schedules:[{id:'legacy-1',round:'1회차',date:'2026-10-17',note:'1시~'}],sessions:[]};}
 function normalizeInfectionCityName(name){return ({'하르툼':'카르툼','호치민시':'호치민'}[name]||name);}
 function normalizeRoundCounts(raw){
   const out={};
@@ -762,11 +813,31 @@ function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s
   }else{
     meta.current_character_ids=s.meta.current_character_ids.filter(id=>character_roles.some(r=>r.id===id)).slice(0,4);
   }
-  return {character_roles,meta,players:d.players.map((p,i)=>{const saved=stored.find(x=>x?.name===p.name)||stored[i]||{};return {...p,...saved,name:p.name};}),infection_tracker:migrateInfectionTracker(s?.infection_tracker),player_deck_tracker:{...defaultPlayerDeckTracker(),...(s?.player_deck_tracker||{})},panic_levels:normalizePanicLevels(s?.panic_levels),schedules:Array.isArray(s?.schedules)?s.schedules:d.schedules,sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
+  return {diseases:normalizeDiseaseRecords(s?.diseases),character_roles,meta,players:d.players.map((p,i)=>{const saved=stored.find(x=>x?.name===p.name)||stored[i]||{};return {...p,...saved,name:p.name};}),infection_tracker:migrateInfectionTracker(s?.infection_tracker),player_deck_tracker:{...defaultPlayerDeckTracker(),...(s?.player_deck_tracker||{})},panic_levels:normalizePanicLevels(s?.panic_levels),schedules:Array.isArray(s?.schedules)?s.schedules:d.schedules,sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
 async function boot(){const {data:{session}}=await db.auth.getSession();isAdmin=!!session;if(isAdmin){const {data,error}=await db.from('pandemic_legacy_s1_state').select('data').eq('id',1).single();if(!error&&data){state=mergeState(data.data);canEdit=true;openApp();return;}}}
 async function unlock(){const code=$('#codeInput').value.trim();if(!code)return;$('#gateError').textContent='';const {data,error}=await db.rpc('get_pandemic_legacy_s1',{p_code:code});if(error){console.error(error);$('#gateError').textContent=error.code==='P0001'?'비밀번호가 맞지 않아요.':'연결 설정을 확인해주세요.';return;}accessCode=code;state=mergeState(data);canEdit=true;sessionStorage.setItem('pandemicLegacyS1Code',code);openApp();}
 function openApp(){$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');$('#addScheduleBtn').classList.toggle('hidden',!canEdit);JEI_V114.init();render();}
-function render(){renderPlayers();renderStatus();renderMonths();renderInfectionTracker();renderPlayerDeckTracker();renderSchedules();renderSessions();}
+function render(){renderDiseaseRecords();renderPlayers();renderStatus();renderMonths();renderInfectionTracker();renderPlayerDeckTracker();renderSchedules();renderSessions();}
+function renderDiseaseRecords(){
+  // 입력 중 화면을 다시 만들지 않아 커서/드래그/IME 입력 위치가 유지됩니다.
+  state.diseases=normalizeDiseaseRecords(state.diseases);
+  document.querySelectorAll('.disease-card[data-disease]').forEach(card=>{
+    const color=card.dataset.disease;
+    const record=state.diseases[color];
+    if(!record)return;
+    card.querySelectorAll('[data-disease-field]').forEach(field=>{
+      const key=field.dataset.diseaseField;
+      field.value=record[key]||'';
+      field.disabled=!canEdit;
+      field.oninput=()=>{
+        if(!canEdit)return;
+        // 다른 기존 필드와 동일한 queueSave() 직렬화 경로 사용.
+        state.diseases[color][key]=field.value;
+        queueSave();
+      };
+    });
+  });
+}
 function renderPlayers(){
   const wrap=$('#players');
   wrap.innerHTML=(state.character_roles||[]).map(r=>`<button type="button" class="role-item ${r.missing?'is-missing':''}" data-role-id="${escapeAttr(r.id)}"><span><span class="role-item-job">${esc(r.role||'직업 미정')}${r.missing?'<span class="role-missing-badge">실종</span>':''}</span><span class="role-item-name">${r.character?esc(r.character):'<span class="role-item-count">이름 미등록</span>'}</span></span><span class="role-item-chevron">›</span></button>`).join('');
