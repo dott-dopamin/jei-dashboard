@@ -445,6 +445,12 @@ body{min-width:0;}
 </style>
 <!-- JEI-S1-V120-DISEASES-END -->
 <meta name="archive-menu-release" content="v129">
+<style>
+/* V132: photo read error / refresh controls, without changing session cards */
+.legacy-photo-retry{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.legacy-photo-retry button{border:1px solid #55717c;border-radius:8px;background:#293b43;color:#eff6f8;padding:7px 10px;font:inherit;font-size:11px;font-weight:800;cursor:pointer}
+.legacy-photo-retry button:hover{background:#344a54}
+</style>
 </head>
 <body>
 <div id="gate" class="gate">
@@ -1122,15 +1128,49 @@ function record(label,value,wide=false){return `<div class="record ${wide?'wide'
 
 async function getSessionPhotos(sessionId,force=false){
   if(!force&&sessionPhotoCache.has(sessionId))return sessionPhotoCache.get(sessionId);
-  const {data,error}=await db.rpc('get_pandemic_legacy_s1_photos',{p_code:accessCode,p_session_id:sessionId});
-  if(error){console.error(error);return [];}
-  const rows=data||[];sessionPhotoCache.set(sessionId,rows);return rows;
+  const {data,error}=await db.rpc('get_pandemic_legacy_s1_photos',{p_code:photoReadCode(),p_session_id:sessionId});
+  if(error){console.error('시즌1 사진 조회 실패',error);throw error;}
+  if(!Array.isArray(data))throw new Error('사진 서버 응답 형식이 올바르지 않습니다.');
+  // Never cache "no photos" permanently: photos may be added on another device.
+  if(data.length)sessionPhotoCache.set(sessionId,data);
+  else sessionPhotoCache.delete(sessionId);
+  return data;
+}
+function photoReadCode(){
+  if(accessCode)return accessCode;
+  try{return sessionStorage.getItem('pandemicLegacyS1Code')||null;}catch(e){return null;}
+}
+function photoProblemMessage(err){
+  const code=err?.code||'';
+  if(code==='P0001'||code==='42501'||code==='401'||code==='403')return '사진 조회 권한을 확인할 수 없어요. 팬데믹 비밀번호로 다시 확인해 주세요.';
+  return `사진을 불러오지 못했어요. (${String(err?.message||'연결 오류').slice(0,130)})`;
+}
+function photoRetryMarkup(sessionId,err){
+  return `<div class="photo-empty" role="status">⚠ ${esc(photoProblemMessage(err))}</div><div class="legacy-photo-retry"><button type="button" onclick="renderSessionPhotos('${sessionId}')">↻ 다시 불러오기</button>${isAdmin&&!accessCode?`<button type="button" onclick="unlockPhotosWithCode('${sessionId}')">비밀번호로 사진 확인</button>`:''}</div>`;
+}
+async function unlockPhotosWithCode(sessionId){
+  const code=prompt('팬데믹 시즌1 비밀번호를 입력해 주세요. (사진 조회용)');
+  if(!code)return;
+  const {error}=await db.rpc('get_pandemic_legacy_s1',{p_code:code.trim()});
+  if(error){alert('비밀번호를 확인하지 못했어요.');return;}
+  accessCode=code.trim();
+  try{sessionStorage.setItem('pandemicLegacyS1Code',accessCode);}catch(e){}
+  sessionPhotoCache.delete(sessionId);
+  await renderSessionPhotos(sessionId);
 }
 async function renderSessionPhotos(sessionId){
-  const el=document.getElementById(`sessionPhotos-${sessionId}`);if(!el)return;
-  el.innerHTML='<div class="photo-loading">사진 불러오는 중...</div>';
-  const photos=await getSessionPhotos(sessionId);
-  el.innerHTML=photos.length?photos.map(p=>`<div class="session-photo" onclick="openSessionPhoto('${sessionId}','${p.id}')"><img src="${p.data_url}" alt="회차 사진" loading="lazy"></div>`).join(''):'<div class="photo-empty">첨부된 사진이 없어요.</div>';
+  const id=`sessionPhotos-${sessionId}`;
+  const el=document.getElementById(id);if(!el)return;
+  el.innerHTML='<div class="photo-loading" role="status">사진 불러오는 중...</div>';
+  try{
+    const photos=await getSessionPhotos(sessionId,true);
+    // Avoid writing into stale / detached elements after mobile re-renders.
+    const target=document.getElementById(id);if(!target)return;
+    target.innerHTML=photos.length?photos.map(p=>`<div class="session-photo" onclick="openSessionPhoto('${sessionId}','${p.id}')"><img src="${p.data_url}" alt="회차 사진" decoding="async"></div>`).join('')
+      :`<div class="photo-empty">첨부된 사진이 없어요.</div>${isAdmin&&!accessCode?`<div class="legacy-photo-retry"><button type="button" onclick="unlockPhotosWithCode('${sessionId}')">비밀번호로 사진 확인</button></div>`:''}`;
+  }catch(err){
+    const target=document.getElementById(id);if(target)target.innerHTML=photoRetryMarkup(sessionId,err);
+  }
 }
 let lightboxPhotos=[],lightboxIndex=0;
 function renderPhotoLightbox(){
@@ -1285,7 +1325,7 @@ async function saveCurrentSession(){
   }
 }
 
-async function openSession(data={}){$('#sessionId').value=data.id||'';$('#sDate').value=data.date||new Date().toISOString().slice(0,10);$('#sMonth').innerHTML=months.map(x=>`<option ${x===(data.month||state.meta.current_month)?'selected':''}>${x}</option>`).join('');$('#sAttempt').value=data.attempt||state.meta.attempt||1;$('#sResult').value=data.result||'';$('#sFunding').value=data.funding??state.meta.funding??'';$('#sCharacters').value=data.characters||'';$('#sObjectives').value=data.objectives||'';$('#sHighlights').value=data.highlights||'';$('#sPermanent').value=data.permanent||'';$('#sUpgrades').value=data.upgrades||'';$('#sNext').value=data.next||'';$('#modalTitle').textContent=data.id?'회차 기록 수정':'회차 기록 추가';modalPendingPhotos=[];modalDeletedPhotoIds=[];modalExistingPhotos=[];$('#sPhotos').value='';$('#sessionModal').classList.remove('hidden');renderModalPhotos();if(data.id){$('#photoStatus').textContent='기존 사진 불러오는 중...';modalExistingPhotos=await getSessionPhotos(data.id,true);renderModalPhotos();}}
+async function openSession(data={}){$('#sessionId').value=data.id||'';$('#sDate').value=data.date||new Date().toISOString().slice(0,10);$('#sMonth').innerHTML=months.map(x=>`<option ${x===(data.month||state.meta.current_month)?'selected':''}>${x}</option>`).join('');$('#sAttempt').value=data.attempt||state.meta.attempt||1;$('#sResult').value=data.result||'';$('#sFunding').value=data.funding??state.meta.funding??'';$('#sCharacters').value=data.characters||'';$('#sObjectives').value=data.objectives||'';$('#sHighlights').value=data.highlights||'';$('#sPermanent').value=data.permanent||'';$('#sUpgrades').value=data.upgrades||'';$('#sNext').value=data.next||'';$('#modalTitle').textContent=data.id?'회차 기록 수정':'회차 기록 추가';modalPendingPhotos=[];modalDeletedPhotoIds=[];modalExistingPhotos=[];$('#sPhotos').value='';$('#saveSession').disabled=false;delete $('#saveSession').dataset.photoBlocked;$('#sessionModal').classList.remove('hidden');renderModalPhotos();if(data.id){$('#photoStatus').textContent='기존 사진 불러오는 중...';try{modalExistingPhotos=await getSessionPhotos(data.id,true);renderModalPhotos();}catch(err){$('#photoStatus').textContent='⚠ '+photoProblemMessage(err)+' · 기존 사진을 확인한 뒤 수정해 주세요.';$('#saveSession').disabled=true;$('#saveSession').dataset.photoBlocked='1';}}}
 window.editSession=id=>{const s=state.sessions.find(x=>x.id===id);if(s)openSession(s)};
 window.deleteSession=async id=>{
   if(!canEdit||!confirm('이 회차 기록과 첨부 사진을 삭제할까요?'))return;

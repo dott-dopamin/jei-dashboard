@@ -470,6 +470,12 @@ html{background:#e7ece8!important}
 </style>
 <!-- JEI-S1-S2-MEMO-V108-END -->
 <meta name="archive-menu-release" content="v129">
+<style>
+/* V132: photo read error / refresh controls, without changing session cards */
+.legacy-photo-retry{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.legacy-photo-retry button{border:1px solid #55717c;border-radius:8px;background:#293b43;color:#eff6f8;padding:7px 10px;font:inherit;font-size:11px;font-weight:800;cursor:pointer}
+.legacy-photo-retry button:hover{background:#344a54}
+</style>
 </head>
 <body class="season2-theme">
 <div id="gate" class="gate"><div class="gate-card"><div class="gate-lock">🔒</div><h2>팬데믹 S2 로그</h2><p>캠페인 스포일러가 포함되어 있어요. 공유받은 비밀번호로 들어오면 기록을 함께 수정할 수 있습니다.</p><div class="gate-row"><input id="codeInput" type="password" inputmode="numeric" placeholder="비밀번호"><button id="unlockBtn">열기</button></div><div id="gateError" class="gate-error"></div></div></div>
@@ -1038,14 +1044,54 @@ async function deleteSession(id){
 }
 
 let photoCache=new Map(),modalExisting=[],modalPending=[],modalDeleted=[],lightboxPhotos=[],lightboxIndex=0;
-async function getSessionPhotos(id,force=false){if(!force&&photoCache.has(id))return photoCache.get(id);const {data,error}=await db.rpc('get_pandemic_legacy_s2_photos',{p_code:accessCode,p_session_id:id});if(error){console.error(error);return[]}photoCache.set(id,data||[]);return data||[]}
-async function loadSessionPhotos(id){const el=$('#photos-'+CSS.escape(id));if(!el)return;el.innerHTML='<div class="photo-help">불러오는 중...</div>';const ps=await getSessionPhotos(id);el.innerHTML=ps.length?ps.map(p=>`<div class="session-photo" data-photo="${p.id}" data-session="${id}"><img src="${p.data_url}" loading="lazy" alt="회차 사진"></div>`).join(''):'<div class="photo-help">첨부된 사진이 없어요.</div>';el.querySelectorAll('.session-photo').forEach(x=>x.onclick=()=>openLightbox(id,x.dataset.photo));}
+async function getSessionPhotos(id,force=false){
+  if(!force&&photoCache.has(id))return photoCache.get(id);
+  const {data,error}=await db.rpc('get_pandemic_legacy_s2_photos',{p_code:photoReadCode(),p_session_id:id});
+  if(error){console.error('시즌2 사진 조회 실패',error);throw error;}
+  if(!Array.isArray(data))throw new Error('사진 서버 응답 형식이 올바르지 않습니다.');
+  if(data.length)photoCache.set(id,data);
+  else photoCache.delete(id);
+  return data;
+}
+function photoReadCode(){
+  if(accessCode)return accessCode;
+  try{return rememberedS2AccessCode()||null;}catch(e){return null;}
+}
+function photoProblemMessage(err){
+  if(['P0001','42501','401','403'].includes(err?.code))return '사진 조회 권한을 확인할 수 없어요. 팬데믹 비밀번호로 다시 확인해 주세요.';
+  return `사진을 불러오지 못했어요. (${String(err?.message||'연결 오류').slice(0,130)})`;
+}
+async function unlockPhotosWithCode(id){
+  const code=prompt('팬데믹 시즌2 비밀번호를 입력해 주세요. (사진 조회용)');
+  if(!code)return;
+  const {error}=await db.rpc('get_pandemic_legacy_s2',{p_code:code.trim()});
+  if(error){alert('비밀번호를 확인하지 못했어요.');return;}
+  accessCode=code.trim();
+  rememberS2AccessCode(accessCode);
+  photoCache.delete(id);
+  await loadSessionPhotos(id);
+}
+async function loadSessionPhotos(id){
+  const domId=`photos-${id}`;
+  const el=document.getElementById(domId);if(!el)return;
+  el.innerHTML='<div class="photo-help" role="status">사진 불러오는 중...</div>';
+  try{
+    const ps=await getSessionPhotos(id,true);
+    const target=document.getElementById(domId);if(!target)return;
+    target.innerHTML=ps.length?ps.map(p=>`<div class="session-photo" data-photo="${p.id}" data-session="${id}"><img src="${p.data_url}" decoding="async" alt="회차 사진"></div>`).join('')
+      :`<div class="photo-help">첨부된 사진이 없어요.</div>${isAdmin&&!accessCode?`<div class="legacy-photo-retry"><button type="button" onclick="unlockPhotosWithCode('${id}')">비밀번호로 사진 확인</button></div>`:''}`;
+    target.querySelectorAll('.session-photo').forEach(x=>x.onclick=()=>openLightbox(id,x.dataset.photo));
+  }catch(err){
+    const target=document.getElementById(domId);if(!target)return;
+    target.innerHTML=`<div class="photo-help" role="status">⚠ ${esc(photoProblemMessage(err))}</div><div class="legacy-photo-retry"><button type="button" onclick="loadSessionPhotos('${id}')">↻ 다시 불러오기</button>${isAdmin&&!accessCode?`<button type="button" onclick="unlockPhotosWithCode('${id}')">비밀번호로 사진 확인</button>`:''}</div>`;
+  }
+}
 function openLightbox(id,pid){const ps=photoCache.get(id)||[],i=ps.findIndex(x=>x.id===pid);if(i<0)return;lightboxPhotos=ps;lightboxIndex=i;renderLightbox();$('#lightbox').classList.remove('hidden')}
 function renderLightbox(){if(!lightboxPhotos.length)return;lightboxIndex=(lightboxIndex+lightboxPhotos.length)%lightboxPhotos.length;$('#lightboxImage').src=lightboxPhotos[lightboxIndex].data_url}
 function closeLightbox(){$('#lightbox').classList.add('hidden');$('#lightboxImage').removeAttribute('src')}
 async function compressImage(file){return new Promise((resolve,reject)=>{const img=new Image(),url=URL.createObjectURL(file);img.onload=()=>{const max=1400,scale=Math.min(1,max/Math.max(img.width,img.height)),w=Math.round(img.width*scale),h=Math.round(img.height*scale),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);resolve(c.toDataURL('image/jpeg',.78))};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('이미지를 읽지 못했어요.'))};img.src=url})}
 function renderPhotoPreview(){const items=[...modalExisting.filter(p=>!modalDeleted.includes(p.id)).map(p=>({...p,kind:'old'})),...modalPending.map((p,i)=>({...p,kind:'new',idx:i}))];$('#photoPreview').innerHTML=items.length?items.map(p=>`<div class="photo-item"><img src="${p.data_url}"><button class="photo-remove" type="button" data-kind="${p.kind}" data-id="${p.kind==='old'?p.id:p.idx}">×</button></div>`).join(''):'<div class="photo-help">첨부된 사진 없음</div>';$('#photoPreview').querySelectorAll('.photo-remove').forEach(b=>b.onclick=()=>{if(b.dataset.kind==='old')modalDeleted.push(b.dataset.id);else modalPending.splice(+b.dataset.id,1);renderPhotoPreview()});$('#photoStatus').textContent=`${items.length}/3장`;}
-async function openSession(s={}){const row=s||{};$('#sessionId').value=row.id||'';$('#sDate').value=row.date||new Date().toISOString().slice(0,10);$('#sMonth').innerHTML=months.map(x=>`<option ${x===(row.month||state.meta.current_month)?'selected':''}>${x}</option>`).join('');$('#sAttempt').value=row.attempt||state.meta.attempt||1;$('#sResult').value=row.result||'';$('#sConnectedCities').value=row.connected_cities??state.meta.connected_cities??'';$('#sCharacters').value=row.characters||'';$('#sObjectives').value=row.objectives||objectiveSummaryText(state.meta.objective_items)||'';$('#sHighlights').value=row.highlights||'';$('#sRules').value=row.rules||'';$('#sPermanent').value=row.permanent_summary||'';$('#sGridChanges').value=row.grid_changes||'';$('#sProduction').value=row.production||'';$('#sNext').value=row.next||'';$('#sessionModalTitle').textContent='회차 기록 수정';modalPending=[];modalDeleted=[];modalExisting=[];$('#sPhotos').value='';$('#sessionModal').classList.remove('hidden');if(row.id)modalExisting=await getSessionPhotos(row.id,true);renderPhotoPreview();}
+async function openSession(s={}){const row=s||{};$('#sessionId').value=row.id||'';$('#sDate').value=row.date||new Date().toISOString().slice(0,10);$('#sMonth').innerHTML=months.map(x=>`<option ${x===(row.month||state.meta.current_month)?'selected':''}>${x}</option>`).join('');$('#sAttempt').value=row.attempt||state.meta.attempt||1;$('#sResult').value=row.result||'';$('#sConnectedCities').value=row.connected_cities??state.meta.connected_cities??'';$('#sCharacters').value=row.characters||'';$('#sObjectives').value=row.objectives||objectiveSummaryText(state.meta.objective_items)||'';$('#sHighlights').value=row.highlights||'';$('#sRules').value=row.rules||'';$('#sPermanent').value=row.permanent_summary||'';$('#sGridChanges').value=row.grid_changes||'';$('#sProduction').value=row.production||'';$('#sNext').value=row.next||'';$('#sessionModalTitle').textContent='회차 기록 수정';modalPending=[];modalDeleted=[];modalExisting=[];$('#sPhotos').value='';$('#saveSession').disabled=false;$('#sessionModal').classList.remove('hidden');if(row.id){try{modalExisting=await getSessionPhotos(row.id,true);}catch(err){renderPhotoPreview();$('#photoStatus').textContent='⚠ '+photoProblemMessage(err)+' · 기존 사진을 확인한 뒤 수정해 주세요.';$('#saveSession').disabled=true;return;}}renderPhotoPreview();}
 async function syncPhotos(sessionId){for(const id of modalDeleted){const {error}=await db.rpc('delete_pandemic_legacy_s2_photo',{p_code:accessCode,p_photo_id:id});if(error)throw error}for(const p of modalPending){const {error}=await db.rpc('save_pandemic_legacy_s2_photo',{p_code:accessCode,p_session_id:sessionId,p_data_url:p.data_url});if(error)throw error}photoCache.delete(sessionId)}
 let currentPendingPhotos=[];
 function renderCurrentPhotoPreview(){
