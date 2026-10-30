@@ -1,5 +1,6 @@
-// 공개 가능한 Supabase URL 및 publishable/anon 키만 입력하세요. service_role 키는 절대 넣지 마세요.
+// V109: 기존 팬데믹/보드게임 Supabase 프로젝트를 안전하게 공유합니다.
+// 브라우저에 넣을 수 있는 public URL과 publishable key만 사용 (secret/service_role 금지).
 window.JEI_DASHBOARD_CONFIG = {
-  url: 'YOUR_NEW_SUPABASE_PROJECT_URL',
-  publishableKey: 'YOUR_NEW_SUPABASE_PUBLISHABLE_KEY'
+  url: 'https://yqvjgalmjrydfygtozgo.supabase.co',
+  publishableKey: 'sb_publishable_8K_sITH95Nkikw8-tdyDwQ_-JFzo94Z'
 };

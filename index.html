@@ -45,7 +45,7 @@ body{background:#f7f8f9!important;min-width:0}
 .logout-btn:hover{background:#eef1f4}
 @media(max-width:700px){.index-hero{gap:8px!important}.account-tools{gap:5px;font-size:10px}.account-tools #accountName{max-width:60px;overflow:hidden;text-overflow:ellipsis}.logout-btn{padding:0 7px;font-size:10px}}
 </style></head>
-<body><div class="lock-screen" id="lockScreen"><div class="lock-box"><small>PERSONAL DASHBOARD</small><h2>일해라 절해라</h2><p>닉네임과 개인 비밀번호로 로그인하세요.</p><form class="lock-form personal-login" id="lockForm"><label for="lockNickname">닉네임</label><input id="lockNickname" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="30" placeholder="닉네임" required><label for="lockPassword">개인 비밀번호</label><input id="lockPassword" type="password" autocomplete="current-password" placeholder="비밀번호" required minlength="10"><button type="submit" id="loginSubmit">내 대시보드 열기</button></form><p class="lock-error" id="lockError" role="alert" aria-live="polite"></p><small class="login-hint">처음 한 번 로그인하면 이후에는 자동으로 접속돼요.</small></div></div><div class="wrap"><header class="index-hero"><div class="index-nav"><h1 class="index-title">일해라 절해라</h1><span class="index-divider">|</span><div class="index-date" id="today"></div><span class="index-divider">|</span><a class="archive-shortcut" href="games.html">🎲 GAME ARCHIVE</a></div><div class="account-tools"><span id="accountName"></span><button id="logoutBtn" class="logout-btn" type="button">로그아웃</button></div></header>
+<body><div class="lock-screen" id="lockScreen"><div class="lock-box"><small>PERSONAL DASHBOARD</small><h2>일해라 절해라</h2><p>닉네임과 개인 비밀번호로 로그인하세요.</p><form class="lock-form personal-login" id="lockForm"><label for="lockNickname">닉네임</label><input id="lockNickname" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="30" placeholder="닉네임" required><label for="lockPassword">개인 비밀번호</label><input id="lockPassword" type="password" autocomplete="current-password" placeholder="비밀번호" required minlength="6"><button type="submit" id="loginSubmit">내 대시보드 열기</button></form><p class="lock-error" id="lockError" role="alert" aria-live="polite"></p><small class="login-hint">처음 한 번 로그인하면 이후에는 자동으로 접속돼요.</small></div></div><div class="wrap"><header class="index-hero"><div class="index-nav"><h1 class="index-title">일해라 절해라</h1><span class="index-divider">|</span><div class="index-date" id="today"></div><span class="index-divider">|</span><a class="archive-shortcut" href="games.html">🎲 GAME ARCHIVE</a></div><div class="account-tools"><span id="accountName"></span><button id="logoutBtn" class="logout-btn" type="button">로그아웃</button></div></header>
 <main class="dashboard">
 <section class="panel calendar-panel"><div class="section-head"><div><small>SCHEDULE</small><h2>업무 캘린더</h2></div><div class="month-nav"><button id="prev">‹</button><b id="monthTitle"></b><button id="next">›</button></div></div><div class="calendar-rules"><div class="calendar-rules-head"><b>키워드 색상</b><span>일정에 키워드가 포함되면 자동 적용</span></div><form id="ruleForm" class="rule-add"><input id="ruleKeyword" placeholder="예: 회의"><input id="ruleColor" type="color" value="#e8ddff"><button>등록</button></form><div id="ruleList" class="rules"></div></div><div class="week"><b>일</b><b>월</b><b>화</b><b>수</b><b>목</b><b>금</b><b>토</b></div><div id="calendar" class="calendar"></div><div class="cal-help">날짜를 클릭하면 일정을 추가할 수 있어요.</div></section>
 <section class="panel todo-panel"><div class="section-head"><div><small>MY TASKS</small><h2>TODO</h2></div><div class="todo-head-actions"><button type="button" class="discontinue-open" id="discontinueOpen">☑ 단종 예정</button><span class="count" id="todoCount"></span></div></div><form id="todoForm" class="add-row"><input id="todoInput" autocomplete="off" placeholder="할 일을 입력하세요"><select id="todoStatus"><option value="before">시작 전</option><option value="doing">진행 중</option><option value="done">완료</option></select><button>추가</button></form><div class="todo-tabs"><button class="active" data-tab="before">시작 전</button><button data-tab="doing">진행 중</button><button data-tab="done">완료</button></div><div class="todo-columns"><div class="todo-col active" data-status="before"><h3><i class="dot before"></i>시작 전 <em id="beforeN">0</em></h3><div id="beforeList" class="todo-list"></div></div><div class="todo-col" data-status="doing"><h3><i class="dot doing"></i>진행 중 <em id="doingN">0</em></h3><div id="doingList" class="todo-list"></div></div><div class="todo-col" data-status="done"><h3><i class="dot done"></i>완료 <em id="doneN">0</em></h3><div id="doneList" class="todo-list"></div></div></div></section>
@@ -75,7 +75,7 @@ const AUTO_HOLIDAYS={"2026-01-01":"신정","2026-03-01":"삼일절","2026-05-05"
 let todos=[],discontinued=[],events={},rules=[],selected='',view=new Date();view.setDate(1),noteId=null;
 const statusToDb={before:'시작전',doing:'진행중',done:'완료'}, statusFromDb={'시작전':'before','진행중':'doing','완료':'done'};
 
-// Each user is authenticated by Supabase Auth. RLS in the separate project enforces data isolation.
+// Each user is authenticated by Supabase Auth. RLS owner_id policies within the existing project enforce data isolation.
 const lockScreen=$('#lockScreen'),lockForm=$('#lockForm'),lockPassword=$('#lockPassword'),lockNickname=$('#lockNickname'),lockError=$('#lockError'),loginSubmit=$('#loginSubmit');
 let dashboardUser=null;
 function showLogin(message=''){
@@ -92,7 +92,7 @@ async function enterDashboard(user,nickname){
  await loadAll();
 }
 lockForm.addEventListener('submit',async e=>{
- e.preventDefault();if(!configured){lockError.textContent='dashboard-config.js에서 새 프로젝트 URL과 키를 설정해주세요.';return}
+ e.preventDefault();if(!configured){lockError.textContent='dashboard-config.js에서 기존 프로젝트 URL과 키를 확인해주세요.';return}
  const nickname=lockNickname.value.trim(),password=lockPassword.value;
  if(!nickname||!password)return;
  loginSubmit.disabled=true;loginSubmit.textContent='로그인 중…';lockError.textContent='';
@@ -112,7 +112,7 @@ $('#logoutBtn').addEventListener('click',async()=>{
  showLogin();
 });
 (async()=>{
- if(!configured){showLogin('새 Supabase 프로젝트 설정이 필요해요. 설치 안내서를 확인해주세요.');return}
+ if(!configured){showLogin('기존 Supabase 연결 설정이 필요해요. 설치 안내서를 확인해주세요.');return}
  try{
   const {data:{session},error}=await db.auth.getSession();
   if(error)throw error;
