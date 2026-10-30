@@ -32,8 +32,20 @@ body{background:#f7f8f9!important;min-width:0}
   .index-divider{font-size:12px!important}
   .archive-shortcut{height:32px!important;min-height:32px!important;font-size:10px!important;padding:0 10px!important}
 }
+
+/* Dashboard multi-user login and account controls */
+.personal-login{display:flex!important;flex-direction:column!important;gap:8px!important}
+.personal-login label{text-align:left;font-size:11px;font-weight:800;color:#58636d;margin-top:5px}
+.personal-login input{width:100%!important;min-width:0!important;box-sizing:border-box!important;font-size:14px!important}
+.personal-login button{height:42px;margin-top:8px}
+.personal-login button:disabled{opacity:.6;cursor:progress}
+.login-hint{display:block;margin-top:14px;line-height:1.5;color:#88949d;letter-spacing:normal!important}
+.account-tools{display:flex;align-items:center;gap:10px;flex:0 0 auto;white-space:nowrap;font-size:11px;color:#77818b}
+.logout-btn{height:30px;padding:0 11px;border:1px solid #d7dde3;border-radius:8px;background:#fff;color:#51606c;font-size:11px;font-weight:700;cursor:pointer}
+.logout-btn:hover{background:#eef1f4}
+@media(max-width:700px){.index-hero{gap:8px!important}.account-tools{gap:5px;font-size:10px}.account-tools #accountName{max-width:60px;overflow:hidden;text-overflow:ellipsis}.logout-btn{padding:0 7px;font-size:10px}}
 </style></head>
-<body><div class="lock-screen" id="lockScreen"><div class="lock-box"><small>PRIVATE DASHBOARD</small><h2>일해라 절해라</h2><p>개인 대시보드입니다. 비밀번호를 입력하세요.</p><form class="lock-form" id="lockForm"><input id="lockPassword" type="password" inputmode="numeric" autocomplete="current-password" placeholder="비밀번호" maxlength="20"><button type="submit">열기</button></form><p class="lock-error" id="lockError"></p></div></div><div class="wrap"><header class="index-hero"><div class="index-nav"><h1 class="index-title">일해라 절해라</h1><span class="index-divider">|</span><div class="index-date" id="today"></div><span class="index-divider">|</span><a class="archive-shortcut" href="games.html">🎲 GAME ARCHIVE</a></div></header>
+<body><div class="lock-screen" id="lockScreen"><div class="lock-box"><small>PERSONAL DASHBOARD</small><h2>일해라 절해라</h2><p>닉네임과 개인 비밀번호로 로그인하세요.</p><form class="lock-form personal-login" id="lockForm"><label for="lockNickname">닉네임</label><input id="lockNickname" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="30" placeholder="닉네임" required><label for="lockPassword">개인 비밀번호</label><input id="lockPassword" type="password" autocomplete="current-password" placeholder="비밀번호" required minlength="10"><button type="submit" id="loginSubmit">내 대시보드 열기</button></form><p class="lock-error" id="lockError" role="alert" aria-live="polite"></p><small class="login-hint">처음 한 번 로그인하면 이후에는 자동으로 접속돼요.</small></div></div><div class="wrap"><header class="index-hero"><div class="index-nav"><h1 class="index-title">일해라 절해라</h1><span class="index-divider">|</span><div class="index-date" id="today"></div><span class="index-divider">|</span><a class="archive-shortcut" href="games.html">🎲 GAME ARCHIVE</a></div><div class="account-tools"><span id="accountName"></span><button id="logoutBtn" class="logout-btn" type="button">로그아웃</button></div></header>
 <main class="dashboard">
 <section class="panel calendar-panel"><div class="section-head"><div><small>SCHEDULE</small><h2>업무 캘린더</h2></div><div class="month-nav"><button id="prev">‹</button><b id="monthTitle"></b><button id="next">›</button></div></div><div class="calendar-rules"><div class="calendar-rules-head"><b>키워드 색상</b><span>일정에 키워드가 포함되면 자동 적용</span></div><form id="ruleForm" class="rule-add"><input id="ruleKeyword" placeholder="예: 회의"><input id="ruleColor" type="color" value="#e8ddff"><button>등록</button></form><div id="ruleList" class="rules"></div></div><div class="week"><b>일</b><b>월</b><b>화</b><b>수</b><b>목</b><b>금</b><b>토</b></div><div id="calendar" class="calendar"></div><div class="cal-help">날짜를 클릭하면 일정을 추가할 수 있어요.</div></section>
 <section class="panel todo-panel"><div class="section-head"><div><small>MY TASKS</small><h2>TODO</h2></div><div class="todo-head-actions"><button type="button" class="discontinue-open" id="discontinueOpen">☑ 단종 예정</button><span class="count" id="todoCount"></span></div></div><form id="todoForm" class="add-row"><input id="todoInput" autocomplete="off" placeholder="할 일을 입력하세요"><select id="todoStatus"><option value="before">시작 전</option><option value="doing">진행 중</option><option value="done">완료</option></select><button>추가</button></form><div class="todo-tabs"><button class="active" data-tab="before">시작 전</button><button data-tab="doing">진행 중</button><button data-tab="done">완료</button></div><div class="todo-columns"><div class="todo-col active" data-status="before"><h3><i class="dot before"></i>시작 전 <em id="beforeN">0</em></h3><div id="beforeList" class="todo-list"></div></div><div class="todo-col" data-status="doing"><h3><i class="dot doing"></i>진행 중 <em id="doingN">0</em></h3><div id="doingList" class="todo-list"></div></div><div class="todo-col" data-status="done"><h3><i class="dot done"></i>완료 <em id="doneN">0</em></h3><div id="doneList" class="todo-list"></div></div></div></section>
@@ -50,35 +62,69 @@ body{background:#f7f8f9!important;min-width:0}
 <label class="holiday-check"><input id="eventHoliday" type="checkbox"><span>공휴일</span></label>
 <button class="event-submit">일정 추가</button>
 </form><div id="eventList" class="event-list"></div></div></div>
+<script src="dashboard-config.js"></script><script src="dashboard-auth.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL='https://yqvjgalmjrydfygtozgo.supabase.co';
-const SUPABASE_KEY='sb_publishable_8K_sITH95Nkikw8-tdyDwQ_-JFzo94Z';
-const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const $=s=>document.querySelector(s); const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const LOCK_PASSWORD='0514';
+const cfg=window.JEI_DASHBOARD_CONFIG||{};
+const configured=window.JeiAuth.isConfigured(cfg);
+const db=supabase.createClient(configured?cfg.url:'https://example.supabase.co',configured?cfg.publishableKey:'sb_publishable_placeholder',{
+  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false,storageKey:'jei-dashboard-private-v2'}
+});
+const $=s=>document.querySelector(s);const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const AUTO_HOLIDAYS={"2026-01-01":"신정","2026-03-01":"삼일절","2026-05-05":"어린이날","2026-06-06":"현충일","2026-08-15":"광복절","2026-10-03":"개천절","2026-10-09":"한글날","2026-12-25":"성탄절","2026-05-01":"노동절","2026-07-17":"제헌절","2026-02-16":"설날 연휴","2026-02-17":"설날","2026-02-18":"설날 연휴","2026-05-24":"부처님오신날","2026-09-24":"추석 연휴","2026-09-25":"추석","2026-09-26":"추석 연휴","2026-03-02":"대체공휴일(삼일절)","2026-05-25":"대체공휴일(부처님오신날)","2026-08-17":"대체공휴일(광복절)","2026-10-05":"대체공휴일(개천절)","2027-01-01":"신정","2027-03-01":"삼일절","2027-05-05":"어린이날","2027-06-06":"현충일","2027-08-15":"광복절","2027-10-03":"개천절","2027-10-09":"한글날","2027-12-25":"성탄절","2027-05-01":"노동절","2027-07-17":"제헌절","2027-02-06":"설날 연휴","2027-02-07":"설날","2027-02-08":"설날 연휴","2027-05-13":"부처님오신날","2027-09-14":"추석 연휴","2027-09-15":"추석","2027-09-16":"추석 연휴","2027-02-09":"대체공휴일(설날)","2027-08-16":"대체공휴일(광복절)","2027-10-04":"대체공휴일(개천절)","2027-10-11":"대체공휴일(한글날)","2027-12-27":"대체공휴일(성탄절)","2027-05-03":"대체공휴일(노동절)","2027-07-19":"대체공휴일(제헌절)","2028-01-01":"신정","2028-03-01":"삼일절","2028-05-05":"어린이날","2028-06-06":"현충일","2028-08-15":"광복절","2028-10-03":"추석","2028-10-09":"한글날","2028-12-25":"성탄절","2028-05-01":"노동절","2028-07-17":"제헌절","2028-01-26":"설날 연휴","2028-01-27":"설날","2028-01-28":"설날 연휴","2028-05-02":"부처님오신날","2028-10-02":"추석 연휴","2028-10-04":"추석 연휴","2029-01-01":"신정","2029-03-01":"삼일절","2029-05-05":"어린이날","2029-06-06":"현충일","2029-08-15":"광복절","2029-10-03":"개천절","2029-10-09":"한글날","2029-12-25":"성탄절","2029-05-01":"노동절","2029-07-17":"제헌절","2029-02-12":"설날 연휴","2029-02-13":"설날","2029-02-14":"설날 연휴","2029-05-20":"부처님오신날","2029-09-21":"추석 연휴","2029-09-22":"추석","2029-09-23":"추석 연휴","2029-09-24":"대체공휴일(추석)","2029-05-07":"대체공휴일(어린이날)","2029-05-21":"대체공휴일(부처님오신날)","2030-01-01":"신정","2030-03-01":"삼일절","2030-05-05":"어린이날","2030-06-06":"현충일","2030-08-15":"광복절","2030-10-03":"개천절","2030-10-09":"한글날","2030-12-25":"성탄절","2030-05-01":"노동절","2030-07-17":"제헌절","2030-02-02":"설날 연휴","2030-02-03":"설날","2030-02-04":"설날 연휴","2030-05-09":"부처님오신날","2030-09-11":"추석 연휴","2030-09-12":"추석","2030-09-13":"추석 연휴","2030-02-05":"대체공휴일(설날)","2030-05-06":"대체공휴일(어린이날)","2031-01-01":"신정","2031-03-01":"삼일절","2031-05-05":"어린이날","2031-06-06":"현충일","2031-08-15":"광복절","2031-10-03":"개천절","2031-10-09":"한글날","2031-12-25":"성탄절","2031-05-01":"노동절","2031-07-17":"제헌절","2031-01-22":"설날 연휴","2031-01-23":"설날","2031-01-24":"설날 연휴","2031-05-28":"부처님오신날","2031-09-30":"추석 연휴","2031-10-01":"추석","2031-10-02":"추석 연휴","2031-03-03":"대체공휴일(삼일절)","2032-01-01":"신정","2032-03-01":"삼일절","2032-05-05":"어린이날","2032-06-06":"현충일","2032-08-15":"광복절","2032-10-03":"개천절","2032-10-09":"한글날","2032-12-25":"성탄절","2032-05-01":"노동절","2032-07-17":"제헌절","2032-02-10":"설날 연휴","2032-02-11":"설날","2032-02-12":"설날 연휴","2032-05-16":"부처님오신날","2032-09-18":"추석 연휴","2032-09-19":"추석","2032-09-20":"추석 연휴","2032-09-21":"대체공휴일(추석)","2032-05-17":"대체공휴일(부처님오신날)","2032-08-16":"대체공휴일(광복절)","2032-10-04":"대체공휴일(개천절)","2032-10-11":"대체공휴일(한글날)","2032-12-27":"대체공휴일(성탄절)","2032-05-03":"대체공휴일(노동절)","2032-07-19":"대체공휴일(제헌절)","2033-01-01":"신정","2033-03-01":"삼일절","2033-05-05":"어린이날","2033-06-06":"현충일","2033-08-15":"광복절","2033-10-03":"개천절","2033-10-09":"한글날","2033-12-25":"성탄절","2033-05-01":"노동절","2033-07-17":"제헌절","2033-01-30":"설날 연휴","2033-01-31":"설날","2033-02-01":"설날 연휴","2033-05-06":"부처님오신날","2033-09-07":"추석 연휴","2033-09-08":"추석","2033-09-09":"추석 연휴","2033-02-02":"대체공휴일(설날)","2033-10-10":"대체공휴일(한글날)","2033-12-26":"대체공휴일(성탄절)","2033-05-02":"대체공휴일(노동절)","2033-07-18":"대체공휴일(제헌절)","2034-01-01":"신정","2034-03-01":"삼일절","2034-05-05":"어린이날","2034-06-06":"현충일","2034-08-15":"광복절","2034-10-03":"개천절","2034-10-09":"한글날","2034-12-25":"성탄절","2034-05-01":"노동절","2034-07-17":"제헌절","2034-02-18":"설날 연휴","2034-02-19":"설날","2034-02-20":"설날 연휴","2034-05-25":"부처님오신날","2034-09-26":"추석 연휴","2034-09-27":"추석","2034-09-28":"추석 연휴","2034-02-21":"대체공휴일(설날)","2035-01-01":"신정","2035-03-01":"삼일절","2035-05-05":"어린이날","2035-06-06":"현충일","2035-08-15":"광복절","2035-10-03":"개천절","2035-10-09":"한글날","2035-12-25":"성탄절","2035-05-01":"노동절","2035-07-17":"제헌절","2035-02-07":"설날 연휴","2035-02-08":"설날","2035-02-09":"설날 연휴","2035-05-15":"부처님오신날","2035-09-15":"추석 연휴","2035-09-16":"추석","2035-09-17":"추석 연휴","2035-09-18":"대체공휴일(추석)","2035-05-07":"대체공휴일(어린이날)","2026-06-03":"전국동시지방선거"};
 let todos=[],discontinued=[],events={},rules=[],selected='',view=new Date();view.setDate(1),noteId=null;
 const statusToDb={before:'시작전',doing:'진행중',done:'완료'}, statusFromDb={'시작전':'before','진행중':'doing','완료':'done'};
 
-// First gate: 0514. Then authenticate with Supabase before loading private data.
-const lockScreen=$('#lockScreen'), lockForm=$('#lockForm'), lockPassword=$('#lockPassword'), lockError=$('#lockError');
-lockForm.addEventListener('submit',async e=>{e.preventDefault(); if(lockPassword.value!==LOCK_PASSWORD){lockError.textContent='비밀번호가 맞지 않아요.';lockPassword.value='';return} lockError.textContent=''; await ensureLogin();});
-async function ensureLogin(){
-  const {data:{session}}=await db.auth.getSession();
-  if(session){lockScreen.classList.add('hidden');await loadAll();return}
-  const email=prompt('관리자 이메일을 입력하세요.'); if(!email)return;
-  const password=prompt('Supabase 관리자 비밀번호를 입력하세요.'); if(!password)return;
-  const {error}=await db.auth.signInWithPassword({email,password});
-  if(error){alert('관리자 로그인 실패: '+error.message);return}
-  lockScreen.classList.add('hidden'); await loadAll();
+// Each user is authenticated by Supabase Auth. RLS in the separate project enforces data isolation.
+const lockScreen=$('#lockScreen'),lockForm=$('#lockForm'),lockPassword=$('#lockPassword'),lockNickname=$('#lockNickname'),lockError=$('#lockError'),loginSubmit=$('#loginSubmit');
+let dashboardUser=null;
+function showLogin(message=''){
+ dashboardUser=null;lockScreen.classList.remove('hidden');$('#accountName').textContent='';
+ lockError.textContent=message;lockPassword.value='';lockNickname.focus();
 }
-(async()=>{const {data:{session}}=await db.auth.getSession(); if(session){lockScreen.classList.add('hidden');await loadAll()} else setTimeout(()=>lockPassword.focus(),50)})();
+async function enterDashboard(user,nickname){
+ dashboardUser=user;
+ lockScreen.classList.add('hidden');
+ $('#accountName').textContent=nickname||user.user_metadata?.nickname||'';
+ // After switching accounts always discard the previous user's in-memory data.
+ todos=[];discontinued=[];events={};rules=[];noteId=null;selected='';
+ $('#memo').value='';$('#memoSaved').textContent='자동 저장';
+ await loadAll();
+}
+lockForm.addEventListener('submit',async e=>{
+ e.preventDefault();if(!configured){lockError.textContent='dashboard-config.js에서 새 프로젝트 URL과 키를 설정해주세요.';return}
+ const nickname=lockNickname.value.trim(),password=lockPassword.value;
+ if(!nickname||!password)return;
+ loginSubmit.disabled=true;loginSubmit.textContent='로그인 중…';lockError.textContent='';
+ try{
+  const email=await window.JeiAuth.emailForNickname(nickname);
+  const {data,error}=await db.auth.signInWithPassword({email,password});
+  if(error||!data?.user)throw new Error('닉네임 또는 비밀번호를 확인해주세요.');
+  // Nickname is only UI metadata; authorization is based on auth.uid(), never nickname.
+  await db.auth.updateUser({data:{nickname}}).catch(()=>{});
+  await enterDashboard(data.user,nickname);
+ }catch(error){lockError.textContent=error.message||'로그인에 실패했어요.'}
+ finally{loginSubmit.disabled=false;loginSubmit.textContent='내 대시보드 열기'}
+});
+$('#logoutBtn').addEventListener('click',async()=>{
+ if(!confirm('로그아웃할까요?'))return;
+ try{await db.auth.signOut()}catch(error){console.error(error)}
+ showLogin();
+});
+(async()=>{
+ if(!configured){showLogin('새 Supabase 프로젝트 설정이 필요해요. 설치 안내서를 확인해주세요.');return}
+ try{
+  const {data:{session},error}=await db.auth.getSession();
+  if(error)throw error;
+  if(session?.user)await enterDashboard(session.user,session.user.user_metadata?.nickname||'');
+  else showLogin();
+ }catch(err){console.error(err);showLogin('자동 로그인 확인에 실패했어요. 다시 로그인해주세요.')}
+})();
 {const n=new Date(),w=['일','월','화','수','목','금','토'];$('#today').textContent=`${n.getFullYear()}년 ${n.getMonth()+1}월 ${n.getDate()}일 ${w[n.getDay()]}`;}
 
 async function loadAll(){
  const [t,n,c,k,d]=await Promise.all([db.from('todos').select('*').order('created_at',{ascending:false}),db.from('notes').select('*').limit(1),db.from('calendar_events').select('*'),db.from('calendar_keywords').select('*').order('created_at'),db.from('discontinued_items').select('*').order('created_at',{ascending:false})]);
- const err=[t,n,c,k,d].find(x=>x.error)?.error;if(err){alert(err.message);return}
+ const err=[t,n,c,k,d].find(x=>x.error)?.error;if(err){alert('대시보드 데이터를 불러오지 못했어요: '+err.message);showLogin('데이터 권한 또는 프로젝트 설정을 확인해주세요.');return}
  todos=t.data.map((x,i)=>({id:x.id,text:x.content,status:statusFromDb[x.status]||'before',sort_order:Number.isFinite(x.sort_order)?x.sort_order:i}));
  if(n.data[0]){noteId=n.data[0].id;$('#memo').value=n.data[0].content||''}
  events={};c.data.forEach(x=>addEventToMap({id:x.id,text:x.title,start:x.event_date,end:x.end_date||x.event_date,holiday:!!x.is_holiday}));
