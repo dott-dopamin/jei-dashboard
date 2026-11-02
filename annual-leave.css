@@ -1,0 +1,58 @@
+/* JEI Dashboard V111 — calendar / annual leave tabs */
+.leave-top-tabs{display:flex;gap:5px;align-items:center;border:1px solid #e2e6ea;background:#f5f6f8;padding:4px;border-radius:11px;margin-left:auto;flex:0 1 auto}
+.leave-top-tabs button{font-size:12px;font-weight:800;color:#737e89;background:transparent;border:0;border-radius:8px;padding:8px 12px;white-space:nowrap;cursor:pointer}
+.leave-top-tabs button.active{background:#fff;color:#22272b;box-shadow:0 1px 4px #1f293712}
+.leave-top-tabs button:focus-visible,#leaveManagerTab button:focus-visible{outline:2px solid #428b68;outline-offset:2px}
+.calendar-panel .month-nav[hidden],#leaveCalendarTab[hidden],#leaveManagerTab[hidden],#leaveEntryDelete[hidden]{display:none!important}
+#leaveManagerTab{color:#262f36;min-width:0}
+#leaveManagerTab .leave-manager-head{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:3px 0 12px}
+.leave-manager-head label{font-size:13px;font-weight:800}
+#leaveYearSelect{border:1px solid #dfe4e7;border-radius:9px;padding:9px 11px;background:#fff;color:#2b343c;font-weight:750;font-size:13px}
+.leave-service-status{padding:9px 12px;background:#f1f6f2;color:#477459;font-size:11px;border-radius:9px;margin-bottom:12px;line-height:1.5}
+.leave-service-status.leave-error{background:#fff1ec;color:#a04434;border:1px solid #f1cfbf}
+.leave-settings,.leave-editor,.leave-history{background:#f8f9fa;border:1px solid #e6eaed;border-radius:13px;padding:15px 17px;margin-bottom:15px}
+.leave-settings>label{font-size:13px;font-weight:800;display:block;margin-bottom:8px}
+.leave-settings-line{display:flex;gap:8px;align-items:center}
+.leave-settings-line input{border:1px solid #dce1e5;border-radius:9px;background:#fff;min-width:0;max-width:165px;height:40px;padding:8px 12px;font-size:14px}
+.leave-settings-line button{border:0;border-radius:9px;background:#272d32;color:#fff;padding:11px 16px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
+.leave-settings small{display:block;color:#9099a2;font-size:11px;margin-top:8px;line-height:1.5}
+.leave-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:16px}
+.leave-stats>div{border:1px solid #e2e8e5;background:#fff;border-radius:12px;padding:14px 12px;min-width:0}
+.leave-stats small{font-size:11px;color:#85929a;font-weight:750;display:block;margin-bottom:8px;letter-spacing:0}
+.leave-stats strong{font-size:21px;line-height:1.2;color:#2e363b;letter-spacing:-.03em}
+.leave-stats>div:last-child strong{color:#34845f}
+.leave-stats strong.leave-overdrawn{color:#ce6251!important}
+.leave-editor h3,.leave-history h3{font-size:15px;font-weight:850;margin:0 0 13px;letter-spacing:-.02em}
+.leave-editor-grid{display:grid;grid-template-columns:1fr 1fr minmax(140px,.8fr);gap:9px}
+.leave-editor-grid label,.leave-note-label{min-width:0;display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:800;color:#6e7a83}
+.leave-editor-grid input,.leave-editor-grid select,.leave-note-label input{width:100%;min-width:0;border:1px solid #dce2e5;background:#fff;border-radius:9px;height:41px;padding:8px 11px;font-size:13px;color:#293238;outline:none}
+.leave-editor-grid input:focus,.leave-editor-grid select:focus,.leave-note-label input:focus,.leave-settings-line input:focus{border-color:#69ab87}
+.leave-editor-grid .leave-disabled{opacity:.5}
+.leave-note-label{margin-top:10px}
+.leave-date-preview{font-size:12px;color:#468061;margin:10px 1px 5px;min-height:18px}
+.leave-editor-actions{display:flex;align-items:center;justify-content:flex-end;gap:7px;margin-top:12px}
+.leave-editor-actions button,.leave-history-head button,.leave-history-row button{border:1px solid #d6e0dd;border-radius:8px;padding:9px 12px;background:#fff;font-weight:750;color:#475b5b;font-size:12px;cursor:pointer}
+.leave-editor-actions .leave-primary{background:#26312e;color:#fff;border-color:#26312e}
+.leave-editor-actions .leave-danger{border-color:#f2c7c1;color:#bf5449;background:#fff7f5;margin-right:auto}
+#leaveManagerTab button:disabled{opacity:.45;cursor:not-allowed}
+.leave-history-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.leave-history-head h3{margin:0}
+.leave-history-head h3 small{font-size:11px;font-weight:600;color:#89939a}
+.leave-history-row{display:flex;gap:10px;align-items:center;min-width:0;padding:11px 0;border-bottom:1px solid #e4e9e7}
+.leave-history-row:last-child{border-bottom:0}
+.leave-history-info{display:flex;align-items:center;gap:7px;flex:1;min-width:0;flex-wrap:wrap}
+.leave-history-info>strong{font-size:12px;font-weight:800;overflow-wrap:anywhere}
+.leave-history-info small{color:#848e96;font-size:11px;font-weight:400;flex:1 1 100%}
+.leave-kind{display:inline-flex;align-items:center;padding:4px 7px;font-size:10px;border-radius:6px;font-weight:750;white-space:nowrap}
+.leave-kind.leave-full{background:#def2e6;color:#2f7650}
+.leave-kind.leave-half{background:#ffe9d5;color:#98633a}
+.leave-history-row>b{font-size:13px;min-width:36px;text-align:right;white-space:nowrap;color:#485c56}
+.leave-history-row button{padding:7px 10px;white-space:nowrap}
+.leave-holiday-guide{font-size:11px;color:#8a949d;line-height:1.7;margin:7px 0 0}
+.calendar .event-chip.leave-chip{color:#346b54!important;cursor:pointer;border-left:3px solid #82b49b!important}
+.calendar .event-chip.leave-chip[style*="#ffe9d5"]{color:#8d5930!important;border-color:#d6ae82!important}
+.event-row.leave-event-row{background:#f8fbf9}
+.event-row.leave-event-row button{border:1px solid #cadcd1;color:#358060;border-radius:7px;padding:6px 8px}
+@media(max-width:1100px){.calendar-panel .section-head{flex-wrap:wrap}.leave-top-tabs{order:3;width:100%;flex:1 1 100%;margin-left:0}.leave-top-tabs button{flex:1}}
+@media(max-width:700px){.leave-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.leave-editor-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.leave-editor-grid label:last-child{grid-column:1/-1}.leave-stats strong{font-size:19px}}
+@media(max-width:440px){.leave-settings,.leave-editor,.leave-history{padding:12px}.leave-settings-line input{width:100px}.leave-editor-grid{grid-template-columns:1fr}.leave-editor-grid label:last-child{grid-column:auto}.leave-history-row{gap:5px}.leave-history-row button{padding:6px}}
