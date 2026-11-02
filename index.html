@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JEI Dashboard</title><link rel="stylesheet" href="style.css"><style>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JEI Dashboard</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="annual-leave.css"><style>
 /* V53: exact shared header geometry with GAME ARCHIVE pages */
 html{overflow-y:scroll;scrollbar-gutter:stable;background:#f7f8f9!important}
 body{background:#f7f8f9!important;min-width:0}
@@ -67,6 +67,7 @@ body{background:#f7f8f9!important;min-width:0}
 </form><div id="eventList" class="event-list"></div></div></div>
 <script src="dashboard-config.js"></script><script src="dashboard-auth.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="annual-leave.js"></script>
 <script>
 const cfg=window.JEI_DASHBOARD_CONFIG||{};
 const configured=window.JeiAuth.isConfigured(cfg);
@@ -83,7 +84,7 @@ let todoHasCompletedAt=false, todoWriteInProgress=false;
 const lockScreen=$('#lockScreen'),lockForm=$('#lockForm'),lockPassword=$('#lockPassword'),lockNickname=$('#lockNickname'),lockError=$('#lockError'),loginSubmit=$('#loginSubmit');
 let dashboardUser=null;
 function showLogin(message=''){
- dashboardUser=null;lockScreen.classList.remove('hidden');$('#accountName').textContent='';
+ dashboardUser=null;window.JeiLeave?.reset();lockScreen.classList.remove('hidden');$('#accountName').textContent='';
  lockError.textContent=message;lockPassword.value='';lockNickname.focus();
 }
 async function enterDashboard(user,nickname){
@@ -91,7 +92,7 @@ async function enterDashboard(user,nickname){
  lockScreen.classList.add('hidden');
  $('#accountName').textContent=nickname||user.user_metadata?.nickname||'';
  // After switching accounts always discard the previous user's in-memory data.
- todos=[];discontinued=[];events={};rules=[];noteId=null;selected='';
+ todos=[];discontinued=[];events={};rules=[];noteId=null;selected='';window.JeiLeave?.reset();
  $('#memo').value='';$('#memoSaved').textContent='자동 저장';
  await loadAll();
 }
@@ -137,6 +138,7 @@ async function loadAll(){
  rules=k.data.map(x=>({id:x.id,keyword:x.keyword,color:x.color}));
  discontinued=d.data.map(x=>({id:x.id,product:x.product_name,memo:x.memo||''}));
  drawTodos();drawDiscontinued();drawRules();drawCalendar();
+ await window.JeiLeave?.load(dashboardUser);
 }
 function localDate(date){const d=new Date(date);return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");}
 function todoDateLabel(value){if(!value)return"";const d=new Date(value);return isNaN(d.getTime())?"":`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;}
@@ -272,7 +274,7 @@ function parseDateKey(k){const [y,m,d]=k.split('-').map(Number);return new Date(
 function addDays(k,n){const dt=parseDateKey(k);dt.setDate(dt.getDate()+n);return dateKey(dt.getFullYear(),dt.getMonth(),dt.getDate())}
 function addEventToMap(ev){let k=ev.start;while(k<=ev.end){(events[k]??=[]).push(ev);k=addDays(k,1)}}
 function rangeClass(e,k){if(e.start===e.end)return '';if(k===e.start)return ' range-start';if(k===e.end)return ' range-end';return ' range-mid'}
-function drawCalendar(){const y=view.getFullYear(),m=view.getMonth();$('#monthTitle').textContent=`${y}. ${String(m+1).padStart(2,'0')}`;const first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate();let html='';for(let i=0;i<first;i++)html+='<div class="day blank"></div>';for(let d=1;d<=last;d++){const k=dateKey(y,m,d),manual=events[k]||[],auto=AUTO_HOLIDAYS[k]?[{id:'auto-'+k,text:AUTO_HOLIDAYS[k],start:k,end:k,holiday:true,auto:true}]:[],es=[...auto,...manual],today=k===dateKey(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()),dow=new Date(y,m,d).getDay(),holiday=!!AUTO_HOLIDAYS[k];html+=`<button class="day ${today?'today':''} ${dow===0?'sunday':dow===6?'saturday':''} ${holiday?'auto-holiday-day':''}" onclick="openDay('${k}')"><strong>${d}</strong><div>${es.slice(0,3).map(e=>`<span class="event-chip${rangeClass(e,k)} ${e.auto?'auto-holiday-chip':''}" style="background:${colorFor(e.text,e.holiday)}">${esc(e.text)}</span>`).join('')}${es.length>3?`<small class="more">+${es.length-3}</small>`:''}</div></button>`}$('#calendar').innerHTML=html}
+function drawCalendar(){const y=view.getFullYear(),m=view.getMonth();$('#monthTitle').textContent=`${y}. ${String(m+1).padStart(2,'0')}`;const first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate();let html='';for(let i=0;i<first;i++)html+='<div class="day blank"></div>';for(let d=1;d<=last;d++){const k=dateKey(y,m,d),manual=events[k]||[],auto=AUTO_HOLIDAYS[k]?[{id:'auto-'+k,text:AUTO_HOLIDAYS[k],start:k,end:k,holiday:true,auto:true}]:[],es=[...auto,...(window.JeiLeave?.calendarItems(k)||[]),...manual],today=k===dateKey(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()),dow=new Date(y,m,d).getDay(),holiday=!!AUTO_HOLIDAYS[k];html+=`<button class="day ${today?'today':''} ${dow===0?'sunday':dow===6?'saturday':''} ${holiday?'auto-holiday-day':''}" onclick="openDay('${k}')"><strong>${d}</strong><div>${es.slice(0,3).map(e=>`<span class="event-chip${rangeClass(e,k)} ${e.auto?'auto-holiday-chip':e.leave?'leave-chip':''}" style="background:${e.leave?e.bg:colorFor(e.text,e.holiday)}" ${e.leave?'data-leave-id="'+e.id+'"':''}>${esc(e.text)}</span>`).join('')}${es.length>3?`<small class="more">+${es.length-3}</small>`:''}</div></button>`}$('#calendar').innerHTML=html}
 $('#prev').onclick=()=>{view.setMonth(view.getMonth()-1);drawCalendar()};$('#next').onclick=()=>{view.setMonth(view.getMonth()+1);drawCalendar()};
 function shortDate(k){if(!k)return '';const [y,m,d]=k.split('-');return `${y.slice(-2)}/${m}/${d}`}
 function syncEventDates(){ $('#eventStartDisplay').value=shortDate($('#eventStart').value); $('#eventEndDisplay').value=shortDate($('#eventEnd').value); }
@@ -282,7 +284,7 @@ window.openDay=k=>{selected=k;const [y,m,d]=k.split('-');$('#modalDate').textCon
 $('#eventStart').addEventListener('change',()=>{if(!$('#eventEnd').value||$('#eventEnd').value<$('#eventStart').value)$('#eventEnd').value=$('#eventStart').value;syncEventDates()});
 $('#eventEnd').addEventListener('change',syncEventDates);
 $('#eventForm').addEventListener('submit',async e=>{e.preventDefault();const v=$('#eventText').value.trim(),start=$('#eventStart').value||selected,end=$('#eventEnd').value||start,holiday=$('#eventHoliday').checked;if(!v)return;if(end<start)return alert('종료일은 시작일보다 빠를 수 없어요.');const {data,error}=await db.from('calendar_events').insert({event_date:start,end_date:end,title:v,is_holiday:holiday}).select().single();if(error)return alert(error.message);addEventToMap({id:data.id,text:v,start:data.event_date,end:data.end_date||data.event_date,holiday:!!data.is_holiday});$('#eventText').value='';$('#eventHoliday').checked=false;drawCalendar();drawEventList()});
-function drawEventList(){if(!selected)return;const auto=AUTO_HOLIDAYS[selected]?[{id:'auto-'+selected,text:AUTO_HOLIDAYS[selected],start:selected,end:selected,holiday:true,auto:true}]:[],es=[...auto,...((events[selected]||[]))];$('#eventList').innerHTML=es.length?es.map(e=>`<div class="event-row ${e.auto?'auto-holiday-row':''}"><i style="background:${colorFor(e.text,e.holiday)}"></i><span>${esc(e.text)}${e.auto?'<small class="event-range-label">자동 공휴일</small>':e.start!==e.end?`<small class="event-range-label">${e.start} ~ ${e.end}</small>`:''}</span>${e.auto?'':`<button onclick="delEvent('${e.id}')">×</button>`}</div>`).join(''):'<p class="empty">등록된 일정이 없어요.</p>'}window.delEvent=async id=>{const {error}=await db.from('calendar_events').delete().eq('id',id);if(error)return alert(error.message);Object.keys(events).forEach(k=>events[k]=events[k].filter(e=>e.id!==id));drawCalendar();drawEventList()};
+function drawEventList(){if(!selected)return;const auto=AUTO_HOLIDAYS[selected]?[{id:'auto-'+selected,text:AUTO_HOLIDAYS[selected],start:selected,end:selected,holiday:true,auto:true}]:[],es=[...auto,...((events[selected]||[]))];$('#eventList').innerHTML=es.length?es.map(e=>`<div class="event-row ${e.auto?'auto-holiday-row':''}"><i style="background:${colorFor(e.text,e.holiday)}"></i><span>${esc(e.text)}${e.auto?'<small class="event-range-label">자동 공휴일</small>':e.start!==e.end?`<small class="event-range-label">${e.start} ~ ${e.end}</small>`:''}</span>${e.auto?'':`<button onclick="delEvent('${e.id}')">×</button>`}</div>`).join(''):'<p class="empty">등록된 일정이 없어요.</p>';const leaveRows=window.JeiLeave?.eventRows(selected)||'';if(leaveRows){if(!es.length)$('#eventList').innerHTML='';$('#eventList').insertAdjacentHTML('beforeend',leaveRows);}}window.delEvent=async id=>{const {error}=await db.from('calendar_events').delete().eq('id',id);if(error)return alert(error.message);Object.keys(events).forEach(k=>events[k]=events[k].filter(e=>e.id!==id));drawCalendar();drawEventList()};
 function drawRules(){$('#ruleList').innerHTML=rules.map(r=>`<div class="rule"><i style="background:${r.color}"></i><b>${esc(r.keyword)}</b><button onclick="delRule('${r.id}')">×</button></div>`).join('')||'<p class="empty">등록된 키워드가 없어요.</p>'}
 $('#ruleForm').addEventListener('submit',async e=>{e.preventDefault();const keyword=$('#ruleKeyword').value.trim(),color=$('#ruleColor').value;if(!keyword)return;const {data,error}=await db.from('calendar_keywords').insert({keyword,color}).select().single();if(error)return alert(error.message);rules.push(data);$('#ruleKeyword').value='';drawRules();drawCalendar()});window.delRule=async id=>{const {error}=await db.from('calendar_keywords').delete().eq('id',id);if(error)return alert(error.message);rules=rules.filter(r=>r.id!==id);drawRules();drawCalendar()};
 </script></body></html>
