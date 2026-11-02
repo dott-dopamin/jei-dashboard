@@ -153,7 +153,7 @@ function eventRows(key){
 }
 function openEdit(id){
  var e=entries.find(function(x){return x.id===id;});if(!e||!ready)return;
- selectedYear=Number(e.start_date.slice(0,4));selectTab('manager');
+ selectedYear=Number(e.start_date.slice(0,4));var eventModal=byId('eventModal');if(eventModal)eventModal.classList.remove('show');selectTab('manager');
  editId=id;render();
  byId('leaveStart').value=e.start_date;byId('leaveEnd').value=e.end_date;
  byId('leaveKind').value=e.leave_type;byId('leaveNote').value=e.note||'';
