@@ -114,7 +114,7 @@ function render(){
  byId('leaveHistoryList').innerHTML=list.length?list.map(function(e){
    var amount=units(e),future=datesOf(e).every(function(k){return k>todayKey();});
    var period=e.start_date===e.end_date?e.start_date:e.start_date+' ~ '+e.end_date;
-   return '<div class="leave-history-row"><div class="leave-history-info"><strong>'+escapeHtml(period)+'</strong><span class="leave-kind '+(e.leave_type==='full'?'leave-full':'leave-half')+'">'+label(e.leave_type)+'</span><small>'+(future?'사용 예정':'사용 / 예정')+(e.note?' · '+escapeHtml(e.note):'')+'</small></div><b>−'+amount+'일</b><button type="button" data-leave-edit="'+escapeHtml(e.id)+'">수정</button></div>';
+   return '<div class="leave-history-row"><div class="leave-history-info"><strong>'+escapeHtml(period)+'</strong><span class="leave-kind '+(e.leave_type==='full'?'leave-full':'leave-half')+'">'+label(e.leave_type)+'</span><small>'+(future?'사용 예정':datesOf(e).every(function(k){return k<=todayKey();})?'사용 완료':'사용·예정')+(e.note?' · '+escapeHtml(e.note):'')+'</small></div><b>−'+amount+'일</b><button type="button" data-leave-edit="'+escapeHtml(e.id)+'">수정</button></div>';
  }).join(''):'<p class="empty">이 연도에는 등록한 연차가 없어요.</p>';
  if(!ready)byId('leaveHistoryList').innerHTML='<p class="empty">연차 관리 SQL을 적용하면 이곳에서 내역을 확인할 수 있어요.</p>';
 }
