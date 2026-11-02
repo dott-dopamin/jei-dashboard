@@ -41,7 +41,7 @@ function install(){
  panel.appendChild(area);
  byId('leaveTabCalendar').onclick=function(){selectTab('calendar');};
  byId('leaveTabManager').onclick=function(){selectTab('manager');};
- byId('leaveYearSelect').onchange=function(e){selectedYear=Number(e.target.value);resetEntryForm();render();};
+ byId('leaveYearSelect').onchange=function(e){selectedYear=Number(e.target.value);resetEntryForm();selectTab('calendar');render();};
  byId('leaveSaveEntitlement').onclick=saveAnnual;
  byId('leaveEntryForm').onsubmit=saveEntry;
  byId('leaveEntryReset').onclick=resetEntryForm;
@@ -56,9 +56,18 @@ function install(){
  resetEntryForm();render();
 }
 function selectTab(which){
- var isCalendar=which==='calendar';byId('leaveCalendarTab').classList.toggle('active',isCalendar);byId('leaveTabManager').classList.toggle('active',!isCalendar);
- byId('leaveCalendarTab').setAttribute('aria-selected',String(isCalendar));byId('leaveTabManager').setAttribute('aria-selected',String(!isCalendar));
- byId('leaveCalendarTab').tabIndex=isCalendar?0:-1;byId('leaveTabManager').tabIndex=isCalendar?-1:0;
+ var isCalendar=which==='calendar';
+ // Keep visual, accessibility and state attributes in sync. Inline styling avoids stale/overriding stylesheets.
+ [[byId('leaveTabCalendar'),isCalendar],[byId('leaveTabManager'),!isCalendar]].forEach(function(pair){
+   var b=pair[0],on=pair[1];
+   b.classList.toggle('active',on);
+   b.setAttribute('aria-selected',String(on));
+   b.tabIndex=on?0:-1;
+   b.style.setProperty('background-color',on?'#fff':'#e9edf1','important');
+   b.style.setProperty('color',on?'#20252a':'#87919d','important');
+   b.style.setProperty('box-shadow',on?'0 1px 5px rgba(24,32,40,.12)':'none','important');
+   b.style.setProperty('border-color',on?'#dfe4e9':'transparent','important');
+ });
  byId('leaveCalendarTab').setAttribute('aria-expanded',String(isCalendar));
  byId('leaveCalendarTab').closest('.calendar-panel').querySelector('.month-nav').hidden=!isCalendar;
  byId('leaveCalendarTab').closest('.calendar-panel').querySelector('.section-head h2').textContent=isCalendar?'업무 캘린더':'연차 관리';
