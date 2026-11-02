@@ -2,6 +2,11 @@
 .leave-top-tabs{display:flex;gap:5px;align-items:center;border:1px solid #e2e6ea;background:#f5f6f8;padding:4px;border-radius:11px;margin-left:auto;flex:0 1 auto}
 .leave-top-tabs button{font-size:12px;font-weight:800;color:#737e89;background:transparent;border:0;border-radius:8px;padding:8px 12px;white-space:nowrap;cursor:pointer}
 .leave-top-tabs button.active{background:#fff;color:#22272b;box-shadow:0 1px 4px #1f293712}
+/* Explicit two-state styling: only selected tab can look active */
+.leave-top-tabs button[role="tab"][aria-selected="false"]{background:#e9edf1!important;color:#89929e!important;box-shadow:none!important;border:1px solid transparent!important;font-weight:650}
+.leave-top-tabs button[role="tab"][aria-selected="true"]{background:#fff!important;color:#20252a!important;box-shadow:0 1px 5px #1820281c!important;border:1px solid #dfe4e9!important;font-weight:850}
+.leave-top-tabs button[role="tab"][aria-selected="false"]:hover{background:#e2e7ec!important;color:#606c78!important}
+
 .leave-top-tabs button:focus-visible,#leaveManagerTab button:focus-visible{outline:2px solid #428b68;outline-offset:2px}
 .calendar-panel .month-nav[hidden],#leaveCalendarTab[hidden],#leaveManagerTab[hidden],#leaveEntryDelete[hidden]{display:none!important}
 #leaveManagerTab{color:#262f36;min-width:0}
