@@ -1,0 +1,34 @@
+/* V112 — drag-and-drop manual calendar events. Auto holidays and leave records stay fixed. */
+.calendar .event-chip.calendar-drag-chip{
+  cursor:grab;
+  user-select:none;
+  -webkit-user-select:none;
+  border:1px solid rgba(74,92,113,.15);
+  transition:box-shadow .12s ease,opacity .12s ease;
+}
+.calendar .event-chip.calendar-drag-chip:hover{
+  box-shadow:0 1px 5px rgba(34,46,58,.16);
+  border-color:rgba(75,105,123,.35);
+}
+.calendar .event-chip.calendar-drag-chip:active{cursor:grabbing}
+.calendar .event-chip.calendar-dragging{opacity:.45;cursor:grabbing}
+.calendar .day.calendar-drop-target{
+  outline:3px solid #79a9d2;
+  outline-offset:-4px;
+  background:#eef7ff;
+  box-shadow:inset 0 0 0 1px #c4dce9;
+}
+.calendar-drag-status{
+  font-size:11px;
+  color:#477b60;
+  line-height:1.55;
+  margin:9px 2px 0;
+  padding:7px 10px;
+  background:#eff7f1;
+  border-radius:8px;
+  border:1px solid #d8e8da;
+}
+.calendar-drag-status.is-error{
+  color:#b04e45;background:#fff3ef;border-color:#f0d5cc;
+}
+.calendar .leave-chip,.calendar .auto-holiday-chip{cursor:pointer}
