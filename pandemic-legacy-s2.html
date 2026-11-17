@@ -1497,11 +1497,42 @@ const JEI_V114=(()=>{
   const table='pandemic_legacy_'+season+'_state';
   let changed=0,saved=0,inFlight=null,retryTimer=null,navigating=false,ready=false;
   let confirmedSnapshot='';
+  // Keep acknowledged writes pending verification; never POST the same snapshot again just because GET failed.
+  let acknowledgedWrite=null;
   const copy=x=>JSON.parse(JSON.stringify(x));
+  const stable=o=>JSON.stringify(o,(k,v)=>v&&typeof v==='object'&&!Array.isArray(v)
+    ?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a.localeCompare(b))):v);
+  const sameData=(a,b)=>JSON.stringify(a)===JSON.stringify(b)||stable(a)===stable(b);
   const status=message=>{const e=document.getElementById('saveState');if(e)e.textContent=message;};
+  function clearSaveDiagnostic(){
+    const el=document.getElementById('saveState');
+    if(!el)return;
+    el.onclick=null;
+    el.onkeydown=null;
+    el.removeAttribute('title');
+    el.removeAttribute('role');
+    el.removeAttribute('tabindex');
+    el.style.cursor='';
+  }
+  function showSaveDiagnostic(error,phase){
+    const el=document.getElementById('saveState');
+    const code=String(error?.code||'NO_CODE');
+    const original=String(error?.message||error||'원인 메시지 없음');
+    const message=accessCode?original.split(accessCode).join('[비밀번호 숨김]'):original;
+    const details='단계: '+phase+'\n오류 코드: '+code+'\n원인: '+message.slice(0,600);
+    status(phase.startsWith('서버 쓰기 성공')?'⚠ 서버 저장 확인 지연 · 눌러서 원인 확인':'⚠ 서버 저장 실패 · 눌러서 원인 확인');
+    if(!el)return;
+    el.title=details;
+    el.setAttribute('role','button');
+    el.setAttribute('tabindex','0');
+    el.style.cursor='pointer';
+    const show=()=>window.alert('팬데믹 시즌2 저장 진단\n'+details+'\n\n기존 기록을 삭제하거나 캐시를 지우지 마세요.');
+    el.onclick=show;
+    el.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();show();}};
+  }
   function saveDraft(){
     if(!ready||!state)return;
-    try{localStorage.setItem(draftKey,JSON.stringify({saved_at:new Date().toISOString(),base:confirmedSnapshot,state:copy(state)}));}
+    try{localStorage.setItem(draftKey,JSON.stringify({saved_at:new Date().toISOString(),base:confirmedSnapshot,ack:acknowledgedWrite?JSON.stringify(acknowledgedWrite.payload):null,state:copy(state)}));}
     catch(e){console.warn('Browser draft storage unavailable:',e);}
   }
   function markChanged(){
@@ -1531,28 +1562,54 @@ const JEI_V114=(()=>{
   }
   async function sendPending(){
     while(saved<changed){
-      const n=changed;
-      const payload=copy(state); // freeze snapshot before the request
-      status('서버 저장 중...');
-      try{
-        await writeRemote(payload);
-        const returned=await readRemote();
-        // The server must return the same data that was written.
-        if(JSON.stringify(returned)!==JSON.stringify(payload)){
-          // Account for Postgres JSONB object key ordering differences.
-          const stable=o=>JSON.stringify(o,(k,v)=>v&&typeof v==='object'&&!Array.isArray(v)
-            ?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a.localeCompare(b))):v);
-          if(stable(returned)!==stable(payload))throw Error('서버에서 저장된 내용이 다르게 조회되었습니다.');
+      // Once POST has succeeded, a failed confirmation GET must not trigger
+      // another POST of the same (possibly stale) snapshot.
+      const target=acknowledgedWrite||{n:changed,payload:copy(state)};
+      if(!acknowledgedWrite){
+        status('서버 저장 중...');
+        try{
+          await writeRemote(target.payload);
+          acknowledgedWrite=target;
+          saveDraft(); // persist the acknowledged base for safe reload recovery
+        }catch(writeError){
+          // The request may have committed before the network lost its response.
+          // Check the server before retrying a potentially successful write.
+          try{
+            const found=await readRemote();
+            if(sameData(found,target.payload)){
+              acknowledgedWrite=target;
+              saveDraft();
+            }
+          }catch(checkError){console.warn('쓰기 결과 확인 불가:',checkError);}
+          if(!acknowledgedWrite){
+            console.error('팬데믹 '+season+' 서버 쓰기 실패:',writeError);
+            showSaveDiagnostic(writeError,'서버 쓰기');
+            clearTimeout(retryTimer);
+            retryTimer=setTimeout(()=>{if(ready&&saved<changed)flush().catch(console.error);},4500);
+            return false;
+          }
         }
-        confirmedSnapshot=JSON.stringify(payload);
-        saved=n;
+      }
+      try{
+        status('서버 저장 확인 중...');
+        const returned=await readRemote();
+        if(!sameData(returned,target.payload)){
+          const mismatch=new Error('저장된 데이터가 다르게 조회되었습니다. 충돌 방지를 위해 재전송하지 않습니다.');
+          mismatch.code='SAVE_VERIFY_MISMATCH';
+          throw mismatch;
+        }
+        confirmedSnapshot=JSON.stringify(target.payload);
+        saved=target.n;
+        acknowledgedWrite=null;
         if(saved===changed){
           try{localStorage.removeItem(draftKey);}catch(e){}
+          clearSaveDiagnostic();
           status('✓ 자동 저장됨');
-        }
-      }catch(e){
-        console.error('팬데믹 '+season+' 저장 오류:',e);
-        status('⚠ 서버 저장 실패 · 잠시 후 재시도');
+        }else saveDraft();
+      }catch(readError){
+        console.error('팬데믹 '+season+' 저장 확인 지연:',readError);
+        showSaveDiagnostic(readError,'서버 쓰기 성공 · 저장 확인 조회');
+        // Keep the acknowledgement, retry GET only, and retain the browser draft.
         clearTimeout(retryTimer);
         retryTimer=setTimeout(()=>{if(ready&&saved<changed)flush().catch(console.error);},4500);
         return false;
@@ -1593,13 +1650,19 @@ const JEI_V114=(()=>{
     // matches the exact version originally edited. Otherwise never overwrite it.
     let draft=null;
     try{draft=JSON.parse(localStorage.getItem(draftKey)||'null');}catch(e){}
-    if(draft?.state && draft.base===confirmedSnapshot &&
-       JSON.stringify(draft.state)!==confirmedSnapshot){
+    // A previous write might have reached the server before its GET confirmation
+    // failed. Recover newer local edits only if the server equals the last known
+    // base OR the last acknowledged write; never overwrite independent edits.
+    let ackMatchesServer=false;
+    if(draft?.ack)try{ackMatchesServer=sameData(JSON.parse(draft.ack),state);}catch(e){}
+    if(draft?.state && (draft.base===confirmedSnapshot||ackMatchesServer) &&
+       !sameData(draft.state,state)){
       state=mergeState(draft.state);
       changed=1;
+      saveDraft();
       status('이전 미완료 입력 저장 중...');
       setTimeout(()=>{flush().catch(console.error);},0);
-    }else if(draft?.state && JSON.stringify(draft.state)!==confirmedSnapshot){
+    }else if(draft?.state && !sameData(draft.state,state)){
       status('⚠ 미저장 입력이 남아 있으나 서버가 달라 자동 덮어쓰지 않았어요');
     }else if(draft){
       try{localStorage.removeItem(draftKey);}catch(e){}
