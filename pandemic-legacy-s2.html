@@ -701,6 +701,9 @@ html{background:#e7ece8!important}
 <script>
 const db=supabase.createClient('https://yqvjgalmjrydfygtozgo.supabase.co','sb_publishable_8K_sITH95Nkikw8-tdyDwQ_-JFzo94Z');
 const $=s=>document.querySelector(s); const months=Array.from({length:12},(_,i)=>`${i+1}월`); let state=null,isAdmin=false,canEdit=false,accessCode='',saveTimer=null;
+// Track how this campaign was actually opened. A Supabase login alone does NOT
+// prove that direct UPDATE on the season state table is permitted.
+let s2StateAccessMode='password';
 const START_CITIES=[['london','런던','blue'],['istanbul','이스탄불','black'],['newyork','뉴욕','blue'],['washington','워싱턴','blue'],['jacksonville','잭슨빌','blue'],['tripoli','트리폴리','black'],['cairo','카이로','black'],['lagos','라고스','yellow'],['saopaulo','상파울루','yellow']];
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clone(v){return JSON.parse(JSON.stringify(v));}
@@ -772,8 +775,8 @@ function openS2PhaseTracker(){
 function defaultState(){return{meta:{current_month:'1월',attempt:1,rationing:4,connected_cities:'',last_result:'',next_note:'',next_note_draft:'',play_date:'',session_result:'',play_log:'',current_objectives:'',objective_items:[],current_rules:'',permanent_summary:''},players:[{name:'다은',color:'pink',character:'',role:'',detail:''},{name:'한철',color:'black',character:'',role:'',detail:''},{name:'승민',color:'blue',character:'',role:'',detail:''},{name:'제이',color:'white',character:'',role:'',detail:''}],infection_tracker:defaultInfectionTracker(),infection_phase_tracker:defaultS2PhaseTracker(),player_deck_tracker:defaultPlayerDeck(),world_status:[],excel_deck_v101:null,sessions:[]};}
 function normalizeTracker(t){const d=defaultInfectionTracker(),x=t||{};return{cities:Array.isArray(x.cities)&&x.cities.length?x.cities:d.cities,groups:Array.isArray(x.groups)&&x.groups.length?x.groups:d.groups,discard:x.discard&&typeof x.discard==='object'?x.discard:{},game_end:x.game_end&&typeof x.game_end==='object'?x.game_end:{},epidemics:+x.epidemics||0,rate_step:Number.isFinite(+x.rate_step)?Math.max(0,Math.min(7,+x.rate_step)) : Math.max(0,Math.min(7,+x.epidemics||0)),history:Array.isArray(x.history)?x.history.slice(-20):[],configured_total:Number.isFinite(+x.configured_total)?+x.configured_total:27};}
 function mergeState(s){const d=defaultState(),stored=Array.isArray(s?.players)?s.players:[],rawMeta={...d.meta,...(s?.meta||{})};if(!Array.isArray(rawMeta.objective_items))rawMeta.objective_items=[];if(!rawMeta.objective_items.length&&String(rawMeta.current_objectives||'').trim()){rawMeta.objective_items=String(rawMeta.current_objectives).split(/\n+/).map(x=>x.trim()).filter(Boolean).map((text,i)=>({id:`legacy-${i}-${Date.now()}`,text,done:false}));}return{meta:rawMeta,players:d.players.map((p,i)=>{const z=stored.find(x=>x?.name===p.name)||stored[i]||{};return{...p,...z,name:p.name,color:p.color}}),infection_tracker:normalizeTracker(s?.infection_tracker),infection_phase_tracker:normalizeS2PhaseTracker(s?.infection_phase_tracker),player_deck_tracker:{...d.player_deck_tracker,...(s?.player_deck_tracker||{})},world_status:Array.isArray(s?.world_status)?s.world_status:[],excel_deck_v101:s?.excel_deck_v101||null,sessions:Array.isArray(s?.sessions)?s.sessions:[]};}
-async function boot(){const {data:{session}}=await db.auth.getSession();isAdmin=!!session;if(isAdmin){const {data,error}=await db.from('pandemic_legacy_s2_state').select('data').eq('id',1).single();if(!error&&data){state=mergeState(data.data);canEdit=true;openApp();return;}}const remembered=rememberedS2AccessCode();if(remembered){$('#codeInput').value=remembered;unlock(true);}}
-async function unlock(auto=false){const code=$('#codeInput').value.trim();if(!code)return;$('#gateError').textContent='';const {data,error}=await db.rpc('get_pandemic_legacy_s2',{p_code:code});if(error){console.error(error);if(auto)forgetS2AccessCode();$('#gateError').textContent=error.code==='P0001'?'비밀번호가 맞지 않아요.':'연결 설정을 확인해주세요.';return;}accessCode=code;rememberS2AccessCode(code);state=mergeState(data);canEdit=true;openApp();}
+async function boot(){const {data:{session}}=await db.auth.getSession();isAdmin=!!session;if(isAdmin){const {data,error}=await db.from('pandemic_legacy_s2_state').select('data').eq('id',1).single();if(!error&&data){s2StateAccessMode='direct';state=mergeState(data.data);canEdit=true;openApp();return;}}const remembered=rememberedS2AccessCode();if(remembered){$('#codeInput').value=remembered;unlock(true);}}
+async function unlock(auto=false){const code=$('#codeInput').value.trim();if(!code)return;$('#gateError').textContent='';const {data,error}=await db.rpc('get_pandemic_legacy_s2',{p_code:code});if(error){console.error(error);if(auto)forgetS2AccessCode();$('#gateError').textContent=error.code==='P0001'?'비밀번호가 맞지 않아요.':'연결 설정을 확인해주세요.';return;}accessCode=code;rememberS2AccessCode(code);s2StateAccessMode='password';state=mergeState(data);canEdit=true;openApp();}
 function openApp(){$('#gate').classList.add('hidden');$('#app').classList.remove('hidden');JEI_V114.init();render();}
 function render(){syncWorldConnectedCount(false);renderMonths();renderPlayers();renderStatus();renderSessions();}
 function renderMonths(){$('#monthStrip').innerHTML=months.map(x=>`<div class="month-chip ${x===state.meta.current_month?'active':''}">${x}</div>`).join('');}
@@ -1543,17 +1546,27 @@ const JEI_V114=(()=>{
     clearTimeout(saveTimer);clearTimeout(retryTimer);
   }
   async function writeRemote(payload){
-    if(isAdmin){
-      const {data,error}=await db.from(table).update({data:payload,updated_at:new Date().toISOString()}).eq('id',1).select('id');
+    const writeByPassword=async()=>{
+      const {error}=await db.rpc('save_pandemic_legacy_'+season,{p_code:accessCode||null,p_data:payload});
       if(error)throw error;
-      if(!Array.isArray(data)||data.length!==1)throw Error('저장할 기록을 찾지 못했습니다.');
-    }else{
-      const {error}=await db.rpc('save_pandemic_legacy_'+season,{p_code:accessCode,p_data:payload});
-      if(error)throw error;
-    }
+    };
+    // Password entry always uses the campaign's existing validated RPC, even
+    // when the browser ALSO happens to hold a Supabase login session.
+    if(s2StateAccessMode!=='direct')return await writeByPassword();
+
+    const {data,error}=await db.from(table).update({data:payload,updated_at:new Date().toISOString()}).eq('id',1).select('id');
+    if(!error&&Array.isArray(data)&&data.length===1)return;
+    // The direct-table path can SELECT a row but be blocked from UPDATE by RLS.
+    // Never UPSERT, reset or replace the singleton when no row was updated.
+    if(error&&error.code!=='42501')throw error;
+    const {data:existing,error:lookupError}=await db.from(table).select('id').eq('id',1).maybeSingle();
+    if(lookupError)throw lookupError;
+    if(!existing)throw Error('시즌2 원본 기록(id=1)을 확인할 수 없어 저장을 중단했습니다.');
+    await writeByPassword();
+    // V134's readback comparison below still must verify the RPC actually saved.
   }
   async function readRemote(){
-    if(isAdmin){
+    if(s2StateAccessMode==='direct'){
       const {data,error}=await db.from(table).select('data').eq('id',1).single();
       if(error)throw error;return data?.data;
     }
