@@ -433,6 +433,13 @@ html{background:#e7ece8!important}
   .s2x-risk-head strong{font-size:14px}
 }
 @media(max-width:999px){.s2x-mainlayout>.s2x-risk{order:-1}}
+/* V137: manually enter the card physically drawn from box 6. */
+.s2x-physical-fields{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(125px,.7fr);gap:12px;margin:16px 0}
+.s2x-physical-field{display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:850;color:#3e6466}
+.s2x-physical-field input,.s2x-physical-field select{width:100%;min-width:0;padding:12px;background:#fff;border:1px solid #aec1c2;border-radius:9px;font-size:14px;color:#1b4247}
+.s2x-physical-field input:focus,.s2x-physical-field select:focus{outline:2px solid #5b9eae;outline-offset:1px}
+.s2x-physical-field select:disabled{background:#edf2ef;color:#627977}
+@media(max-width:640px){.s2x-physical-fields{grid-template-columns:1fr}}
 @media(max-width:700px){.s2x-overlay{padding:7px}.s2x-dialog{height:calc(100dvh - 14px);border-radius:11px}.s2x-head{padding:12px}.s2x-head h2{font-size:18px}.s2x-head p{font-size:10px}.s2x-scroll{padding:11px}.s2x-stats{grid-template-columns:1fr 1fr}.s2x-bottom-grid{grid-template-columns:1fr 1fr}.s2x-toolbar>div{width:100%}.s2x-btn{font-size:11px;padding:8px}.s2x-risk-head strong{font-size:15px}.s2x-chip{font-size:12px}.s2x-edit-fields{grid-template-columns:1fr 1fr}}
 
 
@@ -696,14 +703,14 @@ html{background:#e7ece8!important}
 
 <div id="s2xModal" class="s2x-overlay hidden" role="presentation">
   <div class="s2x-dialog" role="dialog" aria-modal="true" aria-labelledby="s2xTitle">
-    <div class="s2x-head"><div><div class="s2x-kicker">INFECTION DECK / EXCEL LOGIC</div><h2 id="s2xTitle">감염 카드 더미 트래커</h2><p>엑셀 VBA 기준 · 감염 카드는 도시를 눌러 1장 처리 · 유행병 시 6번 카드상자에서 1장 재등장</p></div><button id="s2xClose" class="s2x-btn" type="button">닫기 ×</button></div>
+    <div class="s2x-head"><div><div class="s2x-kicker">INFECTION DECK / EXCEL LOGIC</div><h2 id="s2xTitle">감염 카드 더미 트래커</h2><p>엑셀 VBA 기준 · 감염 카드는 도시를 눌러 1장 처리 · 유행병 시 실물 6번 카드상자의 카드 1장을 직접 입력해 재등장</p></div><button id="s2xClose" class="s2x-btn" type="button">닫기 ×</button></div>
     <div class="s2x-scroll" id="s2xScroll">
-      <div class="s2x-toolbar"><div><button id="s2xEpidemic" class="s2x-btn warn" type="button">유행병 발생 · 6번 카드상자 추첨</button><button id="s2xUndo" class="s2x-btn" type="button">↶ 되돌리기</button></div><div><button id="s2xAdd" class="s2x-btn" type="button">+ 도시 / 카드 추가</button><button id="s2xAudit" class="s2x-btn" type="button">차수 점검 · 복구</button><button id="s2xExport" class="s2x-btn" type="button">기록 백업</button><button id="s2xImport" class="s2x-btn" type="button">백업 불러오기</button><input id="s2xImportFile" class="hidden" type="file" accept=".json,application/json"><button id="s2xReset" class="s2x-btn" type="button">차수 초기화</button><span id="s2xSaveStatus" class="s2x-save"></span></div></div>
+      <div class="s2x-toolbar"><div><button id="s2xEpidemic" class="s2x-btn warn" type="button">유행병 발생 · 실물 카드 입력</button><button id="s2xUndo" class="s2x-btn" type="button">↶ 되돌리기</button></div><div><button id="s2xAdd" class="s2x-btn" type="button">+ 도시 / 카드 추가</button><button id="s2xAudit" class="s2x-btn" type="button">차수 점검 · 복구</button><button id="s2xExport" class="s2x-btn" type="button">기록 백업</button><button id="s2xImport" class="s2x-btn" type="button">백업 불러오기</button><input id="s2xImportFile" class="hidden" type="file" accept=".json,application/json"><button id="s2xReset" class="s2x-btn" type="button">차수 초기화</button><span id="s2xSaveStatus" class="s2x-save"></span></div></div>
       <div class="s2x-stats" id="s2xStats"></div>
       <div class="s2x-mainlayout">
         <div class="s2x-maincolumn">
-      <div class="s2x-table-wrap" id="s2xTableScroll"><table class="s2x-table"><thead><tr><th>도시 / 카드 (클릭하여 1장 처리)</th><th>총 카드</th><th>1차</th><th>2차</th><th>3차</th><th>4차</th><th>5차</th><th>6번 카드상자</th><th>편집</th></tr></thead><tbody id="s2xBody"></tbody><tfoot id="s2xFoot"></tfoot></table></div>
-      <div class="s2x-info"><b>새 유행병 처리</b> · 이미 뽑은 카드가 6번 카드상자에 있다고 가정합니다. 유행병이 발생하면 버린 카드 중 <b>딱 1장</b>을 선택해 다음 감염 차수로 이동합니다. 나머지 카드는 버린 더미에 남고 총 카드 수는 변하지 않아요. <b>보급품 제거는 실제 게임판에서 직접</b> 처리해 주세요. 실수하면 <b>되돌리기</b>를 사용하세요.</div>
+      <div class="s2x-table-wrap" id="s2xTableScroll"><table class="s2x-table"><thead><tr><th>도시 / 카드 (클릭하여 1장 처리)</th><th>총 카드</th><th>1차</th><th>2차</th><th>3차</th><th>4차</th><th>5차</th><th>사용 처리</th><th>편집</th></tr></thead><tbody id="s2xBody"></tbody><tfoot id="s2xFoot"></tfoot></table></div>
+      <div class="s2x-info"><b>실물 6번 카드상자</b> · 사이트의 '사용 처리' 목록과는 별개의 실제 카드상자입니다. 게임판에서 무작위로 카드 1장을 뽑고 <b>그 도시명을 직접 입력</b>하면, 사이트에 없는 카드라도 <b>재등장 위험군에 카드 1장을 추가</b>할 수 있어요. 사이트의 기존 사용 처리 수량을 차감하지 않습니다. <b>보급품 제거는 게임판에서 직접</b> 처리해 주세요. 잘못 입력했다면 <b>되돌리기</b>를 사용하세요.</div>
         </div>
         <aside class="s2x-risk" aria-label="현재 재등장 위험군 고정 패널">
           <div class="s2x-risk-head"><strong>🚨 재등장 위험군</strong><span id="s2xRiskCount">0장</span></div>
@@ -731,15 +738,22 @@ html{background:#e7ece8!important}
  </div>
 </div>
 <div id="s2xEditShade" class="s2x-edit-shade hidden"><div class="s2x-edit" role="dialog" aria-modal="true" aria-label="도시 편집"><h3 id="s2xEditTitle">도시 추가</h3><p>추가되거나 영구 제외되는 도시 및 감염 카드를 직접 관리합니다.</p><div class="s2x-edit-fields"><label class="s2x-edit-wide">도시 / 카드명<input id="s2xName" maxlength="70" placeholder="도시명 또는 할로우맨"></label><label>유형<select id="s2xType"><option value="city">도시 카드</option><option value="other">기타 카드 (색상 없음)</option></select></label><label>도시 색상<select id="s2xColor"><option value="blue">블루</option><option value="yellow">옐로우</option><option value="black">블랙</option><option value="red">레드</option></select></label><label class="s2x-edit-wide">총 카드 수<input id="s2xTotal" type="number" min="0" max="999" value="1"></label><label class="s2x-edit-wide" id="s2xPlacementLabel">신규 카드의 배치<select id="s2xPlacement"><option value="deck">현재 감염 더미에 추가</option><option value="discard">이미 뽑힌 카드로 등록</option></select></label><div class="s2x-edit-wide"><div style="font-size:11px;font-weight:900;color:#56716f;margin-bottom:7px">차수별 남은 장수 (직접 보정 가능)</div><div class="s2x-phase-rows" id="s2xEditPhases"></div></div></div><div id="s2xEditError" class="s2x-editor-error"></div><div class="s2x-edit-actions"><button id="s2xDelete" class="s2x-btn warn hidden" type="button">도시 삭제</button><button id="s2xCancel" class="s2x-btn" type="button">취소</button><button id="s2xApply" class="s2x-btn primary" type="button">적용</button></div></div></div>
-<div id="s2xBottomShade" class="s2x-edit-shade hidden"><div class="s2x-edit" style="width:min(820px,100%)" role="dialog" aria-modal="true" aria-label="6번 카드상자 재등장 추첨">
-<h3>유행병 발생 · 6번 카드상자</h3>
-<p>이전에 버린 카드 중 정확히 1장을 추첨해서 <b>새 감염 차수(재등장 위험군)</b>로 이동합니다. 보급품은 게임판에서 직접 제거하세요.</p>
-<div id="s2xBottomSummary" class="s2x-bottom-summary"></div>
-<div class="s2x-bottom-toolrow"><button id="s2xBottomRandom" type="button" class="s2x-btn primary">🎲 랜덤 1장 추첨</button><button id="s2xBottomReroll" type="button" class="s2x-btn hidden">다시 추첨 (확정 전)</button><span style="font-size:11px;color:#657f7c">실제 카드대로 선택하려면 아래 도시를 클릭</span></div>
-<div id="s2xBottomGrid" class="s2x-bottom-grid"></div>
+<div id="s2xBottomShade" class="s2x-edit-shade hidden"><div class="s2x-edit" style="width:min(620px,100%)" role="dialog" aria-modal="true" aria-label="6번 카드상자 실물 도시카드 입력">
+<h3>유행병 발생 · 실물 6번 카드상자</h3>
+<p><b>실제 6번 카드상자에서 카드 1장을 랜덤으로 뽑은 다음</b>, 카드에 적힌 도시명을 아래에 입력해 주세요. 사이트에서 자동 추첨하지 않습니다.</p>
+<div id="s2xBottomSummary" class="s2x-bottom-summary">실물 카드 입력은 기존 트래커의 '사용 처리' 수량과 무관해요.</div>
+<div class="s2x-physical-fields">
+  <label class="s2x-physical-field">실제 뽑은 도시카드 이름
+    <input type="text" id="s2xPhysicalCity" list="s2xPhysicalCityList" autocomplete="off" maxlength="70" placeholder="예: 상트페테르부르크">
+    <datalist id="s2xPhysicalCityList"></datalist>
+  </label>
+  <label class="s2x-physical-field">도시 카드 색상
+    <select id="s2xPhysicalColor"><option value="">색상 선택</option><option value="blue">파랑</option><option value="yellow">노랑</option><option value="black">검정</option><option value="red">빨강</option></select>
+  </label>
+</div>
 <div id="s2xBottomSelected" class="s2x-bottom-selection hidden" role="status"></div>
 <div id="s2xBottomError" class="s2x-editor-error"></div>
-<div class="s2x-edit-actions"><button id="s2xBottomCancel" type="button" class="s2x-btn">취소</button><button id="s2xBottomConfirm" type="button" class="s2x-btn primary" disabled>게임판 처리 확인 · 1장 반영</button></div>
+<div class="s2x-edit-actions"><button id="s2xBottomCancel" type="button" class="s2x-btn">취소</button><button id="s2xBottomConfirm" type="button" class="s2x-btn primary" disabled>게임판 처리 확인 · 새 카드 1장 반영</button></div>
 </div></div>
 
 <script>
@@ -1355,13 +1369,13 @@ function s2xRender(){
   const t=s2xTracker(),rows=s2xSorted(t),total=rows.reduce((n,c)=>n+c.total,0),left=rows.reduce((n,c)=>n+c.phases.reduce((x,y)=>x+y,0),0),drawn=total-left;
   const top=s2xTopPile(t),risk=t.created.length<2||top<0?[]:rows.filter(c=>(+c.phases[top]||0)>0);
   const riskNum=risk.reduce((n,c)=>n+(+c.phases[top]||0),0);
-  $('#s2xStats').innerHTML=[['기록된 감염 차수',t.created.length+' / 5'],['도시 / 카드 종류',String(rows.length)],['감염 더미에 남은 카드',left+'장'],['6번 카드상자',drawn+'장']].map(([title,value])=>`<div class="s2x-stat"><span>${title}</span><b>${value}</b></div>`).join('');
+  $('#s2xStats').innerHTML=[['기록된 감염 차수',t.created.length+' / 5'],['도시 / 카드 종류',String(rows.length)],['감염 더미에 남은 카드',left+'장'],['사용 처리 (트래커)',drawn+'장']].map(([title,value])=>`<div class="s2x-stat"><span>${title}</span><b>${value}</b></div>`).join('');
   $('#s2xRiskCount').textContent=riskNum+'장'+(riskNum&&top>=0?` · ${top+1}차 묶음`:'');
   const colors=[['blue','파랑'],['yellow','노랑'],['black','검정'],['red','빨강'],['none','기타']];
   $('#s2xRiskColors').innerHTML=colors.map(([color,name])=>{const n=risk.filter(c=>(c.type==='other'?'none':c.color)===color).reduce((v,c)=>v+c.phases[top],0);return n?`<span class="s2x-color-count ${color}">${name} ${n}</span>`:'';}).join('');
   $('#s2xRiskList').innerHTML=risk.length?risk.map(c=>`<button type="button" data-s2x-risk="${s2xEscape(c.id)}" class="s2x-chip ${c.type==='other'?'none':(['blue','yellow','black','red'].includes(c.color)?c.color:'none')} ${t.last_reentry?.id===c.id?'recent':''}" title="표에서 ${s2xEscape(c.name)} 위치 찾기"><span>${s2xEscape(c.name)}</span> <b>×${c.phases[top]}</b></button>`).join(''):'<span class="s2x-empty">현재 재등장 묶음에 남은 카드가 없어요.</span>';
-  $('#s2xRecent').textContent=t.last_reentry?.name?`최근 6번 카드상자 추첨: ${t.last_reentry.name} · ${t.last_reentry.mode==='random'?'랜덤':'직접 지정'} · 보급품은 게임판에서 수동 처리`:'도시를 누르면 왼쪽 표에서 해당 줄이 강조돼요.';
-  $('#s2xEpidemic').disabled=t.created.length===0||s2xDiscardTotal(t)===0||s2xNextPileSlot(t)>=5;
+  $('#s2xRecent').textContent=t.last_reentry?.name?`최근 6번 카드상자: ${t.last_reentry.name} · ${t.last_reentry.mode==='physical'?'실물 카드 직접 입력':(t.last_reentry.mode==='random'?'기존 사이트 추첨':'기존 직접 지정')} · 보급품은 게임판에서 수동 처리`:'도시를 누르면 왼쪽 표에서 해당 줄이 강조돼요.';
+  $('#s2xEpidemic').disabled=t.created.length===0||s2xNextPileSlot(t)>=5;
   $('#s2xUndo').disabled=t.history.length===0;
   $('#s2xBody').innerHTML=rows.map(c=>`<tr data-s2x-row="${s2xEscape(c.id)}"><td class="s2x-city-cell ${c.type==='other'?'none':c.color}"><button type="button" class="s2x-city-button" data-s2x-draw="${s2xEscape(c.id)}" ${s2xLatestIndex(c)<0?'disabled':''}><span>${s2xEscape(c.name)}<small>${c.type==='other'?'기타 카드':'클릭하면 1장 사용 처리'}</small></span></button></td><td>${c.total}</td>${c.phases.map((n,i)=>`<td class="${t.created.includes(i)?'s2x-activephase':'s2x-emptyphase'}">${n}</td>`).join('')}<td class="s2x-remain">${s2xRemain(c)}</td><td><button class="s2x-btn" type="button" data-s2x-edit="${s2xEscape(c.id)}">수정</button></td></tr>`).join('');
   $('#s2xFoot').innerHTML=`<tr class="s2x-totrow"><td>전체 합계</td><td>${total}</td>${[0,1,2,3,4].map(i=>`<td>${rows.reduce((n,c)=>n+c.phases[i],0)}</td>`).join('')}<td>${drawn}</td><td></td></tr>`;
@@ -1370,61 +1384,75 @@ function s2xRender(){
   $('#s2xRiskList').querySelectorAll('[data-s2x-risk]').forEach(b=>b.onclick=()=>s2xFocusRisk(b.dataset.s2xRisk));
 }
 function s2xFocusRisk(id){const row=[...$('#s2xBody').querySelectorAll('[data-s2x-row]')].find(el=>el.dataset.s2xRow===id);if(!row)return;$('#s2xBody').querySelectorAll('.s2x-row-focus').forEach(el=>el.classList.remove('s2x-row-focus'));row.classList.add('s2x-row-focus');row.scrollIntoView({behavior:'smooth',block:'center',inline:'nearest'});}
-function s2xDiscardTotal(t){return t.cities.reduce((n,c)=>n+s2xRemain(c),0);}
 
 function s2xEscape(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function s2xDraw(id,save=true,phaseIndex=null){const t=s2xTracker(),c=t.cities.find(c=>c.id===id);if(!c)return false;const i=phaseIndex===null?s2xLatestIndex(c):phaseIndex;if(i<0||(+c.phases[i]||0)<=0)return false;if(save)s2xSnapshot(t);c.phases[i]--;if(save)s2xPersist();return true;}
 function s2xNextPhase(t){const which=s2xNextPileSlot(t);if(which>=5)return false;const before=t.cities.map(c=>s2xRemain(c));t.cities.forEach((c,j)=>c.phases[which]=before[j]);t.created=Array.from({length:which+1},(_,i)=>i);return true;}
 let s2xBottomPending=null;
+function s2xPhysicalNameKey(v){return String(v||'').normalize('NFKC').replace(/\s+/g,'').toLocaleLowerCase('ko-KR');}
+function s2xPhysicalMatch(name){const key=s2xPhysicalNameKey(name);return key?s2xTracker().cities.find(c=>s2xPhysicalNameKey(c.name)===key):null;}
 function s2xBottomOpen(){
- const t=s2xTracker(),available=s2xSorted(t).filter(c=>s2xRemain(c)>0);
- if(!t.created.length)return alert('등록된 감염 카드가 없어요. 도시 / 카드 수를 먼저 입력해주세요.');
+ const t=s2xTracker();
+ if(!t.created.length)return alert('감염 차수가 아직 초기화되지 않았어요. 감염 카드 목록부터 확인해 주세요.');
  if(s2xNextPileSlot(t)>=5)return alert('감염 차수 5칸이 모두 사용 중이에요. 다음 차수를 만들 수 없어요.');
- if(!available.length)return alert('6번 카드상자에 버린 카드가 없어요. 게임판과 트래커의 카드 수를 확인해주세요.');
  s2xBottomPending=null;
- $('#s2xBottomSummary').textContent=`6번 카드상자 ${s2xDiscardTotal(t)}장 · 후보 도시 / 카드 ${available.length}종 · 선택된 카드 1장만 재등장군으로 이동`;
- $('#s2xBottomGrid').innerHTML=available.map(c=>`<button type="button" data-s2x-bottom="${s2xEscape(c.id)}" class="s2x-bottom-button ${c.type==='other'?'none':c.color}">${s2xEscape(c.name)}<small>버린 더미 ${s2xRemain(c)}장</small></button>`).join('');
+ $('#s2xPhysicalCity').value='';$('#s2xPhysicalColor').value='';$('#s2xPhysicalColor').disabled=false;
+ $('#s2xPhysicalCityList').innerHTML=s2xSorted(t).filter(c=>c.type!=='other').map(c=>`<option value="${s2xEscape(c.name)}"></option>`).join('');
  $('#s2xBottomSelected').textContent='';$('#s2xBottomSelected').classList.add('hidden');
- $('#s2xBottomError').textContent='';$('#s2xBottomConfirm').disabled=true;$('#s2xBottomReroll').classList.add('hidden');
+ $('#s2xBottomError').textContent='';$('#s2xBottomConfirm').disabled=true;
+ $('#s2xBottomSummary').textContent='6번 상자에서 실제로 뽑은 카드 1장을 입력하세요. 기존 카드 목록과 상자 안의 카드는 서로 별개입니다.';
  $('#s2xBottomShade').classList.remove('hidden');
- $('#s2xBottomGrid').querySelectorAll('[data-s2x-bottom]').forEach(b=>b.onclick=()=>s2xBottomPick(b.dataset.s2xBottom,'manual'));
+ $('#s2xPhysicalCity').focus();
 }
-function s2xBottomPick(id,mode){
- const c=s2xTracker().cities.find(c=>c.id===id);
- if(!c||s2xRemain(c)<=0)return;
- s2xBottomPending={id,mode};
- const boardHint=c.type==='other'?'⚠ 기타 카드입니다. 실제 카드의 특수 처리는 게임판에서 직접 확인하세요.':'⚠ 해당 도시의 보급품은 실제 게임판에서 직접 모두 제거하세요. 사이트에서는 보급품을 변경하지 않습니다.';
- $('#s2xBottomSelected').innerHTML=`<strong>${s2xEscape(c.name)} ×1장</strong><div>6번 카드상자 → 다음 감염 차수(재등장 위험군)</div><div>${boardHint}</div>`;
- $('#s2xBottomSelected').classList.remove('hidden');
- $('#s2xBottomGrid').querySelectorAll('[data-s2x-bottom]').forEach(el=>el.classList.toggle('selected',el.dataset.s2xBottom===id));
- $('#s2xBottomReroll').classList.toggle('hidden',mode!=='random');
- $('#s2xBottomConfirm').disabled=false;
- $('#s2xBottomError').textContent='';
-}
-function s2xBottomRandom(){
- const t=s2xTracker(),rows=s2xSorted(t).map(c=>({c,n:s2xRemain(c)})).filter(x=>x.n>0);
- const count=rows.reduce((n,r)=>n+r.n,0);
- if(!count)return $('#s2xBottomError').textContent='6번 카드상자에 남은 카드가 없습니다.';
- // Uniform among physical cards: a city with 3 discarded copies is 3x as likely.
- let ticket;
- if(window.crypto?.getRandomValues){const b=new Uint32Array(1);const bound=4294967296-(4294967296%count);do{crypto.getRandomValues(b);}while(b[0]>=bound);ticket=b[0]%count;}
- else ticket=Math.floor(Math.random()*count);
- const selected=rows.find(r=>(ticket-=r.n)<0);
- s2xBottomPick(selected.c.id,'random');
+function s2xPhysicalPreview(){
+ const t=s2xTracker(),name=$('#s2xPhysicalCity').value.trim(),match=s2xPhysicalMatch(name),colorInput=$('#s2xPhysicalColor'),preview=$('#s2xBottomSelected'),error=$('#s2xBottomError');
+ error.textContent='';s2xBottomPending=null;
+ if(match&&match.type==='city'){
+  colorInput.value=match.color;colorInput.disabled=true;
+ }else{
+  if(colorInput.disabled)colorInput.value='';
+  colorInput.disabled=false;
+ }
+ if(!name){preview.classList.add('hidden');$('#s2xBottomConfirm').disabled=true;return;}
+ if(match&&match.type==='other'){
+  preview.classList.add('hidden');error.textContent='이미 같은 이름의 기타 카드가 등록돼 있어요. 카드 종류를 먼저 확인해 주세요.';$('#s2xBottomConfirm').disabled=true;return;
+ }
+ const color=match?.color||colorInput.value;
+ if(!['blue','yellow','black','red'].includes(color)){
+  preview.classList.add('hidden');$('#s2xBottomConfirm').disabled=true;return;
+ }
+ if(match&&(+match.total||0)>=999){
+  preview.classList.add('hidden');error.textContent='해당 도시의 총 카드 수가 최대값이에요. 도시 편집에서 수량을 먼저 확인해 주세요.';$('#s2xBottomConfirm').disabled=true;return;
+ }
+ const slot=s2xNextPileSlot(t);
+ if(slot>=5){preview.classList.add('hidden');error.textContent='더 이상 감염 차수를 생성할 수 없어요.';$('#s2xBottomConfirm').disabled=true;return;}
+ s2xBottomPending={existingId:match?.id||null,name:match?.name||name,color,slot};
+ preview.innerHTML=`<strong>${s2xEscape(name)} × 1장</strong><div>${match?'기존 도시 카드에 실물 카드 1장 추가':'새 도시 카드로 등록'} → ${slot+1}차 재등장 위험군에 1장 추가</div><div>⚠ 게임판에서 해당 도시의 보급품은 직접 제거해 주세요. 사이트에서는 보급품을 변경하지 않아요.</div>`;
+ preview.classList.remove('hidden');$('#s2xBottomConfirm').disabled=false;
 }
 function s2xBottomConfirm(){
- const pending=s2xBottomPending,t=s2xTracker();
+ const pending=s2xBottomPending,t=s2xTracker(),error=$('#s2xBottomError');
  if(!pending)return;
- const c=t.cities.find(c=>c.id===pending.id),slot=s2xNextPileSlot(t);
- if(!c||s2xRemain(c)<=0||slot>=5)return $('#s2xBottomError').textContent='카드 수가 변경됐습니다. 취소 후 다시 추첨해주세요.';
+ if(s2xNextPileSlot(t)!==pending.slot||pending.slot>=5){error.textContent='감염 차수가 변경됐어요. 창을 닫고 다시 입력해 주세요.';return;}
+ const name=$('#s2xPhysicalCity').value.trim();
+ if(s2xPhysicalNameKey(name)!==s2xPhysicalNameKey(pending.name)){s2xPhysicalPreview();return;}
+ const existing=s2xPhysicalMatch(name);
+ if(existing?.id!==(pending.existingId||undefined) || (existing&&existing.type!=='city')){
+  error.textContent='도시 정보가 변경됐어요. 다시 확인해 주세요.';s2xPhysicalPreview();return;
+ }
  s2xSnapshot(t);
- // Do NOT create a new physical card or move the entire discard pile.
- // Transfer exactly one existing discarded card to the fresh risk phase.
- c.phases[slot]=(c.phases[slot]||0)+1;
- t.created=Array.from({length:slot+1},(_,i)=>i);
- t.last_reentry={id:c.id,name:c.name,mode:pending.mode,at:new Date().toISOString()};
+ let c=existing;
+ if(c){c.total=(+c.total||0)+1;}
+ else{
+  const id='box6-'+(window.crypto?.randomUUID?.()||Date.now().toString(36)+'-'+Math.random().toString(36).slice(2));
+  c={id,name,type:'city',color:pending.color,total:1,phases:[0,0,0,0,0]};
+  t.cities.push(c);
+ }
+ c.phases[pending.slot]=(c.phases[pending.slot]||0)+1;
+ t.created=Array.from({length:pending.slot+1},(_,i)=>i);
+ t.last_reentry={id:c.id,name:c.name,mode:'physical',at:new Date().toISOString()};
  if(!Array.isArray(t.reentry_log))t.reentry_log=[];
- t.reentry_log.push({...t.last_reentry,phase:slot+1,quantity:1});
+ t.reentry_log.push({...t.last_reentry,phase:pending.slot+1,quantity:1,source:'physical-box-6'});
  if(t.reentry_log.length>60)t.reentry_log=t.reentry_log.slice(-60);
  s2xBottomPending=null;$('#s2xBottomShade').classList.add('hidden');s2xPersist();
 }
@@ -1589,7 +1617,7 @@ $('#s2xCancel').onclick=s2xEditClose;
 $('#s2xApply').onclick=s2xApply;
 $('#s2xDelete').onclick=s2xDelete;
 $('#s2xType').onchange=s2xUpdateColor;
-$('#s2xBottomRandom').onclick=s2xBottomRandom;$('#s2xBottomReroll').onclick=s2xBottomRandom;$('#s2xBottomConfirm').onclick=s2xBottomConfirm;$('#s2xBottomCancel').onclick=()=>{$('#s2xBottomShade').classList.add('hidden');s2xBottomPending=null;};
+$('#s2xPhysicalCity').oninput=s2xPhysicalPreview;$('#s2xPhysicalColor').onchange=s2xPhysicalPreview;$('#s2xBottomConfirm').onclick=s2xBottomConfirm;$('#s2xBottomCancel').onclick=()=>{$('#s2xBottomShade').classList.add('hidden');s2xBottomPending=null;};
 $('#s2xModal').onclick=e=>{if(e.target===$('#s2xModal'))s2xClose();};
 document.addEventListener('keydown',e=>{if(e.key!=='Escape'||$('#s2xModal').classList.contains('hidden'))return;if(!$('#s2xBottomShade').classList.contains('hidden'))$('#s2xBottomShade').classList.add('hidden');else if(!$('#s2xEditShade').classList.contains('hidden'))s2xEditClose();else if(!$('#s2xRepairShade').classList.contains('hidden'))s2xCloseRepair();else s2xClose();});
 s2xWheel();
